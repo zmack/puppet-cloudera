@@ -17,5 +17,9 @@
 # All rights reserved.
 
 class cdh::zookeeper {
-  include cdh::zookeeper::install
+  $package_names = [ "hadoop-zookeeper" ]
+
+  package { $package_names:
+    ensure => present,
+  } 
 }

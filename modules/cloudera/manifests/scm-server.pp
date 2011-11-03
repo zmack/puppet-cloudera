@@ -13,13 +13,8 @@
 #  License. 
 # 
 
-# (c) Copyright 2011 Cloudera, Inc.
-# All rights reserved.
-
-class cdh::hbase {
-  $package_names = [ "hadoop-hbase" ]
-
-  package { $package_names: 
-    ensure => present,
-  }
+class cloudera::scm-server {
+  include cloudera::scm-server::config
+  include cloudera::scm-server::install
+  include cloudera::scm-server::service
 }

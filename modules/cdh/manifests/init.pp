@@ -20,4 +20,5 @@ class cdh {
   include zookeeper
   include pig
   include oozie
+  include hue
 }

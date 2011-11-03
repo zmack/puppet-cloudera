@@ -14,5 +14,11 @@
 # 
 
 class cdh::hadoop {
-  include cdh::hadoop::install
+  $package_names = [ "hadoop-0.20", 
+                     "hadoop-0.20-sbin", 
+                     "hadoop-0.20-native" ]
+
+  package { $package_names:
+    ensure => present,
+  }
 }

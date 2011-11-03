@@ -15,4 +15,9 @@
 
 class cdh::oozie {
   include cdh::oozie::client
+  $package_names = [ "oozie" ]
+
+  package { $package_names:
+    ensure => present,
+  }
 }

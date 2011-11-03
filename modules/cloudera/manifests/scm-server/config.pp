@@ -13,13 +13,14 @@
 #  License. 
 # 
 
-# (c) Copyright 2011 Cloudera, Inc.
-# All rights reserved.
-
-class cdh::hbase {
-  $package_names = [ "hadoop-hbase" ]
-
-  package { $package_names: 
-    ensure => present,
+class cloudera::scm-server::config inherits cloudera::scm-server::params {
+  $adm_pass_cmdline = $db_admin_pass ? {
+    undef   => "",
+    default => "-p'$db_admin_pass'",
+  }
+  exec { "scm-install-schema":
+    command     => "/usr/share/cmf/schema/scm_prepare_database.sh -u '$db_admin_user' $adm_pass_cmdline mysql '$db_name' '$db_user' '$db_pass'",
+    require     => Package[$package_names],
+    unless      => "/usr/bin/mysqlshow -u '$db_admin_user' $adm_pass_cmdline '$db_name'",
   }
 }

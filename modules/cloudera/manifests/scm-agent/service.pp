@@ -13,13 +13,11 @@
 #  License. 
 # 
 
-# (c) Copyright 2011 Cloudera, Inc.
-# All rights reserved.
-
-class cdh::hbase {
-  $package_names = [ "hadoop-hbase" ]
-
-  package { $package_names: 
-    ensure => present,
+class cloudera::scm-agent::service inherits cloudera::scm-agent::params {
+  service { "cloudera-scm-agent":
+    ensure    => running,
+    enable    => true,
+    require   => [ Package["cloudera-scm-agent"], File["scm-config.ini"] ],
+    subscribe => File["scm-config.ini"],
   }
 }

@@ -13,11 +13,9 @@
 #  License. 
 # 
 
-# (c) Copyright 2011 Cloudera, Inc.
-# All rights reserved.
-
-class cdh::hbase {
-  $package_names = [ "hadoop-hbase" ]
+class cloudera::plugins {
+  $package_names = [ "cloudera-scm-plugins", "hue-hadoop-auth-plugin", 
+                     "hue-oozie-auth-plugin", "hue-userman" ]
 
   package { $package_names: 
     ensure => present,

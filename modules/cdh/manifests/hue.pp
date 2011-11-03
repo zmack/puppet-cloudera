@@ -13,13 +13,13 @@
 #  License. 
 # 
 
-# (c) Copyright 2011 Cloudera, Inc.
+# (c) Copyright 2010 Cloudera, Inc.
 # All rights reserved.
 
-class cdh::hbase {
-  $package_names = [ "hadoop-hbase" ]
+class cdh::hue {
+  $package_names = [ "hue", "hue-common", "hue-plugins" ]
 
   package { $package_names: 
     ensure => present,
-  }
+  } 
 }

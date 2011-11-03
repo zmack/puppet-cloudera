@@ -17,5 +17,9 @@
 # All rights reserved.
 
 class cdh::hive {
-  include cdh::hive::install
+  $package_names = [ "hadoop-hive" ]
+
+  package { $package_names: 
+    ensure => present,
+  }
 }

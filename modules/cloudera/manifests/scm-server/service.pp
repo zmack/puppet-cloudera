@@ -13,13 +13,16 @@
 #  License. 
 # 
 
-# (c) Copyright 2011 Cloudera, Inc.
-# All rights reserved.
+# Note that this class assumes that mysqld is already installed and running, and
+# that the mysql jdbc connector is present.  You should add them to the list of
+# requires, however they are defined in your installation.
 
-class cdh::hbase {
-  $package_names = [ "hadoop-hbase" ]
-
-  package { $package_names: 
-    ensure => present,
+class cloudera::scm-server::service inherits cloudera::scm-server::params {
+  service { "cloudera-scm-server":
+    ensure  => running,
+    enable  => true,
+    require => [ Package[$package_names], Exec["scm-install-schema"] ]
+,
   }
 }
+

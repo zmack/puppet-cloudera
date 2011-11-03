@@ -13,13 +13,8 @@
 #  License. 
 # 
 
-# (c) Copyright 2011 Cloudera, Inc.
-# All rights reserved.
-
-class cdh::hbase {
-  $package_names = [ "hadoop-hbase" ]
-
-  package { $package_names: 
-    ensure => present,
-  }
+class cloudera::scm-agent::params ( 
+  $server_host="localhost", $server_port=7182 ) 
+{
+  $package_names = [ "cloudera-scm-agent" ]
 }
