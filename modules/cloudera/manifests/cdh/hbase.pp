@@ -16,8 +16,8 @@
 # (c) Copyright 2011 Cloudera, Inc.
 # All rights reserved.
 
-class cdh::hive {
-  $package_names = [ "hadoop-hive" ]
+class cloudera::cdh::hbase {
+  $package_names = [ "hadoop-hbase" ]
 
   package { $package_names: 
     ensure => present,

@@ -13,13 +13,12 @@
 #  License. 
 # 
 
-# (c) Copyright 2011 Cloudera, Inc.
-# All rights reserved.
+class cloudera::cdh::hadoop {
+  $package_names = [ "hadoop-0.20", 
+                     "hadoop-0.20-sbin", 
+                     "hadoop-0.20-native" ]
 
-class cdh::hbase {
-  $package_names = [ "hadoop-hbase" ]
-
-  package { $package_names: 
+  package { $package_names:
     ensure => present,
   }
 }

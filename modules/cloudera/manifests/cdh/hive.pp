@@ -13,13 +13,13 @@
 #  License. 
 # 
 
-# (c) Copyright 2010 Cloudera, Inc.
+# (c) Copyright 2011 Cloudera, Inc.
 # All rights reserved.
 
-class cdh::hue {
-  $package_names = [ "hue", "hue-common", "hue-plugins" ]
+class cloudera::cdh::hive {
+  $package_names = [ "hadoop-hive" ]
 
   package { $package_names: 
     ensure => present,
-  } 
+  }
 }

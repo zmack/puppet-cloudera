@@ -12,4 +12,11 @@
 #  the specific language governing permissions and limitations under the 
 #  License. 
 # 
-include cdh
+
+class cloudera::cdh::oozie::client {
+  $package_names = [ "oozie-client" ]
+
+  package { $package_names:
+    ensure => present,
+  }
+}

@@ -14,6 +14,7 @@
 # 
 
 class cloudera {
+  include cloudera::cdh
   include cloudera::plugins
   include cloudera::scm-agent
 }

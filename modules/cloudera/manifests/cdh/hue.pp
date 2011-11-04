@@ -13,12 +13,13 @@
 #  License. 
 # 
 
-class cdh::hadoop {
-  $package_names = [ "hadoop-0.20", 
-                     "hadoop-0.20-sbin", 
-                     "hadoop-0.20-native" ]
+# (c) Copyright 2010 Cloudera, Inc.
+# All rights reserved.
 
-  package { $package_names:
+class cloudera::cdh::hue {
+  $package_names = [ "hue", "hue-common", "hue-plugins" ]
+
+  package { $package_names: 
     ensure => present,
-  }
+  } 
 }

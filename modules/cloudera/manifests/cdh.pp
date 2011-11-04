@@ -13,7 +13,7 @@
 #  License.
 #
 
-class cdh {
+class cloudera::cdh {
   include hadoop
   include hbase
   include hive

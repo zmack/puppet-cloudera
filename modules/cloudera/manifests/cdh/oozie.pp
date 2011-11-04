@@ -13,8 +13,11 @@
 #  License.
 #
 
-class cdh::pig::install inherits cdh::pig::params {
+class cloudera::cdh::oozie {
+  include cloudera::cdh::oozie::client
+  $package_names = [ "oozie" ]
+
   package { $package_names:
     ensure => present,
-  } 
+  }
 }

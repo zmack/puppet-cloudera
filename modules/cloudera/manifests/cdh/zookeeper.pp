@@ -16,7 +16,7 @@
 # (c) Copyright 2011 Cloudera, Inc.
 # All rights reserved.
 
-class cdh::zookeeper {
+class cloudera::cdh::zookeeper {
   $package_names = [ "hadoop-zookeeper" ]
 
   package { $package_names:
