@@ -13,9 +13,6 @@
 #  License. 
 # 
 
-# (c) Copyright 2011 Cloudera, Inc.
-# All rights reserved.
-
 class cloudera::cdh::hbase {
   $package_names = [ "hadoop-hbase" ]
 
