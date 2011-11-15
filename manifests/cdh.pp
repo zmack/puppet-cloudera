@@ -21,4 +21,5 @@ class cloudera::cdh {
   include pig
   include oozie
   include hue
+  include mahout
 }
