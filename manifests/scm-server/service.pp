@@ -18,7 +18,7 @@
 # requires, however they are defined in your installation.
 
 class cloudera::scm-server::service inherits cloudera::scm-server::params {
-  service { "cloudera-scm-server":
+  service { $service_name:
     ensure  => running,
     enable  => true,
     require => [ Package[$package_names], Exec["scm-install-schema"] ]

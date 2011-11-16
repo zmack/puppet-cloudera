@@ -15,5 +15,6 @@
 
 class cloudera::scm-server::params ($db_name="cmf", $db_user="cmf", $db_pass,
                                     $db_admin_user="root", $db_admin_pass=undef) {
-  $package_names = [ "cloudera-scm-server" ]
+  $package_names = [ "cloudera-manager-server" ]
+  $service_name  = "cloudera-scm-server"
 }

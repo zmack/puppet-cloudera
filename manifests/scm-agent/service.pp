@@ -14,10 +14,10 @@
 # 
 
 class cloudera::scm-agent::service inherits cloudera::scm-agent::params {
-  service { "cloudera-scm-agent":
+  service { $service_name:
     ensure    => running,
     enable    => true,
-    require   => [ Package["cloudera-scm-agent"], File["scm-config.ini"] ],
+    require   => [ Package[$package_names], File["scm-config.ini"] ],
     subscribe => File["scm-config.ini"],
   }
 }

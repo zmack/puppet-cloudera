@@ -14,8 +14,8 @@
 # 
 
 class cloudera::plugins {
-  $package_names = [ "cloudera-scm-plugins", "hue-hadoop-auth-plugin", 
-                     "hue-oozie-auth-plugin", "hue-userman" ]
+  $package_names = [ "cloudera-manager-plugins", "hue-hadoop-auth-plugin", 
+                     "hue-oozie-auth-plugin" ]
 
   package { $package_names: 
     ensure => present,
