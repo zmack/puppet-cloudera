@@ -25,8 +25,9 @@ class cloudera::cdh::hue {
   } 
 
   service { $service_name:
-    enable  => false,
-    ensure  => stopped,
-    require => Package[$package_names],
+    enable    => false,
+    ensure    => stopped,
+    hasstatus => true,
+    require   => Package[$package_names],
   }
 }
