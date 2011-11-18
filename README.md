@@ -2,6 +2,45 @@
 
 ## Description
 
+This module contains four primary classes:
+
+### cloudera::cdh
+
+Installs the components of Cloudera's Distribution for Hadoop, and (with two exceptions)
+leaves them unconfigured.  Including `cloudera::cdh` directly will result in the hadoop, hbase, 
+hive, zookeeper, pig, oozie, mahout, and hue packages being installed.  In addition, each of the 
+components may be installed individually, by including only the relevant class in this 
+namespace (for instance, including `cloudera::cdh::hbase` will result in hbase being installed).
+
+Since neither Sqoop nor Flume is currently managed by Cloudera Enterprise, `cloudera::cdh::sqoop` 
+and `cloudera::cdh::flume` contain classes to start those components' services directly from
+puppet: `cloudera::cdh::flume::node`, `cloudera::cdh::flume::master`, and 
+`cloudera::cdh::sqoop::metastore`.
+
+This class is automatically included if you `include cloudera`.
+
+
+### cloudera::plugins
+
+Installs the Cloudera Enterprise plugins for CDH. 
+
+This class is automatically included if you `include cloudera`.
+
+### cloudera::scm-agent
+
+Installs, configures, and starts the Cloudera Manager Agent, which should be running on every
+node of your cluster.  Usage is detailed below.
+
+This class is automatically included if you `include cloudera`.
+
+### cloudera::scm-server
+
+Installs, configures, and starts the Cloudera Manager Server.  Generally, should only
+be included for one host in your cluster, and, as such, is *not* included automatically
+in from the `cloudera` class.  For usage instructions read on.
+
+### General Notes
+
 Note that, in order for this module to work, you will have to ensure that:
 
  * Oracle JRE version 6 or later is installed
@@ -10,7 +49,7 @@ Note that, in order for this module to work, you will have to ensure that:
  * If installing Cloudera Manager Server, MySQL must be installed and running on the host and port (and using the credentials) provided to cloudera::scm-server::params.
 
 For more information, see the "Cloudera Manager Installation Guide" at:
-https://ccp.cloudera.com/display/ENT/Cloudera+Manager+Installation+Guide
+[https://ccp.cloudera.com/display/ENT/Cloudera+Manager+Installation+Guide](https://ccp.cloudera.com/display/ENT/Cloudera+Manager+Installation+Guide)
 
 ## Usage
 
