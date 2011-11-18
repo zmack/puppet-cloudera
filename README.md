@@ -6,23 +6,16 @@ This module contains four primary classes:
 
 ### cloudera::cdh
 
-Installs the components of Cloudera's Distribution for Hadoop, and (with two exceptions)
-leaves them unconfigured.  Including `cloudera::cdh` directly will result in the hadoop, hbase, 
-hive, zookeeper, pig, oozie, mahout, and hue packages being installed.  In addition, each of the 
-components may be installed individually, by including only the relevant class in this 
-namespace (for instance, including `cloudera::cdh::hbase` will result in hbase being installed).
+Installs the components of Cloudera’s Distribution for Hadoop (CDH), and, with two exceptions, leaves them unconfigured. Including `cloudera::cdh` directly will install the Hadoop, HBase, Hive, ZooKeeper, Pig, Oozie, Mahout, and Hue packages. In addition, you can install each of the components individually, by including only the relevant class in this namespace (for instance, including `cloudera::cdh::hbase` will result in HBase being installed).
 
-Since neither Sqoop nor Flume is currently managed by Cloudera Enterprise, `cloudera::cdh::sqoop` 
-and `cloudera::cdh::flume` contain classes to start those components' services directly from
-puppet: `cloudera::cdh::flume::node`, `cloudera::cdh::flume::master`, and 
-`cloudera::cdh::sqoop::metastore`.
+Since neither Sqoop nor Flume is currently managed by Cloudera Manager, `cloudera::cdh::sqoop` and `cloudera::cdh::flume` contain classes to start those components’ services directly from Puppet: `cloudera::cdh::flume::node`, `cloudera::cdh::flume::master`, and `cloudera::cdh::sqoop::metastore`.
 
 This class is automatically included if you `include cloudera`.
 
 
 ### cloudera::plugins
 
-Installs the Cloudera Enterprise plugins for CDH. 
+Installs the Cloudera Manager plugins for CDH. 
 
 This class is automatically included if you `include cloudera`.
 
@@ -37,7 +30,7 @@ This class is automatically included if you `include cloudera`.
 
 Installs, configures, and starts the Cloudera Manager Server.  Generally, should only
 be included for one host in your cluster, and, as such, is *not* included automatically
-in from the `cloudera` class.  For usage instructions read on.
+in from the `cloudera` class.  For information about usage, skip ahead to the section titled "Usage".
 
 ### General Notes
 
