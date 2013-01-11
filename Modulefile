@@ -1,9 +1,9 @@
-name    'razorsedge-scm'
+name    'razorsedge-cloudera'
 version '0.0.1'
 author 'razorsedge'
 license 'Apache License, Version 2.0'
-project_page 'https://github.com/razorsedge/puppet-scm'
-source 'git://github.com/razorsedge/puppet-scm.git'
+project_page 'https://github.com/razorsedge/puppet-cloudera'
+source 'git://github.com/razorsedge/puppet-cloudera.git'
 summary 'UNKNOWN'
 description 'UNKNOWN'
 
