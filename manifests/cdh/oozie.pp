@@ -15,16 +15,14 @@
 
 class cloudera::cdh::oozie {
   include cloudera::cdh::oozie::client
-  $package_names = [ "oozie" ]
-  $service_name  = "oozie"
 
-  package { $package_names:
-    ensure => present,
+  package { 'oozie':
+    ensure => 'present',
   }
 
-  service { $service_name:
+  service { 'oozie':
+#   ensure  => 'stopped',
     enable  => false,
-    ensure  => stopped,
-    require => Package[$package_names],
+    require => Package['oozie'],
   }
 }

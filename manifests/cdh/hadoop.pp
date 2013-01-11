@@ -14,11 +14,31 @@
 # 
 
 class cloudera::cdh::hadoop {
-  $package_names = [ "hadoop-0.20", 
-                     "hadoop-0.20-sbin", 
-                     "hadoop-0.20-native" ]
+  package { 'hadoop':
+    ensure => 'present',
+  }
 
-  package { $package_names:
-    ensure => present,
+  package { 'hadoop-hdfs':
+    ensure => 'present',
+  }
+
+  package { 'hadoop-httpfs':
+    ensure => 'present',
+  }
+
+  package { 'hadoop-mapreduce':
+    ensure => 'present',
+  }
+
+  package { 'hadoop-yarn':
+    ensure => 'present',
+  }
+
+  package { 'hadoop-client':
+    ensure => 'present',
+  }
+
+  package { 'hadoop-0.20-mapreduce':
+    ensure => 'present',
   }
 }

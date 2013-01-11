@@ -14,16 +14,7 @@
 #
 
 class cloudera::cdh::pig {
-  $package_names = [ "hadoop-pig" ]
-
-  package { $package_names:
-    ensure => present,
-  } 
-
-  file { "/etc/pig/pig.properties":
-    source  => "puppet:///modules/cloudera/pig.properties",
-    require => Package[$package_names],
-    owner   => "root", 
-    mode    => "755",   
+  package { 'pig':
+    ensure => 'present',
   }
 }

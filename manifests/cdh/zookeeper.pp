@@ -17,9 +17,7 @@
 # All rights reserved.
 
 class cloudera::cdh::zookeeper {
-  $package_names = [ "hadoop-zookeeper" ]
-
-  package { $package_names:
-    ensure => present,
+  package { 'zookeeper':
+    ensure => 'present',
   } 
 }

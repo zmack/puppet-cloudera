@@ -8,4 +8,6 @@ summary 'UNKNOWN'
 description 'UNKNOWN'
 
 ## Add dependencies, if any:
-#dependency 'puppetlabs/stdlib', '>=2.1.0'
+dependency 'puppetlabs/stdlib', '>=2.6.0'
+#dependency 'puppetlabs/mysql', '>=0.6.0'
+#dependency 'puppetlabs/java', '>=0.2.0'

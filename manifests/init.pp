@@ -13,8 +13,53 @@
 #  License. 
 # 
 
-class cloudera {
-  include cloudera::cdh
-  include cloudera::plugins
-  include cloudera::scm-agent
+class cloudera (
+  $ensure         = $cloudera::params::ensure,
+  $autoupgrade    = $cloudera::params::autoupgrade,
+  $service_ensure = $cloudera::params::service_ensure,
+  $service_enable = $cloudera::params::safe_service_enable,
+  $cdh_yumserver  = $cloudera::params::cdh_yumserver,
+  $cdh_yumpath    = $cloudera::params::cdh_yumpath,
+  $cdh_version    = $cloudera::params::cdh_version,
+  $cm_yumserver   = $cloudera::params::cm_yumserver,
+  $cm_yumpath     = $cloudera::params::cm_yumpath,
+  $cm_version     = $cloudera::params::cm_version,
+  $ci_yumserver   = $cloudera::params::ci_yumserver,
+  $ci_yumpath     = $cloudera::params::cm_yumpath,
+  $ci_version     = $cloudera::params::ci_version,
+  $cm_server_host = $cloudera::params::cm_server_host,
+  $cm_server_port = $cloudera::params::cm_server_port,
+) inherits cloudera::params {
+  # Validate our booleans
+  validate_bool($autoupgrade)
+  validate_bool($service_enable)
+
+  Class['cloudera::repo'] -> Class['cloudera::cdh'] -> Class['cloudera::scm_agent']
+
+  class { 'cloudera::repo':
+    ensure        => $ensure,
+    cdh_yumserver => $cdh_yumserver,
+    cm_yumserver  => $cm_yumserver,
+    ci_yumserver  => $ci_yumserver,
+    cdh_yumpath   => $cdh_yumpath,
+    cm_yumpath    => $cm_yumpath,
+    ci_yumpath    => $cm_yumpath,
+    cdh_version   => $cdh_version,
+    cm_version    => $cm_version,
+    ci_version    => $ci_version,
+  }
+  class { 'cloudera::cdh':
+    ensure         => $ensure,
+    autoupgrade    => $autoupgrade,
+    service_ensure => $service_ensure,
+    service_enable => $service_enable,
+  }
+  class { 'cloudera::scm_agent':
+    ensure         => $ensure,
+    autoupgrade    => $autoupgrade,
+    service_ensure => $service_ensure,
+    service_enable => $service_enable,
+    server_host    => $cm_server_host,
+    server_port    => $cm_server_port,
+  }
 }

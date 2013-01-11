@@ -14,9 +14,7 @@
 # 
 
 class cloudera::cdh::hbase {
-  $package_names = [ "hadoop-hbase" ]
-
-  package { $package_names: 
-    ensure => present,
+  package { 'hbase':
+    ensure => 'present',
   }
 }

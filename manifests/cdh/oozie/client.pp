@@ -14,9 +14,7 @@
 # 
 
 class cloudera::cdh::oozie::client {
-  $package_names = [ "oozie-client" ]
-
-  package { $package_names:
-    ensure => present,
+  package { 'oozie-client':
+    ensure => 'present',
   }
 }

@@ -13,13 +13,45 @@
 #  License.
 #
 
-class cloudera::cdh {
-  include hadoop
-  include hbase
-  include hive
-  include zookeeper
-  include pig
-  include oozie
-  include hue
-  include mahout
+class cloudera::cdh (
+  $ensure         = $cloudera::params::ensure,
+  $autoupgrade    = $cloudera::params::autoupgrade,
+  $service_ensure = $cloudera::params::service_ensure,
+) inherits cloudera::params {
+  # Validate our booleans
+  validate_bool($autoupgrade)
+
+  class { 'cloudera::cdh::bigtop':
+#    ensure      => $ensure,
+#    autoupgrade => $autoupgrade,
+  }
+  class { 'cloudera::cdh::hadoop':
+#    ensure      => $ensure,
+#    autoupgrade => $autoupgrade,
+  }
+  class { 'cloudera::cdh::hue::plugins':
+#    ensure      => $ensure,
+#    autoupgrade => $autoupgrade,
+  }
+  class { 'cloudera::cdh::hbase':
+#    ensure      => $ensure,
+#    autoupgrade => $autoupgrade,
+  }
+  class { 'cloudera::cdh::hive':
+#    ensure      => $ensure,
+#    autoupgrade => $autoupgrade,
+  }
+  class { 'cloudera::cdh::oozie':
+#    ensure         => $ensure,
+#    autoupgrade    => $autoupgrade,
+#    service_ensure => $service_ensure,
+  }
+  class { 'cloudera::cdh::pig':
+#    ensure      => $ensure,
+#    autoupgrade => $autoupgrade,
+  }
+  class { 'cloudera::cdh::zookeeper':
+#    ensure      => $ensure,
+#    autoupgrade => $autoupgrade,
+  }
 }

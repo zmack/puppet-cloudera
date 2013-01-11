@@ -17,17 +17,14 @@
 # All rights reserved.
 
 class cloudera::cdh::hue {
-  $package_names = [ "hue", "hue-common", "hue-plugins" ]
-  $service_name  = "hue"
-
-  package { $package_names: 
-    ensure => present,
+  package { 'hue':
+    ensure => 'present',
   } 
 
-  service { $service_name:
+  service { 'hue':
+#   ensure    => 'stopped',
     enable    => false,
-    ensure    => stopped,
     hasstatus => true,
-    require   => Package[$package_names],
+    require   => Package['hue'],
   }
 }

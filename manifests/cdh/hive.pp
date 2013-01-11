@@ -17,9 +17,7 @@
 # All rights reserved.
 
 class cloudera::cdh::hive {
-  $package_names = [ "hadoop-hive" ]
-
-  package { $package_names: 
-    ensure => present,
+  package { 'hive':
+    ensure => 'present',
   }
 }
