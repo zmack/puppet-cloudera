@@ -25,7 +25,7 @@ class cloudera (
   $cm_yumpath     = $cloudera::params::cm_yumpath,
   $cm_version     = $cloudera::params::cm_version,
   $ci_yumserver   = $cloudera::params::ci_yumserver,
-  $ci_yumpath     = $cloudera::params::cm_yumpath,
+  $ci_yumpath     = $cloudera::params::ci_yumpath,
   $ci_version     = $cloudera::params::ci_version,
   $cm_server_host = $cloudera::params::cm_server_host,
   $cm_server_port = $cloudera::params::cm_server_port,
@@ -34,7 +34,8 @@ class cloudera (
   validate_bool($autoupgrade)
   validate_bool($service_enable)
 
-  Class['cloudera::repo'] -> Class['cloudera::cdh'] -> Class['cloudera::scm_agent']
+  anchor { 'cloudera::begin': }
+  anchor { 'cloudera::end': }
 
   class { 'cloudera::repo':
     ensure        => $ensure,
@@ -43,23 +44,37 @@ class cloudera (
     ci_yumserver  => $ci_yumserver,
     cdh_yumpath   => $cdh_yumpath,
     cm_yumpath    => $cm_yumpath,
-    ci_yumpath    => $cm_yumpath,
+    ci_yumpath    => $ci_yumpath,
     cdh_version   => $cdh_version,
     cm_version    => $cm_version,
     ci_version    => $ci_version,
+#    require       => Anchor['cloudera::begin'],
+#    before        => Anchor['cloudera::end'],
   }
   class { 'cloudera::cdh':
     ensure         => $ensure,
     autoupgrade    => $autoupgrade,
     service_ensure => $service_ensure,
-    service_enable => $service_enable,
+#    service_enable => $service_enable,
+    require        => Class['cloudera::repo'],
+#    require        => Anchor['cloudera::begin'],
+#    before         => Anchor['cloudera::end'],
   }
   class { 'cloudera::scm_agent':
     ensure         => $ensure,
     autoupgrade    => $autoupgrade,
     service_ensure => $service_ensure,
-    service_enable => $service_enable,
+#    service_enable => $service_enable,
     server_host    => $cm_server_host,
     server_port    => $cm_server_port,
+    require        => [ Class['cloudera::repo'], Class['cloudera::cdh'], ],
+#    require        => Anchor['cloudera::begin'],
+#    before         => Anchor['cloudera::end'],
   }
+
+  Anchor['cloudera::begin'] ->
+  Class['cloudera::repo'] ->
+  Class['cloudera::cdh'] ->
+  Class['cloudera::scm_agent'] ->
+  Anchor['cloudera::end']
 }

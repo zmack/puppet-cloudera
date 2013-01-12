@@ -42,7 +42,6 @@ class cloudera::scm_agent (
 ) inherits cloudera::params {
   # Validate our booleans
   validate_bool($autoupgrade)
-  validate_bool($service_enable)
 
   case $ensure {
     /(present)/: {

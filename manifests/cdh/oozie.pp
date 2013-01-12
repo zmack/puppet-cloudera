@@ -14,7 +14,15 @@
 #
 
 class cloudera::cdh::oozie {
-  include cloudera::cdh::oozie::client
+  anchor { 'cloudera::cdh::oozie::begin': }
+  anchor { 'cloudera::cdh::oozie::end': }
+
+  class { 'cloudera::cdh::oozie::client':
+#    ensure      => $ensure,
+#    autoupgrade => $autoupgrade,
+    require     => Anchor['cloudera::cdh::oozie::begin'],
+    before      => Anchor['cloudera::cdh::oozie::end'],
+  }
 
   package { 'oozie':
     ensure => 'present',
@@ -25,4 +33,10 @@ class cloudera::cdh::oozie {
     enable  => false,
     require => Package['oozie'],
   }
+
+#  Anchor['cloudera::cdh::oozie::begin'] ->
+#  Class['cloudera::cdh::oozie::client'] ->
+#  Package['oozie'] ->
+#  Service['oozie'] ->
+#  Anchor['cloudera::cdh::oozie::end']
 }

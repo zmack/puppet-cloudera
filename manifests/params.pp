@@ -70,6 +70,16 @@ class cloudera::params {
     $safe_autoupgrade = $autoupgrade
   }
 
+  $service_enable = $::cloudera_service_enable ? {
+    undef => true,
+    default => $::cloudera_service_enable,
+  }
+  if is_string($service_enable) {
+    $safe_service_enable = str2bool($service_enable)
+  } else {
+    $safe_service_enable = $service_enable
+  }
+
   $cdh_version = '4'
   $cm_version  = '4'
   $ci_version  = '0'

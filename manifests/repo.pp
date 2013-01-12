@@ -60,7 +60,7 @@ class cloudera::repo (
   $cm_yumpath    = $cloudera::params::cm_yumpath,
   $cm_version    = $cloudera::params::cm_version,
   $ci_yumserver  = $cloudera::params::ci_yumserver,
-  $ci_yumpath    = $cloudera::params::cm_yumpath,
+  $ci_yumpath    = $cloudera::params::ci_yumpath,
   $ci_version    = $cloudera::params::ci_version,
 ) inherits cloudera::params {
   case $ensure {
