@@ -75,6 +75,10 @@ class cloudera::scm_agent (
     ensure => $package_ensure,
   }
 
+  package { 'cloudera-manager-daemons':
+    ensure => $package_ensure,
+  }
+
   file { 'scm-config.ini':
     ensure  => $file_ensure,
     path    => '/etc/cloudera-scm-agent/config.ini',
