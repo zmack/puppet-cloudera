@@ -78,4 +78,5 @@ class cloudera::cdh (
 #    autoupgrade => $autoupgrade,
     require     => Anchor['cloudera::cdh::begin'],
     before      => Anchor['cloudera::cdh::end'],
+  }
 }
