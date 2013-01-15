@@ -7,3 +7,10 @@ RSpec::Core::RakeTask.new(:spec_standalonev) do |t|
   t.pattern = 'spec/{classes,defines,unit}/**/*_spec.rb'
 end
 
+# https://github.com/stahnma/puppet-modules/blob/master/common/Rakefile
+desc "Run puppet in noop mode and check for syntax errors."
+task :validate do
+  Dir['manifests/**/*.pp'].each do |path|
+    sh "puppet parser validate --noop #{path}"
+  end
+end
