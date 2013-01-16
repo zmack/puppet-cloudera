@@ -41,4 +41,11 @@ class cloudera::cdh::hadoop {
   package { 'hadoop-0.20-mapreduce':
     ensure => 'present',
   }
+
+  service { 'hadoop-httpfs':
+#    ensure    => 'stopped',
+    enable    => false,
+    hasstatus => true,
+    require   => Package['hadoop-httpfs'],
+  }
 }
