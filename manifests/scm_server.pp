@@ -41,9 +41,9 @@ class cloudera::scm_server (
     ensure  => 'present',
   }
 
-  package { 'cloudera-manager-daemons':
-    ensure => $package_ensure,
-  }
+#  package { 'cloudera-manager-daemons':
+#    ensure => $package_ensure,
+#  }
 
   file { '/etc/cloudera-scm-server/db.properties':
     path    => '/etc/cloudera-scm-server/db.properties',
