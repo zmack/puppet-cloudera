@@ -73,6 +73,12 @@ class cloudera::cdh (
     require     => Anchor['cloudera::cdh::begin'],
     before      => Anchor['cloudera::cdh::end'],
   }
+  class { 'cloudera::cdh::flume':
+#    ensure      => $ensure,
+#    autoupgrade => $autoupgrade,
+    require     => Anchor['cloudera::cdh::begin'],
+    before      => Anchor['cloudera::cdh::end'],
+  }
   class { 'cloudera::cdh::impala':
 #    ensure      => $ensure,
 #    autoupgrade => $autoupgrade,
