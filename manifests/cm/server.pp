@@ -1,4 +1,4 @@
-# == Class: cloudera::scm_server
+# == Class: cloudera::cm::server
 #
 # This class handles installing and configuring the Cloudera Manager Server.
 #
@@ -14,7 +14,7 @@
 #
 # === Sample Usage:
 #
-#   class { 'cloudera::scm_server':
+#   class { 'cloudera::cm::server':
 #   }
 #
 # === Authors:
@@ -25,7 +25,7 @@
 #
 # Copyright (C) 2013 Mike Arnold, unless otherwise noted.
 #
-class cloudera::scm_server (
+class cloudera::cm::server (
   $user          = 'root',
   $passwd        = 'password',
   $db_host       = 'localhost',

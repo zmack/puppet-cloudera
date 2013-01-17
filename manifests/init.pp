@@ -60,7 +60,7 @@ class cloudera (
 #    require        => Anchor['cloudera::begin'],
 #    before         => Anchor['cloudera::end'],
   }
-  class { 'cloudera::scm_agent':
+  class { 'cloudera::cm':
     ensure         => $ensure,
     autoupgrade    => $autoupgrade,
     service_ensure => $service_ensure,
@@ -75,6 +75,6 @@ class cloudera (
   Anchor['cloudera::begin'] ->
   Class['cloudera::repo'] ->
   Class['cloudera::cdh'] ->
-  Class['cloudera::scm_agent'] ->
+  Class['cloudera::cm'] ->
   Anchor['cloudera::end']
 }

@@ -1,4 +1,4 @@
-# == Class: cloudera::scm_agent
+# == Class: cloudera::cm
 #
 # This class handles installing and configuring the Cloudera Manager Agent.
 #
@@ -21,7 +21,7 @@
 #
 # === Sample Usage:
 #
-#   class { 'cloudera::scm_agent':
+#   class { 'cloudera::cm':
 #     server_host => 'smhost.localdomain',
 #   }
 #
@@ -33,7 +33,7 @@
 #
 # Copyright (C) 2013 Mike Arnold, unless otherwise noted.
 #
-class cloudera::scm_agent (
+class cloudera::cm (
   $ensure         = $cloudera::params::ensure,
   $autoupgrade    = $cloudera::params::autoupgrade,
   $service_ensure = $cloudera::params::service_ensure,
