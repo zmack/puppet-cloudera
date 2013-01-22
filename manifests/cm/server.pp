@@ -16,7 +16,7 @@
 #
 #   Package['mysql-connector-java']
 #   Package['oracle-connector-java']
-#   Package['postgresql-connector-java']
+#   Package['postgresql-java']
 #   Package['jdk-sun']
 #
 # === Sample Usage:
@@ -106,6 +106,12 @@ class cloudera::cm::server (
     require    => Package['cloudera-manager-server'],
   }
 
+  @exec { 'scm_prepare_database':
+    command => "/usr/share/cmf/schema/scm_prepare_database.sh ${db_type} ${scmopts} --user=${db_user} --password=${db_pass} ${database_name} ${username} ${password} && touch /etc/cloudera-manager-server/.scm_prepare_database",
+    creates => '/etc/cloudera-manager-server/.scm_prepare_database',
+    require => $scm_prepare_database_require,
+  }
+
   case $db_type {
     'embedded': {
       package { 'cloudera-manager-server-db':
@@ -127,9 +133,59 @@ class cloudera::cm::server (
         before     => Service['cloudera-scm-server'],
       }
     }
-    'mysql': { }
-    'oracle': { }
-    'postgresql': { }
+    'mysql': {
+      if ( $db_host != 'localhost' ) and ( $db_host != $fqdn ) {
+        # Set the commandline options to connect to a remote database.
+        $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${fqdn}"
+        $scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['mysqld'], ]
+      } else {
+        #require mysql::server
+        Class['mysql::server'] -> Exec['scm_prepare_database']
+        $scm_prepare_database_require = Package['cloudera-manager-server']
+      }
+
+      if ! defined(Class['mysql::java']) {
+        class { 'mysql::java': }
+      }
+      realize Exec['scm_prepare_database']
+      Class['mysql::java'] -> Exec['scm_prepare_database']
+    }
+    'oracle': {
+      if ( $db_host != 'localhost' ) and ( $db_host != $fqdn ) {
+        # Set the commandline options to connect to a remote database.
+        $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${fqdn}"
+        #$scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['oracle'], ]
+        $scm_prepare_database_require = Package['cloudera-manager-server']
+      } else {
+        #require oracle::server
+        #Class['oracle::server'] -> Service['cloudera-scm-server']
+        $scm_prepare_database_require = Package['cloudera-manager-server']
+      }
+
+      # TODO: find a Class['oracle::java']
+      #if ! defined(Class['oracle::java']) {
+      #  class { 'oracle::java': }
+      #}
+      realize Exec['scm_prepare_database']
+      #Class['oracle::java'] -> Exec['scm_prepare_database']
+    }
+    'postgresql': {
+      if ( $db_host != 'localhost' ) and ( $db_host != $fqdn ) {
+        # Set the commandline options to connect to a remote database.
+        $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${fqdn}"
+        $scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['postgresqld'], ]
+      } else {
+        #require postgresql::server
+        Class['postgresql::server'] -> Service['cloudera-scm-server']
+        $scm_prepare_database_require = Package['cloudera-manager-server']
+      }
+
+      if ! defined(Class['postgresql::java']) {
+        class { 'postgresql::java': }
+      }
+      realize Exec['scm_prepare_database']
+      Class['postgresql::java'] -> Exec['scm_prepare_database']
+    }
     default: { }
   }
 }
