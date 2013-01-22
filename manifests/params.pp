@@ -91,7 +91,7 @@ class cloudera::params {
       $ci_yumpath = "/impala/redhat/${::os_maj_version}/${::architecture}/impala/"
     }
     default: {
-      fail("Module ${module} is not supported on ${::operatingsystem}")
+      fail("Module ${::module} is not supported on ${::operatingsystem}")
     }
   }
 }

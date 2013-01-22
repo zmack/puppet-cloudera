@@ -9,5 +9,6 @@ description 'UNKNOWN'
 
 ## Add dependencies, if any:
 dependency 'puppetlabs/stdlib', '>=2.3.0'
-#dependency 'puppetlabs/mysql', '>=0.6.0'
+dependency 'puppetlabs/mysql', '>=0.6.0'
+dependency 'puppetlabs/postgresql', '>=2.0.0'
 #dependency 'puppetlabs/java', '>=0.2.0'
