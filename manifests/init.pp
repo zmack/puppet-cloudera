@@ -51,6 +51,10 @@ class cloudera (
 #    require       => Anchor['cloudera::begin'],
 #    before        => Anchor['cloudera::end'],
   }
+  class { 'cloudera::java':
+    ensure      => $ensure,
+    autoupgrade => $autoupgrade,
+  }
   class { 'cloudera::cdh':
     ensure         => $ensure,
     autoupgrade    => $autoupgrade,
@@ -74,6 +78,7 @@ class cloudera (
 
   Anchor['cloudera::begin'] ->
   Class['cloudera::repo'] ->
+  Class['cloudera::java'] ->
   Class['cloudera::cdh'] ->
   Class['cloudera::cm'] ->
   Anchor['cloudera::end']
