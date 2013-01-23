@@ -53,6 +53,23 @@ class cloudera::java (
   file { 'java-profile.d':
     ensure  => $file_ensure,
     path    => '/etc/profile.d/java.sh',
-    content => template('cloudera/java.sh.erb'),
+    source  => 'puppet:///modules/cloudera/java.sh',
+    mode    => '0755',
+    owner   => 'root',
+    group   => 'root',
+  }
+
+  # http://biowiki.org/CentosAlternatives
+  # alternatives --install /usr/bin/java java /usr/java/default/jre/bin/java 1600 \
+  #  --slave /usr/bin/keytool keytool /usr/java/default/bin/keytool \
+  #  --slave /usr/bin/rmiregistry rmiregistry /usr/java/default/bin/rmiregistry \
+  #  --slave /usr/lib/jvm/jre jre /usr/java/default/jre \
+  #  --slave /usr/lib/jvm-exports/jre jre_exports /usr/java/default/jre/lib
+  exec { 'java-alternatives':
+    command => 'alternatives --install /usr/bin/java java /usr/java/default/jre/bin/java 1600 --slave /usr/bin/keytool keytool /usr/java/default/bin/keytool --slave /usr/bin/rmiregistry rmiregistry /usr/java/default/bin/rmiregistry --slave /usr/lib/jvm/jre jre /usr/java/default/jre --slave /usr/lib/jvm-exports/jre jre_exports /usr/java/default/jre/lib',
+    unless  => 'alternatives --display java | grep -q /usr/java/default/jre/bin/java',
+    path    => '/bin:/sbin:/usr/bin:/usr/sbin',
+    require => Package['jdk'],
+    returns => [ 0, 2, ],
   }
 }
