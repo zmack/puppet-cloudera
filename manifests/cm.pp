@@ -4,6 +4,18 @@
 #
 # === Parameters:
 #
+# [*ensure*]
+#   Ensure if present or absent.
+#   Default: present
+#
+# [*autoupgrade*]
+#   Upgrade package automatically, if there is a newer version.
+#   Default: false
+#
+# [*service_ensure*]
+#   Ensure if service is running or stopped.
+#   Default: running
+#
 # [*server_host*]
 #   Hostname of the Cloudera Manager server.
 #   Default: localhost
@@ -14,15 +26,18 @@
 #
 # === Actions:
 #
+# Installs the packages.
+# Configures the server connection.
+# Starts the service.
 #
 # === Requires:
 #
-#   Package['jdk-sun']
+#   Package['jdk']
 #
 # === Sample Usage:
 #
 #   class { 'cloudera::cm':
-#     server_host => 'smhost.localdomain',
+#     server_host => 'smhost.example.com',
 #   }
 #
 # === Authors:

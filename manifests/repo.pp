@@ -4,18 +4,16 @@
 #
 # === Parameters:
 #
-# [*yumserver*]
+# [*ensure*]
+#   Ensure if present or absent.
+#   Default: present
+#
+# [*cdh_yumserver*]
 #   URI of the YUM server.
 #   Default: http://archive.cloudera.com
 #
 # [*cdh_yumpath*]
-#   The path to add to the $yumserver URI.
-#   Only set this if your platform is not supported or you know what you are
-#   doing.
-#   Default: auto-set, platform specific
-#
-# [*cm_yumpath*]
-#   The path to add to the $yumserver URI.
+#   The path to add to the $cdh_yumserver URI.
 #   Only set this if your platform is not supported or you know what you are
 #   doing.
 #   Default: auto-set, platform specific
@@ -24,9 +22,33 @@
 #   The version of Cloudera's Distribution, including Apache Hadoop to install.
 #   Default: 4
 #
+# [*cm_yumserver*]
+#   URI of the YUM server.
+#   Default: http://archive.cloudera.com
+#
+# [*cm_yumpath*]
+#   The path to add to the $cm_yumserver URI.
+#   Only set this if your platform is not supported or you know what you are
+#   doing.
+#   Default: auto-set, platform specific
+#
 # [*cm_version*]
 #   The version of Cloudera Manager to install.
 #   Default: 4
+#
+# [*ci_yumserver*]
+#   URI of the YUM server.
+#   Default: http://beta.cloudera.com
+#
+# [*ci_yumpath*]
+#   The path to add to the $ci_yumserver URI.
+#   Only set this if your platform is not supported or you know what you are
+#   doing.
+#   Default: auto-set, platform specific
+#
+# [*ci_version*]
+#   The version of Cloudera Impala to install.
+#   Default: 0
 #
 # === Actions:
 #

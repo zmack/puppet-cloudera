@@ -4,9 +4,24 @@
 #
 # === Parameters:
 #
+# [*ensure*]
+#   Ensure if present or absent.
+#   Default: present
+#
+# [*autoupgrade*]
+#   Upgrade package automatically, if there is a newer version.
+#   Default: false
+#
 # === Actions:
 #
+# Installs the Oracle JDK.
+# Configures the $JAVA_HOME variable and adds java to the $PATH.
+# Configures the alternatives system to set the Oracle JDK as the primary java
+# runtime.
+#
 # === Requires:
+#
+# Nothing.
 #
 # === Sample Usage:
 #

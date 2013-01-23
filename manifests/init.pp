@@ -1,18 +1,112 @@
-# 
-#  Copyright (c) 2011, Cloudera, Inc. All Rights Reserved. 
-# 
-#  Cloudera, Inc. licenses this file to you under the Apache License, 
-#  Version 2.0 (the "License"). You may not use this file except in 
-#  compliance with the License. You may obtain a copy of the License at 
-# 
-#      http://www.apache.org/licenses/LICENSE-2.0 
-# 
-#  This software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
-#  CONDITIONS OF ANY KIND, either express or implied. See the License for 
-#  the specific language governing permissions and limitations under the 
-#  License. 
-# 
-
+# == Class: cloudera
+#
+# This class handles installing the Cloudera software with the intention
+# of the CDH stack being managed by Cloudera Manager.
+#
+# === Parameters:
+#
+# [*ensure*]
+#   Ensure if present or absent.
+#   Default: present
+#
+# [*autoupgrade*]
+#   Upgrade package automatically, if there is a newer version.
+#   Default: false
+#
+# [*service_ensure*]
+#   Ensure if service is running or stopped.
+#   Default: running
+#
+# [*service_enable*]
+#   Start service at boot.
+#   Default: true
+#
+# [*cdh_yumserver*]
+#   URI of the YUM server.
+#   Default: http://archive.cloudera.com
+#
+# [*cdh_yumpath*]
+#   The path to add to the $cdh_yumserver URI.
+#   Only set this if your platform is not supported or you know what you are
+#   doing.
+#   Default: auto-set, platform specific
+#
+# [*cdh_version*]
+#   The version of Cloudera's Distribution, including Apache Hadoop to install.
+#   Default: 4
+#
+# [*cm_yumserver*]
+#   URI of the YUM server.
+#   Default: http://archive.cloudera.com
+#
+# [*cm_yumpath*]
+#   The path to add to the $cm_yumserver URI.
+#   Only set this if your platform is not supported or you know what you are
+#   doing.
+#   Default: auto-set, platform specific
+#
+# [*cm_version*]
+#   The version of Cloudera Manager to install.
+#   Default: 4
+#
+# [*ci_yumserver*]
+#   URI of the YUM server.
+#   Default: http://beta.cloudera.com
+#
+# [*ci_yumpath*]
+#   The path to add to the $ci_yumserver URI.
+#   Only set this if your platform is not supported or you know what you are
+#   doing.
+#   Default: auto-set, platform specific
+#
+# [*ci_version*]
+#   The version of Cloudera Impala to install.
+#   Default: 0
+#
+# [*server_host*]
+#   Hostname of the Cloudera Manager server.
+#   Default: localhost
+#
+# [*server_port*]
+#   Port to which the Cloudera Manager server is listening.
+#   Default: 7182
+#
+# === Actions:
+#
+# Installs YUM repository configuration files.
+#
+# === Requires:
+#
+# Nothing.
+#
+# === Sample Usage:
+#
+#   class { 'cloudera':
+#     cdh_version => '4.1',
+#     cm_version  => '4.1',
+#     server_host => 'smhost.example.com',
+#   }
+#
+# === Authors:
+#
+# Mike Arnold <mike@razorsedge.org>
+#
+# === Copyright:
+#
+# Copyright (C) 2013 Mike Arnold, unless otherwise noted.
+#  Copyright (c) 2011, Cloudera, Inc. All Rights Reserved.
+#
+#  Cloudera, Inc. licenses this file to you under the Apache License,
+#  Version 2.0 (the "License"). You may not use this file except in
+#  compliance with the License. You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  This software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+#  CONDITIONS OF ANY KIND, either express or implied. See the License for
+#  the specific language governing permissions and limitations under the
+#  License.
+#
 class cloudera (
   $ensure         = $cloudera::params::ensure,
   $autoupgrade    = $cloudera::params::autoupgrade,

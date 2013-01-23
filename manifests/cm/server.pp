@@ -4,24 +4,74 @@
 #
 # === Parameters:
 #
+# [*database_name*]
+#   Name of the database to use for Cloudera Manager.
+#   Default: scm
+#
+# [*username*]
+#   Name of the user to use to connect to *database_name*.
+#   Default: scm
+#
+# [*password*]
+#   Password to use to connect to *database_name*.
+#   Default: scm
+#
+# [*db_host*]
+#   Host to connect to for *database_name*.
+#   Default: localhost
+#
+# [*db_port*]
+#   Port on *db_host* to connect to for *database_name*.
+#   Default: 3306
+#
+# [*db_user*]
+#   Administrative database user on *db_host*.
+#   Default: root
+#
+# [*db_pass*]
+#   Administrative database user *db_user* password.
+#   Default:
+#
 # [*db_type*]
 #   Which type of database to use for Cloudera Manager.  Valid options are
 #   embedded, mysql, oracle, or postgresql.
 #   Default: embedded
 #
+# [*ensure*]
+#   Ensure if present or absent.
+#   Default: present
+#
+# [*autoupgrade*]
+#   Upgrade package automatically, if there is a newer version.
+#   Default: false
+#
+# [*service_ensure*]
+#   Ensure if service is running or stopped.
+#   Default: running
+#
 # === Actions:
 #
+# Installs the packages.
+# Configures the database connection.
+# Starts the service.
 #
 # === Requires:
 #
 #   Package['mysql-connector-java']
 #   Package['oracle-connector-java']
 #   Package['postgresql-java']
-#   Package['jdk-sun']
+#   Package['jdk']
 #
 # === Sample Usage:
 #
 #   class { 'cloudera::cm::server':
+#     $database_name = 'cm',
+#     $username      = 'clouderaman',
+#     $password      = 'mySecretPass',
+#     $db_host       = 'dbhost.example.com',
+#     $db_user       = 'root',
+#     $db_pass       = 'myOtherSecretPass',
+#     $db_type       = 'mysql',
 #   }
 #
 # === Authors:
@@ -134,9 +184,9 @@ class cloudera::cm::server (
       }
     }
     'mysql': {
-      if ( $db_host != 'localhost' ) and ( $db_host != $fqdn ) {
+      if ( $db_host != 'localhost' ) and ( $db_host != $::fqdn ) {
         # Set the commandline options to connect to a remote database.
-        $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${fqdn}"
+        $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${::fqdn}"
         $scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['mysqld'], ]
       } else {
         #require mysql::server
@@ -151,9 +201,9 @@ class cloudera::cm::server (
       Class['mysql::java'] -> Exec['scm_prepare_database']
     }
     'oracle': {
-      if ( $db_host != 'localhost' ) and ( $db_host != $fqdn ) {
+      if ( $db_host != 'localhost' ) and ( $db_host != $::fqdn ) {
         # Set the commandline options to connect to a remote database.
-        $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${fqdn}"
+        $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${::fqdn}"
         #$scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['oracle'], ]
         $scm_prepare_database_require = Package['cloudera-manager-server']
       } else {
@@ -162,17 +212,17 @@ class cloudera::cm::server (
         $scm_prepare_database_require = Package['cloudera-manager-server']
       }
 
-      # TODO: find a Class['oracle::java']
-      #if ! defined(Class['oracle::java']) {
-      #  class { 'oracle::java': }
+      # TODO: find a Class['oraclerdbms::java']
+      #if ! defined(Class['oraclerdbms::java']) {
+      #  class { 'oraclerdbms::java': }
       #}
       realize Exec['scm_prepare_database']
-      #Class['oracle::java'] -> Exec['scm_prepare_database']
+      #Class['oraclerdbms::java'] -> Exec['scm_prepare_database']
     }
     'postgresql': {
-      if ( $db_host != 'localhost' ) and ( $db_host != $fqdn ) {
+      if ( $db_host != 'localhost' ) and ( $db_host != $::fqdn ) {
         # Set the commandline options to connect to a remote database.
-        $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${fqdn}"
+        $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${::fqdn}"
         $scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['postgresqld'], ]
       } else {
         #require postgresql::server
