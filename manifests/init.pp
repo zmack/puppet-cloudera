@@ -63,11 +63,11 @@
 #   The version of Cloudera Impala to install.
 #   Default: 0
 #
-# [*server_host*]
+# [*cm_server_host*]
 #   Hostname of the Cloudera Manager server.
 #   Default: localhost
 #
-# [*server_port*]
+# [*cm_server_port*]
 #   Port to which the Cloudera Manager server is listening.
 #   Default: 7182
 #
@@ -82,9 +82,9 @@
 # === Sample Usage:
 #
 #   class { 'cloudera':
-#     cdh_version => '4.1',
-#     cm_version  => '4.1',
-#     server_host => 'smhost.example.com',
+#     cdh_version    => '4.1',
+#     cm_version     => '4.1',
+#     cm_server_host => 'smhost.example.com',
 #   }
 #
 # === Authors:
