@@ -52,7 +52,7 @@
 #
 class cloudera::cdh (
   $ensure         = $cloudera::params::ensure,
-  $autoupgrade    = $cloudera::params::autoupgrade,
+  $autoupgrade    = $cloudera::params::safe_autoupgrade,
   $service_ensure = $cloudera::params::service_ensure,
 ) inherits cloudera::params {
   # Validate our booleans

@@ -109,7 +109,7 @@
 #
 class cloudera (
   $ensure         = $cloudera::params::ensure,
-  $autoupgrade    = $cloudera::params::autoupgrade,
+  $autoupgrade    = $cloudera::params::safe_autoupgrade,
   $service_ensure = $cloudera::params::service_ensure,
   $service_enable = $cloudera::params::safe_service_enable,
   $cdh_yumserver  = $cloudera::params::cdh_yumserver,

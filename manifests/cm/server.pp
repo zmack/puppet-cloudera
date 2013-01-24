@@ -4,6 +4,18 @@
 #
 # === Parameters:
 #
+# [*ensure*]
+#   Ensure if present or absent.
+#   Default: present
+#
+# [*autoupgrade*]
+#   Upgrade package automatically, if there is a newer version.
+#   Default: false
+#
+# [*service_ensure*]
+#   Ensure if service is running or stopped.
+#   Default: running
+#
 # [*database_name*]
 #   Name of the database to use for Cloudera Manager.
 #   Default: scm
@@ -36,18 +48,6 @@
 #   Which type of database to use for Cloudera Manager.  Valid options are
 #   embedded, mysql, oracle, or postgresql.
 #   Default: embedded
-#
-# [*ensure*]
-#   Ensure if present or absent.
-#   Default: present
-#
-# [*autoupgrade*]
-#   Upgrade package automatically, if there is a newer version.
-#   Default: false
-#
-# [*service_ensure*]
-#   Ensure if service is running or stopped.
-#   Default: running
 #
 # === Actions:
 #
@@ -83,6 +83,9 @@
 # Copyright (C) 2013 Mike Arnold, unless otherwise noted.
 #
 class cloudera::cm::server (
+  $ensure         = $cloudera::params::ensure,
+  $autoupgrade    = $cloudera::params::safe_autoupgrade,
+  $service_ensure = $cloudera::params::service_ensure,
   $database_name  = 'scm',
   $username       = 'scm',
   $password       = 'scm',
@@ -91,9 +94,6 @@ class cloudera::cm::server (
   $db_user        = 'root',
   $db_pass        = '',
   $db_type        = 'embedded',
-  $ensure         = $cloudera::params::ensure,
-  $autoupgrade    = $cloudera::params::autoupgrade,
-  $service_ensure = $cloudera::params::service_ensure,
 ) inherits cloudera::params {
   # Validate our booleans
   validate_bool($autoupgrade)

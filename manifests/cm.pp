@@ -50,7 +50,7 @@
 #
 class cloudera::cm (
   $ensure         = $cloudera::params::ensure,
-  $autoupgrade    = $cloudera::params::autoupgrade,
+  $autoupgrade    = $cloudera::params::safe_autoupgrade,
   $service_ensure = $cloudera::params::service_ensure,
   $server_host    = $cloudera::params::cm_server_host,
   $server_port    = $cloudera::params::cm_server_port,
