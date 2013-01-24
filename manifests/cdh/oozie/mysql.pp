@@ -21,11 +21,7 @@
 # Copyright (C) 2013 Mike Arnold, unless otherwise noted.
 #
 class cloudera::cdh::oozie::mysql {
-  if ! defined(Package['mysql-connector-java']) {
-    package { 'mysql-connector-java':
-      ensure => 'present',
-    }
-  }
+  include mysql::java
 
   file { '/usr/lib/oozie/libext/mysql-connector-java.jar':
     ensure => link,
