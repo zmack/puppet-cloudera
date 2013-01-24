@@ -26,8 +26,8 @@ class cloudera::cdh::flume {
   }
 
   service { 'flume-ng':
-    ensure     => 'running',
-    enable     => true,
+#    ensure     => 'running',
+    enable     => false,
     hasstatus  => false,
     hasrestart => true,
     require    => Package['flume-ng'],
