@@ -46,6 +46,11 @@ class cloudera::params {
     default => $::cloudera_cm_server_port,
   }
 
+  $oozie_ext = $::cloudera_oozie_ext ? {
+    undef   => 'http://extjs.com/deploy/ext-2.2.zip',
+    default => $::cloudera_oozie_ext,
+  }
+
 ### The following parameters should not need to be changed.
 
   $ensure = $::cloudera_ensure ? {

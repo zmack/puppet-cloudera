@@ -4,11 +4,17 @@
 #
 # === Parameters:
 #
+# [*oozie_ext*]
+#   URI of the ext-2.2.zip file required by Oozie in order to enable the WebUI.
+#   Default: http://extjs.com/deploy/ext-2.2.zip
+#
 # === Actions:
+#
+# Downloads and unzips ext-2.2.zip.
 #
 # === Requires:
 #
-#   Define['wget::fetch']
+#   Define['staging::deploy']
 #
 # === Sample Usage:
 #
@@ -22,16 +28,11 @@
 #
 # Copyright (C) 2013 Mike Arnold, unless otherwise noted.
 #
-class cloudera::cdh::oozie::ext {
-  wget::fetch { 'ext-2.2.zip':
-    source      => 'http://extjs.com/deploy/ext-2.2.zip',
-    destination => '/usr/lib/oozie/libext/ext-2.2.zip',
-  }
-
-  file { '/var/lib/oozie/oozie-server/webapps':
-    ensure => 'directory',
-    mode   => '0755',
-    owner  => 'oozie',
-    group  => 'oozie',
-  }
+class cloudera::cdh::oozie::ext (
+  $source = $cloudera::params::oozie_ext,
+) inherits cloudera::params {
+  staging::deploy { 'ext-2.2.zip':
+    source => $source,
+    target => '/usr/lib/oozie/libext',
+   }
 }
