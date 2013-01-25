@@ -73,6 +73,12 @@ class cloudera::cdh (
     require     => Anchor['cloudera::cdh::begin'],
     before      => Anchor['cloudera::cdh::end'],
   }
+#  class { 'cloudera::cdh::hue':
+##    ensure      => $ensure,
+##    autoupgrade => $autoupgrade,
+#    require     => Anchor['cloudera::cdh::begin'],
+#    before      => Anchor['cloudera::cdh::end'],
+#  }
   class { 'cloudera::cdh::hue::plugins':
 #    ensure      => $ensure,
 #    autoupgrade => $autoupgrade,
