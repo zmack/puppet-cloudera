@@ -7,7 +7,7 @@ develop branch: [![Build Status](https://secure.travis-ci.org/razorsedge/puppet-
 Introduction
 ------------
 
-This module manages the installation of [Cloudera's Distribution, including Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products/cdh.html) and [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products/cloudera-manager.html).  It follows the standards written in the (Cloudera Manager Installation Guide)[https://ccp.cloudera.com/display/ENT41DOC/Cloudera+Manager+Installation+Guide] (Installation Path B - Installation Using Your Own Method)[https://ccp.cloudera.com/display/ENT41DOC/Installation+Path+B+-+Installation+Using+Your+Own+Method].  It also includes installing the beta version of (Cloudera Impala)[https://ccp.cloudera.com/display/IMPALA10BETADOC/Cloudera+Impala+1.0+Beta+Documentation].
+This module manages the installation of [Cloudera's Distribution, including Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products/cdh.html) and [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products/cloudera-manager.html).  It follows the standards written in the [Cloudera Manager Installation Guide](https://ccp.cloudera.com/display/ENT41DOC/Cloudera+Manager+Installation+Guide) [Installation Path B - Installation Using Your Own Method](https://ccp.cloudera.com/display/ENT41DOC/Installation+Path+B+-+Installation+Using+Your+Own+Method).  It also includes installing the beta version of [Cloudera Impala](https://ccp.cloudera.com/display/IMPALA10BETADOC/Cloudera+Impala+1.0+Beta+Documentation).
 
 Actions:
 
@@ -44,6 +44,7 @@ Meta-class that includes:
 * Class['cloudera::java']
 * Class['cloudera::cdh']
 * Class['cloudera::cm']
+
 Requires the parameter `cm_server_host`.
 
 ### Class['cloudera::repo']
@@ -60,7 +61,7 @@ This class handles installing the Cloudera Distribution, including Apache Hadoop
 
 ### Class['cloudera::cdh::hue']
 
-This class handles installing Hue.  This class is not currently included in Class['cloudera::cdh'] as that would conflict with the Cloudera installation instructions.
+This class handles installing Hue.  This class is not currently included in Class['cloudera::cdh'] as this would conflict with the Cloudera installation instructions.
 
 ### Class['cloudera::cm']
 
@@ -74,36 +75,39 @@ This class handles installing and configuring the Cloudera Manager Server.  This
 Examples
 --------
 
-    # Most nodes in the cluster will use this declaration:
-    class { 'cloudera':
-      cm_server_host => 'smhost.example.com',
-    }
+```Puppet
+# Most nodes in the cluster will use this declaration:
+class { 'cloudera':
+  cm_server_host => 'smhost.example.com',
+}
+```
 
+```Puppet
+# Nodes that will be Gateways may use this declaration:
+class { 'cloudera':
+  cm_server_host => 'smhost.example.com',
+}
+class { 'cloudera::cdh::hue': }
+class { 'cloudera::cdh::mahout': }
+class { 'cloudera::cdh::sqoop': }
+# Install Oozie WebUI support (optional):
+#class { 'cloudera::cdh::oozie::ext': }
+# Install MySQL support (optional):
+#class { 'cloudera::cdh::hue::mysql': }
+#class { 'cloudera::cdh::oozie::mysql': }
+```
 
-    # Nodes that will be Gateways may use this declaration:
-    class { 'cloudera':
-      cm_server_host => 'smhost.example.com',
-    }
-    class { 'cloudera::cdh::hue': }
-    class { 'cloudera::cdh::mahout': }
-    class { 'cloudera::cdh::sqoop': }
-    # Install Oozie WebUI support (optional):
-    #class { 'cloudera::cdh::oozie::ext': }
-    # Install MySQL support (optional):
-    #class { 'cloudera::cdh::hue::mysql': }
-    #class { 'cloudera::cdh::oozie::mysql': }
-
-
-    # The node that will be the CM server may use this declaration:
-    # This will skip installation of the CDH software as it is not required.
-    class { 'cloudera::repo':
-      cdh_version => '4.1',
-      cm_version  => '4.1',
-    } ->
-    class { 'cloudera::java': } ->
-    class { 'cloudera::cm': } ->
-    class { 'cloudera::cm::server': }
-
+```Puppet
+# The node that will be the CM server may use this declaration:
+# This will skip installation of the CDH software as it is not required.
+class { 'cloudera::repo':
+  cdh_version => '4.1',
+  cm_version  => '4.1',
+} ->
+class { 'cloudera::java': } ->
+class { 'cloudera::cm': } ->
+class { 'cloudera::cm::server': }
+```
 
 Notes
 -----
