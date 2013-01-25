@@ -14,6 +14,16 @@
 #
 
 class cloudera::cdh::hadoop {
+  anchor { 'cloudera::cdh::hadoop::begin': }
+  anchor { 'cloudera::cdh::hadoop::end': }
+
+  class { 'cloudera::cdh::hadoop::client':
+#    ensure      => $ensure,
+#    autoupgrade => $autoupgrade,
+    require     => Anchor['cloudera::cdh::hadoop::begin'],
+    before      => Anchor['cloudera::cdh::hadoop::end'],
+  }
+
   package { 'hadoop':
     ensure => 'present',
   }
@@ -31,10 +41,6 @@ class cloudera::cdh::hadoop {
   }
 
   package { 'hadoop-yarn':
-    ensure => 'present',
-  }
-
-  package { 'hadoop-client':
     ensure => 'present',
   }
 
