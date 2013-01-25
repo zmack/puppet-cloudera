@@ -1,81 +1,141 @@
-# Puppet module to install Cloudera's Distribution for Apache Hadoop and Cloudera Manager
+Puppet Cloudera Manager and CDH4 Module
+=======================================
 
-## Description
+master branch: [![Build Status](https://secure.travis-ci.org/razorsedge/puppet-cloudera.png?branch=master)](http://travis-ci.org/razorsedge/puppet-cloudera)
+develop branch: [![Build Status](https://secure.travis-ci.org/razorsedge/puppet-cloudera.png?branch=develop)](http://travis-ci.org/razorsedge/puppet-cloudera)
 
-This module contains four primary classes:
+Introduction
+------------
 
-### cloudera::cdh
+This module manages the installation of [Cloudera's Distribution, including Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products/cdh.html) and [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products/cloudera-manager.html).  It follows the standards written in the [Cloudera Manager Installation Guide](https://ccp.cloudera.com/display/ENT41DOC/Cloudera+Manager+Installation+Guide) [Installation Path B - Installation Using Your Own Method](https://ccp.cloudera.com/display/ENT41DOC/Installation+Path+B+-+Installation+Using+Your+Own+Method).  It also includes installing the beta version of [Cloudera Impala](https://ccp.cloudera.com/display/IMPALA10BETADOC/Cloudera+Impala+1.0+Beta+Documentation).
 
-Installs the components of Cloudera’s Distribution for Hadoop (CDH), and, with two exceptions, leaves them unconfigured. Including `cloudera::cdh` directly will install the Hadoop, HBase, Hive, ZooKeeper, Pig, Oozie, Mahout, and Hue packages. In addition, you can install each of the components individually, by including only the relevant class in this namespace (for instance, including `cloudera::cdh::hbase` will result in HBase being installed).
+Actions:
 
-Since neither Sqoop nor Flume is currently managed by Cloudera Manager, `cloudera::cdh::sqoop` and `cloudera::cdh::flume` contain classes to start those components’ services directly from Puppet: `cloudera::cdh::flume::node`, `cloudera::cdh::flume::master`, and `cloudera::cdh::sqoop::metastore`.
+* Installs the Cloudera software repositories for CDH, CM, and Impala beta.
+* Installs Oracle JDK 6.
+* Installs most components of CDH 4.
+* Installs CM 4 agent.
+* Installs Impala beta.
+* Configures the CM agent to talk to a CM server.
+* Starts the CM agent.
+* Separately installs the CM server and database connectivity (by default to the embedded database server).
+* Separately starts the CM server.
 
-This class is automatically included if you `include cloudera`.
+Software Support:
+
+* CDH              - tested with 4.1.2; CDH3 is presently unsuported (patches welcome)
+* Cloudera Manager - tested with 4.1
+
+OS Support:
+
+* RedHat family - tested on CentOS 6.3+
+* SuSE family   - presently unsupported (patches welcome)
+* Debian family - presently unsupported (patches welcome)
+
+Class documentation is available via puppetdoc.
+
+Class Descriptions
+------------------
+
+### Class['cloudera']
+
+Meta-class that includes:
+* Class['cloudera::repo']
+* Class['cloudera::java']
+* Class['cloudera::cdh']
+* Class['cloudera::cm']
+
+Requires the parameter `cm_server_host`.
+
+### Class['cloudera::repo']
+
+This class handles installing the Cloudera software repositories.
+
+### Class['cloudera::java']
+
+This class handles installing the Oracle JDK from the Cloudera Manager repository.
+
+### Class['cloudera::cdh']
+
+This class handles installing the Cloudera Distribution, including Apache Hadoop.  No configuration is performed on the CDH software and all daemons are forced off so that Cloudera Manager can manage them.  This class installs Bigtop utils, Hadoop (HDFS, MapReduce, YARN), Hue-plugins, HBase, Hive, Oozie, Pig, ZooKeeper, Flume-NG, and Impala.
+
+### Class['cloudera::cdh::hue']
+
+This class handles installing Hue.  This class is not currently included in Class['cloudera::cdh'] as this would conflict with the Cloudera installation instructions.
+
+### Class['cloudera::cm']
+
+This class handles installing and configuring the Cloudera Manager Agent.  This agent should be running on every node in the cluster so that Cloudera Manager can deploy software configurations to the node.  Requires the parameter `server_host`.
+
+### Class['cloudera::cm::server']
+
+This class handles installing and configuring the Cloudera Manager Server.  This class should only be included on one node for you environment.  By default it will install the embeded PostgreSQL database on the same node.  With the correct parameters, it can also connect to local or remote MySQL, PostgreSQL, and Oracle RDBMS databases.
 
 
-### cloudera::plugins
+Examples
+--------
 
-Installs the Cloudera Manager plugins for CDH. 
-
-This class is automatically included if you `include cloudera`.
-
-### cloudera::scm-agent
-
-Installs, configures, and starts the Cloudera Manager Agent, which should be running on every
-node of your cluster.  Usage is detailed below.
-
-This class is automatically included if you `include cloudera`.
-
-### cloudera::scm-server
-
-Installs, configures, and starts the Cloudera Manager Server.  Generally, should only
-be included for one host in your cluster, and, as such, is *not* included automatically
-in from the `cloudera` class.  For information about usage, skip ahead to the section titled "Usage".
-
-### General Notes
-
-Note that, in order for this module to work, you will have to ensure that:
-
- * Oracle JRE version 6 or later is installed
- * The MySQL JDBC connector is installed
- * Your package manager is configured with a repository containing the CDH packages
- * If installing Cloudera Manager Server, MySQL must be installed and running on the host and port (and using the credentials) provided to cloudera::scm-server::params.
-
-For more information, see the "Cloudera Manager Installation Guide" at:
-[https://ccp.cloudera.com/display/ENT/Cloudera+Manager+Installation+Guide](https://ccp.cloudera.com/display/ENT/Cloudera+Manager+Installation+Guide)
-
-## Usage
-
-<pre>
-host 'scm-master' {
-  include cloudera # includes all components except for Cloudera Manager Server
- 
-  class { 'cloudera::scm-server::params':
-    db_pass       => $db_cmf_pw,
-    db_admin_pass => $db_root_pw,
-  }
-  include cloudera::scm-server
+```Puppet
+# Most nodes in the cluster will use this declaration:
+class { 'cloudera':
+  cm_server_host => 'smhost.example.com',
 }
+```
 
-host 'cdh-node' {
-  class { 'cloudera::scm-agent::params':
-    server_host => $scm_master_fqdn,
-  }
-  include cloudera
+```Puppet
+# Nodes that will be Gateways may use this declaration:
+class { 'cloudera':
+  cm_server_host => 'smhost.example.com',
 }
-</pre>
+class { 'cloudera::cdh::hue': }
+class { 'cloudera::cdh::mahout': }
+class { 'cloudera::cdh::sqoop': }
+# Install Oozie WebUI support (optional):
+#class { 'cloudera::cdh::oozie::ext': }
+# Install MySQL support (optional):
+#class { 'cloudera::cdh::hue::mysql': }
+#class { 'cloudera::cdh::oozie::mysql': }
+```
 
-## Configurable Options
+```Puppet
+# The node that will be the CM server may use this declaration:
+# This will skip installation of the CDH software as it is not required.
+class { 'cloudera::repo':
+  cdh_version => '4.1',
+  cm_version  => '4.1',
+} ->
+class { 'cloudera::java': } ->
+class { 'cloudera::cm': } ->
+class { 'cloudera::cm::server': }
+```
 
-### cloudera::scm-agent::params
+Notes
+-----
 
- * $server\_host (defaults to "localhost"): FQDN or IP address to use when connecting to the Cloudera Manager Server
- * $server\_port (defaults to "7182"): TCP port to use when connecting to the Cloudera Manager Server
+* Supports Top Scope variables (i.e. via Dashboard) and Parameterized Classes.
+* Installing CDH3 is not presently supported.
 
-### cloudera::scm-server::params
+Issues
+------
 
- * $db\_name (defaults to "cmf"): Name of the MySQL database that the Cloudera Manager Server will use
- * $db\_user (defaults to "cmf"): User that the Cloudera Manager Server should use when authenticating to MySQL
- * $db\_pass: Password that the Cloudera Manager Server should use when authenticating to MySQL
- * $db\_admin\_user (defaults to "root"): Name of a user with permission to administer MySQL
- * $db\_admin\_pass (defaults to undef): Password to use when authenticating as $db\_admin\_user.
+* None
+
+TODO
+----
+
+* None
+
+License
+-------
+
+Please see LICENSE file.
+
+Copyright
+---------
+
+Copyright (C) 2013 Mike Arnold <mike@razorsedge.org>
+
+[razorsedge/puppet-cloudera on GitHub](https://github.com/razorsedge/puppet-cloudera)
+
+[razorsedge/cloudera on Puppet Forge](http://forge.puppetlabs.com/razorsedge/cloudera)
+

@@ -1,18 +1,35 @@
-# 
-#  Copyright (c) 2011, Cloudera, Inc. All Rights Reserved. 
-# 
-#  Cloudera, Inc. licenses this file to you under the Apache License, 
-#  Version 2.0 (the "License"). You may not use this file except in 
-#  compliance with the License. You may obtain a copy of the License at 
-# 
-#      http://www.apache.org/licenses/LICENSE-2.0 
-# 
-#  This software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
-#  CONDITIONS OF ANY KIND, either express or implied. See the License for 
-#  the specific language governing permissions and limitations under the 
-#  License. 
-# 
-
+# == Class: cloudera::cdh::flume
+#
+# This class installs the Flume NG packages.
+#
+# === Parameters:
+#
+# === Actions:
+#
+# === Requires:
+#
+# === Sample Usage:
+#
+#   class { 'cloudera::cdh::flume': }
+#
+# === Authors:
+#
+# Mike Arnold <mike@razorsedge.org>
+#
+# === Copyright:
+#
+# Copyright (C) 2013 Mike Arnold, unless otherwise noted.
+#
 class cloudera::cdh::flume {
-  include cloudera::cdh::flume::client
+  package { 'flume-ng':
+    ensure => 'present',
+  }
+
+  service { 'flume-ng':
+#    ensure     => 'running',
+    enable     => false,
+    hasstatus  => false,
+    hasrestart => true,
+    require    => Package['flume-ng'],
+  }
 }
