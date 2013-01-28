@@ -2,8 +2,8 @@ fixtures:
   repositories:
     stdlib: git://github.com/puppetlabs/puppetlabs-stdlib.git
     mysql: git://github.com/puppetlabs/puppetlabs-mysql.git
-    postgresql: git://github.com/puppetlabs/puppetlabs-postgresql.git
-    staging: git://github.com/puppetlabs/nanliu-staging.git
-    epel: git://github.com/puppetlabs/puppetlabs-epel.git
+    postgresql: git://github.com/puppetlabs/puppet-postgresql.git
+    staging: git://github.com/nanliu/puppet-staging.git
+    epel: git://github.com/stahnma/puppet-module-epel.git
   symlinks:
     cloudera: "#{source_dir}"
