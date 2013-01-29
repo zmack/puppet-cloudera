@@ -156,12 +156,6 @@ class cloudera::cm::server (
     require    => Package['cloudera-manager-server'],
   }
 
-  @exec { 'scm_prepare_database':
-    command => "/usr/share/cmf/schema/scm_prepare_database.sh ${db_type} ${scmopts} --user=${db_user} --password=${db_pass} ${database_name} ${username} ${password} && touch /etc/cloudera-manager-server/.scm_prepare_database",
-    creates => '/etc/cloudera-manager-server/.scm_prepare_database',
-    require => $scm_prepare_database_require,
-  }
-
   case $db_type {
     'embedded': {
       package { 'cloudera-manager-server-db':
@@ -207,8 +201,8 @@ class cloudera::cm::server (
         #$scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['oracle'], ]
         $scm_prepare_database_require = Package['cloudera-manager-server']
       } else {
-        #require oracle::server
-        #Class['oracle::server'] -> Service['cloudera-scm-server']
+        #require oraclerdbms::server
+        #Class['oraclerdbms::server'] -> Service['cloudera-scm-server']
         $scm_prepare_database_require = Package['cloudera-manager-server']
       }
 
@@ -237,5 +231,11 @@ class cloudera::cm::server (
       Class['postgresql::java'] -> Exec['scm_prepare_database']
     }
     default: { }
+  }
+
+  @exec { 'scm_prepare_database':
+    command => "/usr/share/cmf/schema/scm_prepare_database.sh ${db_type} ${scmopts} --user=${db_user} --password=${db_pass} ${database_name} ${username} ${password} && touch /etc/cloudera-manager-server/.scm_prepare_database",
+    creates => '/etc/cloudera-manager-server/.scm_prepare_database',
+    require => $scm_prepare_database_require,
   }
 }
