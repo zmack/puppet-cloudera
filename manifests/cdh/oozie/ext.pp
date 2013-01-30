@@ -34,5 +34,5 @@ class cloudera::cdh::oozie::ext (
   staging::deploy { 'ext-2.2.zip':
     source => $source,
     target => '/usr/lib/oozie/libext',
-   }
+  }
 }
