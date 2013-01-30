@@ -37,7 +37,7 @@
 #
 class cloudera::java (
   $ensure      = $cloudera::params::ensure,
-  $autoupgrade = $cloudera::params::safe_autoupgrade,
+  $autoupgrade = $cloudera::params::safe_autoupgrade
 ) inherits cloudera::params {
   # Validate our booleans
   validate_bool($autoupgrade)

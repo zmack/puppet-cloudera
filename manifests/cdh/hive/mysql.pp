@@ -24,7 +24,7 @@ class cloudera::cdh::hive::mysql (
   $password,
   $database_name = 'metastore_db',
   $username      = 'hive',
-  $hive_version  = '0.9.0',
+  $hive_version  = '0.9.0'
 ) inherits cloudera::params {
   include mysql::java
 

@@ -93,7 +93,7 @@ class cloudera::cm::server (
   $db_port        = '3306',
   $db_user        = 'root',
   $db_pass        = '',
-  $db_type        = 'embedded',
+  $db_type        = 'embedded'
 ) inherits cloudera::params {
   # Validate our booleans
   validate_bool($autoupgrade)

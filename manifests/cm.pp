@@ -53,7 +53,7 @@ class cloudera::cm (
   $autoupgrade    = $cloudera::params::safe_autoupgrade,
   $service_ensure = $cloudera::params::service_ensure,
   $server_host    = $cloudera::params::cm_server_host,
-  $server_port    = $cloudera::params::cm_server_port,
+  $server_port    = $cloudera::params::cm_server_port
 ) inherits cloudera::params {
   # Validate our booleans
   validate_bool($autoupgrade)

@@ -122,7 +122,7 @@ class cloudera (
   $ci_yumpath     = $cloudera::params::ci_yumpath,
   $ci_version     = $cloudera::params::ci_version,
   $cm_server_host = $cloudera::params::cm_server_host,
-  $cm_server_port = $cloudera::params::cm_server_port,
+  $cm_server_port = $cloudera::params::cm_server_port
 ) inherits cloudera::params {
   # Validate our booleans
   validate_bool($autoupgrade)

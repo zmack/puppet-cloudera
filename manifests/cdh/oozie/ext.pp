@@ -29,7 +29,7 @@
 # Copyright (C) 2013 Mike Arnold, unless otherwise noted.
 #
 class cloudera::cdh::oozie::ext (
-  $source = $cloudera::params::oozie_ext,
+  $source = $cloudera::params::oozie_ext
 ) inherits cloudera::params {
   staging::deploy { 'ext-2.2.zip':
     source => $source,
