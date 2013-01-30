@@ -103,28 +103,28 @@ class cloudera::repo (
         descr    => 'Cloudera\'s Distribution for Hadoop, Version 4',
         enabled  => $enabled,
         gpgcheck => 1,
-        gpgkey   => "${cdh_yumserver}${cdh_yumpath}/RPM-GPG-KEY-cloudera",
-        baseurl  => "${cdh_yumserver}${cdh_yumpath}/${cdh_version}/",
+        gpgkey   => "${cdh_yumserver}${cdh_yumpath}RPM-GPG-KEY-cloudera",
+        baseurl  => "${cdh_yumserver}${cdh_yumpath}${cdh_version}/",
         priority => $cloudera::params::yum_priority,
-        protect  => $cloudera::params::yum_protect ,
+        protect  => $cloudera::params::yum_protect,
       }
       yumrepo { 'cloudera-manager':
         descr    => 'Cloudera Manager',
         enabled  => $enabled,
         gpgcheck => 1,
-        gpgkey   => "${cm_yumserver}${cm_yumpath}/RPM-GPG-KEY-cloudera",
-        baseurl  => "${cm_yumserver}${cm_yumpath}/${cm_version}/",
+        gpgkey   => "${cm_yumserver}${cm_yumpath}RPM-GPG-KEY-cloudera",
+        baseurl  => "${cm_yumserver}${cm_yumpath}${cm_version}/",
         priority => $cloudera::params::yum_priority,
-        protect  => $cloudera::params::yum_protect ,
+        protect  => $cloudera::params::yum_protect,
       }
       yumrepo { 'cloudera-impala':
         descr    => 'Impala',
         enabled  => $enabled,
         gpgcheck => 1,
-        gpgkey   => "${ci_yumserver}${ci_yumpath}/RPM-GPG-KEY-cloudera",
-        baseurl  => "${ci_yumserver}${ci_yumpath}/${ci_version}/",
+        gpgkey   => "${ci_yumserver}${ci_yumpath}RPM-GPG-KEY-cloudera",
+        baseurl  => "${ci_yumserver}${ci_yumpath}${ci_version}/",
         priority => $cloudera::params::yum_priority,
-        protect  => $cloudera::params::yum_protect ,
+        protect  => $cloudera::params::yum_protect,
       }
     }
     default: { }
