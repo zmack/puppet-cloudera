@@ -98,8 +98,10 @@ class cloudera::cm::server (
   # Validate our booleans
   validate_bool($autoupgrade)
   # Validate our regular expressions
-  $states = [ '^embedded$', '^mysql$','^oracle$','^postgresql$' ]
-  validate_re($db_type, $states, '$db_type must be either embedded, mysql, oracle, or postgresql.')
+  #$states = [ '^embedded$', '^mysql$','^oracle$','^postgresql$' ]
+  #validate_re($db_type, $states, '$db_type must be either embedded, mysql, oracle, or postgresql.')
+  $states = [ '^embedded$', '^mysql$','^oracle$' ]
+  validate_re($db_type, $states, '$db_type must be either embedded, mysql, or oracle.')
 
   case $ensure {
     /(present)/: {
@@ -213,23 +215,23 @@ class cloudera::cm::server (
       realize Exec['scm_prepare_database']
       #Class['oraclerdbms::java'] -> Exec['scm_prepare_database']
     }
-    'postgresql': {
-      if ( $db_host != 'localhost' ) and ( $db_host != $::fqdn ) {
-        # Set the commandline options to connect to a remote database.
-        $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${::fqdn}"
-        $scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['postgresqld'], ]
-      } else {
-        #require postgresql::server
-        Class['postgresql::server'] -> Service['cloudera-scm-server']
-        $scm_prepare_database_require = Package['cloudera-manager-server']
-      }
-
-      if ! defined(Class['postgresql::java']) {
-        class { 'postgresql::java': }
-      }
-      realize Exec['scm_prepare_database']
-      Class['postgresql::java'] -> Exec['scm_prepare_database']
-    }
+#    'postgresql': {
+#      if ( $db_host != 'localhost' ) and ( $db_host != $::fqdn ) {
+#        # Set the commandline options to connect to a remote database.
+#        $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${::fqdn}"
+#        $scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['postgresqld'], ]
+#      } else {
+#        #require postgresql::server
+#        Class['postgresql::server'] -> Service['cloudera-scm-server']
+#        $scm_prepare_database_require = Package['cloudera-manager-server']
+#      }
+#
+#      if ! defined(Class['postgresql::java']) {
+#        class { 'postgresql::java': }
+#      }
+#      realize Exec['scm_prepare_database']
+#      Class['postgresql::java'] -> Exec['scm_prepare_database']
+#    }
     default: { }
   }
 

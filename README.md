@@ -24,11 +24,11 @@ Actions:
 Software Support:
 
 * CDH              - tested with 4.1.2; CDH3 is presently unsuported (patches welcome)
-* Cloudera Manager - tested with 4.1
+* Cloudera Manager - tested with 4.1.2
 
 OS Support:
 
-* RedHat family - tested on CentOS 6.3+
+* RedHat family - tested on CentOS 6.3
 * SuSE family   - presently unsupported (patches welcome)
 * Debian family - presently unsupported (patches welcome)
 
@@ -65,11 +65,11 @@ This class handles installing Hue.  This class is not currently included in Clas
 
 ### Class['cloudera::cm']
 
-This class handles installing and configuring the Cloudera Manager Agent.  This agent should be running on every node in the cluster so that Cloudera Manager can deploy software configurations to the node.  Requires the parameter `server_host`.
+This class handles installing and configuring the Cloudera Manager Agent.  This agent should be running on every node in the cluster so that Cloudera Manager can deploy software configurations to the node.  Requires the parameter `server_host` which is passed in from Class['cloudera'].
 
 ### Class['cloudera::cm::server']
 
-This class handles installing and configuring the Cloudera Manager Server.  This class should only be included on one node for you environment.  By default it will install the embeded PostgreSQL database on the same node.  With the correct parameters, it can also connect to local or remote MySQL, PostgreSQL, and Oracle RDBMS databases.
+This class handles installing and configuring the Cloudera Manager Server.  This class should only be included on one node of your environment.  By default it will install the embeded PostgreSQL database on the same node.  With the correct parameters, it can also connect to local or remote MySQL, PostgreSQL, and Oracle RDBMS databases.
 
 
 Examples
@@ -114,16 +114,23 @@ Notes
 
 * Supports Top Scope variables (i.e. via Dashboard) and Parameterized Classes.
 * Installing CDH3 is not presently supported.
+* Based on the [Cloudera Manager 4.1 Installation Guide](https://ccp.cloudera.com/download/attachments/22151983/CM-4.1-enterprise-install-guide.pdf?version=3&modificationDate=1358553325305)
 
 Issues
 ------
 
-* None
+* Need external module support for the Oracle Instant Client JDBC.
+* Need external module support for PostgreSQL JDBC.
 
 TODO
 ----
 
-* None
+* Add HDFS FUSE mounting support.
+* Support pig-udf installation.
+* Document hive-server installation.
+* Document hive-metastore installation.
+* Document sqoop-metastore installation.
+* Document whirr installation.
 
 License
 -------
