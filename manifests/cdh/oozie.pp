@@ -14,17 +14,29 @@
 #
 
 class cloudera::cdh::oozie {
-  include cloudera::cdh::oozie::client
-  $package_names = [ "oozie" ]
-  $service_name  = "oozie"
+  anchor { 'cloudera::cdh::oozie::begin': }
+  anchor { 'cloudera::cdh::oozie::end': }
 
-  package { $package_names:
-    ensure => present,
+  class { 'cloudera::cdh::oozie::client':
+#    ensure      => $ensure,
+#    autoupgrade => $autoupgrade,
+    require     => Anchor['cloudera::cdh::oozie::begin'],
+    before      => Anchor['cloudera::cdh::oozie::end'],
   }
 
-  service { $service_name:
+  package { 'oozie':
+    ensure => 'present',
+  }
+
+  service { 'oozie':
+#   ensure  => 'stopped',
     enable  => false,
-    ensure  => stopped,
-    require => Package[$package_names],
+    require => Package['oozie'],
   }
+
+#  Anchor['cloudera::cdh::oozie::begin'] ->
+#  Class['cloudera::cdh::oozie::client'] ->
+#  Package['oozie'] ->
+#  Service['oozie'] ->
+#  Anchor['cloudera::cdh::oozie::end']
 }
