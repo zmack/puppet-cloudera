@@ -275,66 +275,66 @@ describe 'cloudera::cm::server', :type => 'class' do
     end
   end
 
-#  context 'on a supported operatingsystem, custom parameters, db_type => postgresql' do
-#    let :facts do {
-#      :fqdn                     => 'myhost.example.com',
-#      :postgres_default_version => 'somevar',
-#      :osfamily                 => 'RedHat',
-#      :operatingsystem          => 'OracleLinux'
-#    }
-#    end
-#
-#    describe 'with defaults' do
-#      let(:pre_condition) { 'class {"postgresql::server":}' }
-#      let :params do {
-#        :db_type => 'postgresql'
-#      }
-#      end
-#      it { should contain_file('/etc/cloudera-scm-server/db.properties').with_ensure('present') }
-#      it 'should contain File[/etc/cloudera-scm-server/db.properties] with correct contents' do
-#        verify_contents(subject, '/etc/cloudera-scm-server/db.properties', [
-#          'com.cloudera.cmf.db.type=postgresql',
-#          'com.cloudera.cmf.db.host=localhost:3306',
-#          'com.cloudera.cmf.db.name=scm',
-#          'com.cloudera.cmf.db.user=scm',
-#          'com.cloudera.cmf.db.password=scm',
-#        ])
-#      end
-#      it { should contain_class('postgresql::java') }
-#      it { should contain_exec('scm_prepare_database').with(
-#        :command => '/usr/share/cmf/schema/scm_prepare_database.sh postgresql  --user=root --password= scm scm scm && touch /etc/cloudera-manager-server/.scm_prepare_database',
-#        :creates => '/etc/cloudera-manager-server/.scm_prepare_database'
-#      )}
-#    end
-#
-#    describe 'with custom parameters' do
-#      let(:pre_condition) { 'class {"postgresql::server":}' }
-#      let :params do {
-#        :db_type       => 'postgresql',
-#        :database_name => 'clouderaDB',
-#        :username      => 'dbuser',
-#        :password      => 'myDbPass',
-#        :db_host       => 'dbhost.example.com',
-#        :db_port       => '9000',
-#        :db_user       => 'dbadmin',
-#        :db_pass       => 'myPass'
-#      }
-#      end
-#      it { should contain_file('/etc/cloudera-scm-server/db.properties').with_ensure('present') }
-#      it 'should contain File[/etc/cloudera-scm-server/db.properties] with correct contents' do
-#        verify_contents(subject, '/etc/cloudera-scm-server/db.properties', [
-#          'com.cloudera.cmf.db.type=postgresql',
-#          'com.cloudera.cmf.db.host=dbhost.example.com:9000',
-#          'com.cloudera.cmf.db.name=clouderaDB',
-#          'com.cloudera.cmf.db.user=dbuser',
-#          'com.cloudera.cmf.db.password=myDbPass',
-#        ])
-#      end
-#      it { should contain_class('postgresql::java') }
-#      it { should contain_exec('scm_prepare_database').with(
-#        :command => '/usr/share/cmf/schema/scm_prepare_database.sh postgresql --host=dbhost.example.com --port=9000 --scm-host=myhost.example.com --user=dbadmin --password=myPass clouderaDB dbuser myDbPass && touch /etc/cloudera-manager-server/.scm_prepare_database',
-#        :creates => '/etc/cloudera-manager-server/.scm_prepare_database'
-#      )}
-#    end
-#  end
+  context 'on a supported operatingsystem, custom parameters, db_type => postgresql' do
+    let :facts do {
+      :fqdn                     => 'myhost.example.com',
+      :postgres_default_version => 'somevar',
+      :osfamily                 => 'RedHat',
+      :operatingsystem          => 'OracleLinux'
+    }
+    end
+
+    describe 'with defaults' do
+      let(:pre_condition) { 'class {"postgresql::server":}' }
+      let :params do {
+        :db_type => 'postgresql'
+      }
+      end
+      it { should contain_file('/etc/cloudera-scm-server/db.properties').with_ensure('present') }
+      it 'should contain File[/etc/cloudera-scm-server/db.properties] with correct contents' do
+        verify_contents(subject, '/etc/cloudera-scm-server/db.properties', [
+          'com.cloudera.cmf.db.type=postgresql',
+          'com.cloudera.cmf.db.host=localhost:3306',
+          'com.cloudera.cmf.db.name=scm',
+          'com.cloudera.cmf.db.user=scm',
+          'com.cloudera.cmf.db.password=scm',
+        ])
+      end
+      it { should contain_class('postgresql::java') }
+      it { should contain_exec('scm_prepare_database').with(
+        :command => '/usr/share/cmf/schema/scm_prepare_database.sh postgresql  --user=root --password= scm scm scm && touch /etc/cloudera-manager-server/.scm_prepare_database',
+        :creates => '/etc/cloudera-manager-server/.scm_prepare_database'
+      )}
+    end
+
+    describe 'with custom parameters' do
+      let(:pre_condition) { 'class {"postgresql::server":}' }
+      let :params do {
+        :db_type       => 'postgresql',
+        :database_name => 'clouderaDB',
+        :username      => 'dbuser',
+        :password      => 'myDbPass',
+        :db_host       => 'dbhost.example.com',
+        :db_port       => '9000',
+        :db_user       => 'dbadmin',
+        :db_pass       => 'myPass'
+      }
+      end
+      it { should contain_file('/etc/cloudera-scm-server/db.properties').with_ensure('present') }
+      it 'should contain File[/etc/cloudera-scm-server/db.properties] with correct contents' do
+        verify_contents(subject, '/etc/cloudera-scm-server/db.properties', [
+          'com.cloudera.cmf.db.type=postgresql',
+          'com.cloudera.cmf.db.host=dbhost.example.com:9000',
+          'com.cloudera.cmf.db.name=clouderaDB',
+          'com.cloudera.cmf.db.user=dbuser',
+          'com.cloudera.cmf.db.password=myDbPass',
+        ])
+      end
+      it { should contain_class('postgresql::java') }
+      it { should contain_exec('scm_prepare_database').with(
+        :command => '/usr/share/cmf/schema/scm_prepare_database.sh postgresql --host=dbhost.example.com --port=9000 --scm-host=myhost.example.com --user=dbadmin --password=myPass clouderaDB dbuser myDbPass && touch /etc/cloudera-manager-server/.scm_prepare_database',
+        :creates => '/etc/cloudera-manager-server/.scm_prepare_database'
+      )}
+    end
+  end
 end
