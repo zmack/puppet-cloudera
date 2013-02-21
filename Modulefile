@@ -11,6 +11,6 @@ Cloudera Manager. It follows the standards written in the Cloudera Manager Insta
 - Installation Using Your Own Method. It also includes installing the beta version of Cloudera Impala.'
 dependency 'puppetlabs/stdlib', '>=2.3.0'
 dependency 'puppetlabs/mysql', '>=0.6.0'
-dependency 'puppetlabs/postgresql', '>2.0.1'
+dependency 'puppetlabs/postgresql', '>=2.1.0'
 dependency 'nanliu/staging', '>=0.2.1'
 dependency 'stahnma/epel', '>=0.0.3'
