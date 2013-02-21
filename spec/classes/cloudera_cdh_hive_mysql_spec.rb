@@ -29,12 +29,13 @@ describe 'cloudera::cdh::hive::mysql', :type => 'class' do
       :ensure => 'link',
       :target => '/usr/share/java/mysql-connector-java.jar'
     )}
-#    it { should contain_mysql::db('metastoredb').with(
-#      :user     => 'hive',
-#      :password => 'myPass',
-#      :host     => '%',
-#      :grant    => [ 'select_priv', 'insert_priv', 'update_priv', 'delete_priv', ],
-#      :sql      => '/usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-0.9.0.mysql.sql'
-#    )}
+    it { should contain_mysql__db('metastore_db').with(
+      :user     => 'hive',
+      :password => 'myPass',
+      :host     => '%',
+      :grant    => [ 'select_priv', 'insert_priv', 'update_priv', 'delete_priv' ],
+      :sql      => '/usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-0.9.0.mysql.sql',
+      :require  => 'Class[Mysql::Config]'
+    )}
   end
 end
