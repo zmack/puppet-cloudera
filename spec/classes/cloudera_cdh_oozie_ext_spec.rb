@@ -24,10 +24,9 @@ describe 'cloudera::cdh::oozie::ext', :type => 'class' do
       :operatingsystem => 'CentOS'
     }
     end
-#    # TODO figure out contain_define
-#    it { should contain_define('ext-2.2.zip').with(
-#      :source => 'http://extjs.com/deploy/ext-2.2.zip',
-#      :target => '/usr/lib/oozie/libext'
-#    )}
+    it { should contain_staging__deploy('ext-2.2.zip').with(
+      :source => 'http://extjs.com/deploy/ext-2.2.zip',
+      :target => '/usr/lib/oozie/libext'
+    )}
   end
 end
