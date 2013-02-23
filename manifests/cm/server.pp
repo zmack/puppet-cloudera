@@ -181,11 +181,11 @@ class cloudera::cm::server (
       if ( $db_host != 'localhost' ) and ( $db_host != $::fqdn ) {
         # Set the commandline options to connect to a remote database.
         $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${::fqdn}"
-        $scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['mysqld'], ]
+        $scm_prepare_database_require = Package['cloudera-manager-server']
       } else {
         #require mysql::server
         Class['mysql::server'] -> Exec['scm_prepare_database']
-        $scm_prepare_database_require = Package['cloudera-manager-server']
+        $scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['mysqld'], ]
       }
 
       if ! defined(Class['mysql::java']) {
@@ -198,11 +198,11 @@ class cloudera::cm::server (
       if ( $db_host != 'localhost' ) and ( $db_host != $::fqdn ) {
         # Set the commandline options to connect to a remote database.
         $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${::fqdn}"
-        #$scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['oracle'], ]
         $scm_prepare_database_require = Package['cloudera-manager-server']
       } else {
         #require oraclerdbms::server
         #Class['oraclerdbms::server'] -> Service['cloudera-scm-server']
+        #$scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['oracle'], ]
         $scm_prepare_database_require = Package['cloudera-manager-server']
       }
 
@@ -217,11 +217,11 @@ class cloudera::cm::server (
       if ( $db_host != 'localhost' ) and ( $db_host != $::fqdn ) {
         # Set the commandline options to connect to a remote database.
         $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${::fqdn}"
-        $scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['postgresqld'], ]
+        $scm_prepare_database_require = Package['cloudera-manager-server']
       } else {
         #require postgresql::server
         Class['postgresql::server'] -> Service['cloudera-scm-server']
-        $scm_prepare_database_require = Package['cloudera-manager-server']
+        $scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['postgresqld'], ]
       }
 
       if ! defined(Class['postgresql::java']) {
