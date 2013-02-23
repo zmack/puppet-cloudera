@@ -277,6 +277,7 @@ describe 'cloudera::cm::server', :type => 'class' do
 
   context 'on a supported operatingsystem, custom parameters, db_type => postgresql' do
     let :facts do {
+      :concat_basedir           => '/var/lib/puppet/concat',
       :fqdn                     => 'myhost.example.com',
       :postgres_default_version => 'somevar',
       :osfamily                 => 'RedHat',
