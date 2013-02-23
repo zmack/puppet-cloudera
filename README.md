@@ -120,7 +120,6 @@ Issues
 ------
 
 * Need external module support for the Oracle Instant Client JDBC.
-* Need external module support for PostgreSQL JDBC.
 
 TODO
 ----
