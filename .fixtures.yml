@@ -1,10 +1,12 @@
 fixtures:
   repositories:
-    stdlib: git://github.com/puppetlabs/puppetlabs-stdlib.git
-    mysql: git://github.com/puppetlabs/puppetlabs-mysql.git
-    postgresql: git://github.com/puppetlabs/puppet-postgresql.git
-    concat: git://github.com/ripienaar/puppet-concat.git
-    staging: git://github.com/nanliu/puppet-staging.git
-    epel: git://github.com/stahnma/puppet-module-epel.git
+    stdlib:
+      repo: "git://github.com/puppetlabs/puppetlabs-stdlib.git"
+      ref: "2.6.0"
+    mysql: "git://github.com/puppetlabs/puppetlabs-mysql.git"
+    postgresql: "git://github.com/puppetlabs/puppet-postgresql.git"
+    concat: "git://github.com/ripienaar/puppet-concat.git"
+    staging: "git://github.com/nanliu/puppet-staging.git"
+    epel: "git://github.com/stahnma/puppet-module-epel.git"
   symlinks:
     cloudera: "#{source_dir}"

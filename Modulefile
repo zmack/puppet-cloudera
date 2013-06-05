@@ -5,7 +5,7 @@ author 'razorsedge'
 license 'Apache License, Version 2.0'
 project_page 'https://github.com/razorsedge/puppet-cloudera'
 source 'git://github.com/razorsedge/puppet-cloudera.git'
-summary 'Puppet module to deploy Cloudera Manager and Cloudera\'s Distribution, including Apache Hadoop (CDH).'
+summary 'Deploy Cloudera Manager and Cloudera\'s Distribution, including Apache Hadoop (CDH).'
 description 'This module manages the installation of Cloudera\'s Distribution, including Apache Hadoop (CDH) and
 Cloudera Manager. It follows the standards written in the Cloudera Manager Installation Guide Installation Path B
 - Installation Using Your Own Method. It also includes installing the beta version of Cloudera Impala.'
