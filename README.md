@@ -55,6 +55,10 @@ This class handles installing the Cloudera software repositories.
 
 This class handles installing the Oracle JDK from the Cloudera Manager repository.
 
+### Class['cloudera::java::jce']
+
+This class handles installing the Oracle Java Cryptography Extension (JCE) unlimited strength jurisdiction policy files.  Manual setup is requied in order to download the required software from Oracle.  See the files/README_JCE.md file for details.
+
 ### Class['cloudera::cdh']
 
 This class handles installing the Cloudera Distribution, including Apache Hadoop.  No configuration is performed on the CDH software and all daemons are forced off so that Cloudera Manager can manage them.  This class installs Bigtop utils, Hadoop (HDFS, MapReduce, YARN), Hue-plugins, HBase, Hive, Oozie, Pig, ZooKeeper, Flume-NG, and Impala.
@@ -105,6 +109,7 @@ class { 'cloudera::repo':
   cm_version  => '4.1',
 } ->
 class { 'cloudera::java': } ->
+class { 'cloudera::java::jce': } ->
 class { 'cloudera::cm': } ->
 class { 'cloudera::cm::server': }
 ```
