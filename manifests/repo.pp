@@ -38,7 +38,7 @@
 #
 # [*ci_yumserver*]
 #   URI of the YUM server.
-#   Default: http://beta.cloudera.com
+#   Default: http://archive.cloudera.com
 #
 # [*ci_yumpath*]
 #   The path to add to the $ci_yumserver URI.
@@ -48,7 +48,7 @@
 #
 # [*ci_version*]
 #   The version of Cloudera Impala to install.
-#   Default: 0
+#   Default: 1
 #
 # === Actions:
 #

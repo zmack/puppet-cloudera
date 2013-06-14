@@ -7,15 +7,15 @@ develop branch: [![Build Status](https://secure.travis-ci.org/razorsedge/puppet-
 Introduction
 ------------
 
-This module manages the installation of [Cloudera's Distribution, including Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products/cdh.html) and [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products/cloudera-manager.html).  It follows the standards written in the [Cloudera Manager Installation Guide](https://ccp.cloudera.com/display/ENT41DOC/Cloudera+Manager+Installation+Guide) [Installation Path B - Installation Using Your Own Method](https://ccp.cloudera.com/display/ENT41DOC/Installation+Path+B+-+Installation+Using+Your+Own+Method).  It also includes installing the beta version of [Cloudera Impala](https://ccp.cloudera.com/display/IMPALA10BETADOC/Cloudera+Impala+1.0+Beta+Documentation).
+This module manages the installation of [Cloudera's Distribution, including Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products/cdh.html) and [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products/cloudera-manager.html).  It follows the standards written in the [Cloudera Manager Installation Guide](https://ccp.cloudera.com/display/ENT41DOC/Cloudera+Manager+Installation+Guide) [Installation Path B - Installation Using Your Own Method](https://ccp.cloudera.com/display/ENT41DOC/Installation+Path+B+-+Installation+Using+Your+Own+Method).  It also includes installing [Cloudera Impala](http://www.cloudera.com/content/cloudera-content/cloudera-docs/Impala/latest/Installing-and-Using-Impala/Installing-and-Using-Impala.html).
 
 Actions:
 
-* Installs the Cloudera software repositories for CDH, CM, and Impala beta.
+* Installs the Cloudera software repositories for CDH, CM, and Impala.
 * Installs Oracle JDK 6.
 * Installs most components of CDH 4.
 * Installs CM 4 agent.
-* Installs Impala beta.
+* Installs Impala 1.
 * Configures the CM agent to talk to a CM server.
 * Starts the CM agent.
 * Separately installs the CM server and database connectivity (by default to the embedded database server).

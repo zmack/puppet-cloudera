@@ -8,7 +8,7 @@ source 'git://github.com/razorsedge/puppet-cloudera.git'
 summary 'Deploy Cloudera Manager and Cloudera\'s Distribution, including Apache Hadoop (CDH).'
 description 'This module manages the installation of Cloudera\'s Distribution, including Apache Hadoop (CDH) and
 Cloudera Manager. It follows the standards written in the Cloudera Manager Installation Guide Installation Path B
-- Installation Using Your Own Method. It also includes installing the beta version of Cloudera Impala.'
+- Installation Using Your Own Method. It also includes installing Cloudera Impala.'
 dependency 'puppetlabs/stdlib', '>=2.3.0'
 dependency 'puppetlabs/mysql', '>=0.6.0'
 dependency 'puppetlabs/postgresql', '>=2.1.0'

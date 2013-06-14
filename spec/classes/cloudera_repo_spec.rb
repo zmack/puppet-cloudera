@@ -51,8 +51,8 @@ describe 'cloudera::repo', :type => 'class' do
       :descr    => 'Impala',
       :enabled  => '1',
       :gpgcheck => '1',
-      :gpgkey   => 'http://beta.cloudera.com/impala/redhat/6/x86_64/impala/RPM-GPG-KEY-cloudera',
-      :baseurl  => 'http://beta.cloudera.com/impala/redhat/6/x86_64/impala/0/',
+      :gpgkey   => 'http://archive.cloudera.com/impala/redhat/6/x86_64/impala/RPM-GPG-KEY-cloudera',
+      :baseurl  => 'http://archive.cloudera.com/impala/redhat/6/x86_64/impala/1/',
       :priority => '50',
       :protect  => '0'
     )}
