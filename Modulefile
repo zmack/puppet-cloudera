@@ -16,5 +16,5 @@ dependency 'nanliu/staging', '>=0.2.1'
 dependency 'stahnma/epel', '>=0.0.3'
 
 # Generate the changelog file
-system("git-log-to-changelog > CHANGELOG")
-$? == 0 or fail "changelog generation #{$?}!"
+#system("git-log-to-changelog > CHANGELOG")
+#$? == 0 or fail "changelog generation #{$?}!"
