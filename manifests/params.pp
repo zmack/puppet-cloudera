@@ -47,7 +47,7 @@ class cloudera::params {
   }
 
   $oozie_ext = $::cloudera_oozie_ext ? {
-    undef   => 'http://extjs.com/deploy/ext-2.2.zip',
+    undef   => 'http://archive.cloudera.com/gplextras/misc/ext-2.2.zip',
     default => $::cloudera_oozie_ext,
   }
 
