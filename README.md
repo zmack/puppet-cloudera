@@ -131,6 +131,11 @@ TODO
 * Document sqoop-metastore installation.
 * Document whirr installation.
 
+Contributing
+------------
+
+Please see DEVELOP.md for contribution information.
+
 License
 -------
 
