@@ -39,6 +39,5 @@ class cloudera::cdh::hive::mysql (
     host     => '%',
     grant    => [ 'select_priv', 'insert_priv', 'update_priv', 'delete_priv', ],
     sql      => "/usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-${hive_version}.mysql.sql",
-    require  => Class['mysql::config'],
   }
 }

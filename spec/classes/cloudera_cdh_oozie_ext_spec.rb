@@ -25,7 +25,7 @@ describe 'cloudera::cdh::oozie::ext', :type => 'class' do
     }
     end
     it { should contain_staging__deploy('ext-2.2.zip').with(
-      :source => 'http://extjs.com/deploy/ext-2.2.zip',
+      :source => 'http://archive.cloudera.com/gplextras/misc/ext-2.2.zip',
       :target => '/usr/lib/oozie/libext'
     )}
   end

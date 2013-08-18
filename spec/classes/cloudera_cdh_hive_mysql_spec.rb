@@ -18,6 +18,7 @@ describe 'cloudera::cdh::hive::mysql', :type => 'class' do
 #  end
 
   context 'on a supported operatingsystem, default parameters' do
+    let(:pre_condition) { 'class {"mysql::server":}' }
     let(:params) {{ :password => 'myPass' }}
     let :facts do {
       :osfamily        => 'RedHat',
@@ -34,8 +35,7 @@ describe 'cloudera::cdh::hive::mysql', :type => 'class' do
       :password => 'myPass',
       :host     => '%',
       :grant    => [ 'select_priv', 'insert_priv', 'update_priv', 'delete_priv' ],
-      :sql      => '/usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-0.9.0.mysql.sql',
-      :require  => 'Class[Mysql::Config]'
+      :sql      => '/usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-0.9.0.mysql.sql'
     )}
   end
 end
