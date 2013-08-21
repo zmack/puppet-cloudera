@@ -20,7 +20,8 @@ describe 'cloudera::cm', :type => 'class' do
   context 'on a supported operatingsystem, default parameters' do
     let :facts do {
       :osfamily        => 'RedHat',
-      :operatingsystem => 'CentOS'
+      :operatingsystem => 'CentOS',
+      :fqdn            => 'myhost'
     }
     end
     it { should contain_package('cloudera-manager-agent').with_ensure('present') }
@@ -33,6 +34,7 @@ describe 'cloudera::cm', :type => 'class' do
       verify_contents(subject, 'scm-config.ini', [
         'server_host=localhost',
         'server_port=7182',
+        'listening_hostname=myhost',
         'use_tls=0',
       ])
     end
@@ -47,7 +49,8 @@ describe 'cloudera::cm', :type => 'class' do
   context 'on a supported operatingsystem, custom parameters' do
     let :facts do {
       :osfamily        => 'RedHat',
-      :operatingsystem => 'OracleLinux'
+      :operatingsystem => 'OracleLinux',
+      :fqdn            => 'myhost'
     }
     end
 
@@ -127,6 +130,7 @@ describe 'cloudera::cm', :type => 'class' do
         verify_contents(subject, 'scm-config.ini', [
           'server_host=some.other.host',
           'server_port=9000',
+          'listening_hostname=myhost',
           'use_tls=1',
         ])
       end
