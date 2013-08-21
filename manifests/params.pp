@@ -85,6 +85,16 @@ class cloudera::params {
     $safe_service_enable = $service_enable
   }
 
+  $cm_use_tls = $::cloudera_cm_use_tls ? {
+    undef => false,
+    default => $::cloudera_cm_use_tls,
+  }
+  if is_string($cm_use_tls) {
+    $safe_cm_use_tls = str2bool($cm_use_tls)
+  } else {
+    $safe_cm_use_tls = $cm_use_tls
+  }
+
   $cdh_version = '4'
   $cm_version  = '4'
   $ci_version  = '1'

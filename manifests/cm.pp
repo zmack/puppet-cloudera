@@ -24,6 +24,11 @@
 #   Port to which the Cloudera Manager server is listening.
 #   Default: 7182
 #
+# [*use_tls*]
+#   Whether to enable TLS on the Cloudera Manager agent. TLS needs to be enabled
+#   on the server prior to setting this to true.
+#   Default: false
+#
 # === Actions:
 #
 # Installs the packages.
@@ -53,10 +58,12 @@ class cloudera::cm (
   $autoupgrade    = $cloudera::params::safe_autoupgrade,
   $service_ensure = $cloudera::params::service_ensure,
   $server_host    = $cloudera::params::cm_server_host,
-  $server_port    = $cloudera::params::cm_server_port
+  $server_port    = $cloudera::params::cm_server_port,
+  $use_tls        = $cloudera::params::safe_cm_use_tls
 ) inherits cloudera::params {
   # Validate our booleans
   validate_bool($autoupgrade)
+  validate_bool($use_tls)
 
   case $ensure {
     /(present)/: {

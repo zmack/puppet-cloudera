@@ -46,7 +46,9 @@ task_metrics_timeout_seconds=5.0
 monitored_nodev_filesystem_types=nfs,nfs4,tmpfs
 
 [Security]
-use_tls=0
+<% if @use_tls %>use_tls=1
+<% else %>use_tls=0
+<% end -%>
 # verify_cert_file=
 # client_key_file=
 # client_keypw_file=

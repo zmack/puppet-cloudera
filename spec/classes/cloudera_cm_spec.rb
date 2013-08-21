@@ -33,6 +33,7 @@ describe 'cloudera::cm', :type => 'class' do
       verify_contents(subject, 'scm-config.ini', [
         'server_host=localhost',
         'server_port=7182',
+        'use_tls=0',
       ])
     end
     it { should contain_service('cloudera-scm-agent').with(
@@ -117,7 +118,8 @@ describe 'cloudera::cm', :type => 'class' do
     describe 'server_host => some.other.host' do
       let :params do {
         :server_host => 'some.other.host',
-        :server_port => '9000'
+        :server_port => '9000',
+        :use_tls     => true,
       }
       end
       it { should contain_file('scm-config.ini').with_ensure('present') }
@@ -125,6 +127,7 @@ describe 'cloudera::cm', :type => 'class' do
         verify_contents(subject, 'scm-config.ini', [
           'server_host=some.other.host',
           'server_port=9000',
+          'use_tls=1',
         ])
       end
     end
