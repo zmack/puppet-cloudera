@@ -29,6 +29,10 @@
 #   on the server prior to setting this to true.
 #   Default: false
 #
+# [*verify_cert_file*]
+#   The file holding the public key of the Cloudera Manager server.
+#   Default: /etc/pki/tls/certs/${server_host}-cloudera_manager.crt
+#
 # === Actions:
 #
 # Installs the packages.
@@ -54,12 +58,14 @@
 # Copyright (C) 2013 Mike Arnold, unless otherwise noted.
 #
 class cloudera::cm (
-  $ensure         = $cloudera::params::ensure,
-  $autoupgrade    = $cloudera::params::safe_autoupgrade,
-  $service_ensure = $cloudera::params::service_ensure,
-  $server_host    = $cloudera::params::cm_server_host,
-  $server_port    = $cloudera::params::cm_server_port,
-  $use_tls        = $cloudera::params::safe_cm_use_tls
+  $ensure           = $cloudera::params::ensure,
+  $autoupgrade      = $cloudera::params::safe_autoupgrade,
+  $service_ensure   = $cloudera::params::service_ensure,
+  $server_host      = $cloudera::params::cm_server_host,
+  $server_port      = $cloudera::params::cm_server_port,
+  $use_tls          = $cloudera::params::safe_cm_use_tls,
+  #$verify_cert_file = $cloudera::params::verify_cert_file
+  $verify_cert_file = "/etc/pki/tls/certs/${server_host}-cloudera_manager.crt"
 ) inherits cloudera::params {
   # Validate our booleans
   validate_bool($autoupgrade)
