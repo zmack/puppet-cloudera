@@ -49,10 +49,37 @@
 #   embedded, mysql, oracle, or postgresql.
 #   Default: embedded
 #
+# [*use_tls*]
+#   Whether to enable TLS on the Cloudera Manager server.
+#   Default: false
+#
+# [*server_ca_file*]
+#   The file holding the public key of the Cloudera Manager server certificate
+#   authority.
+#   Default: /etc/pki/tls/certs/cloudera_manager-ca.crt
+#
+# [*server_cert_file*]
+#   The file holding the public key of the Cloudera Manager server.
+#   Default: /etc/pki/tls/certs/${::fqdn}-cloudera_manager.crt
+#
+# [*server_key_file*]
+#   The file holding the private key of the Cloudera Manager server.
+#   Default: /etc/pki/tls/private/${::fqdn}-cloudera_manager.key
+#
+# [*server_chain_file*]
+#   The file holding the public key of the Cloudera Manager server intermediary
+#   certificate authority.
+#   Default: none
+#
+# [*server_keypw*]
+#   The password used to protect the keystore.
+#   Default: none
+#
 # === Actions:
 #
 # Installs the packages.
 # Configures the database connection.
+# If using TLS, configures any SSL certificate keystores.
 # Starts the service.
 #
 # === Requires:
@@ -61,6 +88,7 @@
 #   Package['oracle-connector-java']
 #   Package['postgresql-java']
 #   Package['jdk']
+#   java_ks
 #
 # === Sample Usage:
 #
@@ -93,10 +121,17 @@ class cloudera::cm::server (
   $db_port        = '3306',
   $db_user        = 'root',
   $db_pass        = '',
-  $db_type        = 'embedded'
+  $db_type        = 'embedded',
+  $use_tls           = $cloudera::params::safe_cm_use_tls,
+  $server_ca_file    = $cloudera::params::server_ca_file,
+  $server_cert_file  = $cloudera::params::server_cert_file,
+  $server_key_file   = $cloudera::params::server_key_file,
+  $server_chain_file = $cloudera::params::server_chain_file,
+  $server_keypw      = $cloudera::params::server_keypw
 ) inherits cloudera::params {
   # Validate our booleans
   validate_bool($autoupgrade)
+  validate_bool($use_tls)
   # Validate our regular expressions
   $states = [ '^embedded$', '^mysql$','^oracle$','^postgresql$' ]
   validate_re($db_type, $states, '$db_type must be either embedded, mysql, oracle, or postgresql.')
@@ -237,5 +272,26 @@ class cloudera::cm::server (
     command => "/usr/share/cmf/schema/scm_prepare_database.sh ${db_type} ${scmopts} --user=${db_user} --password=${db_pass} ${database_name} ${username} ${password} && touch /etc/cloudera-manager-server/.scm_prepare_database",
     creates => '/etc/cloudera-manager-server/.scm_prepare_database',
     require => $scm_prepare_database_require,
+  }
+
+  if $use_tls {
+    java_ks { 'cmca:/etc/cloudera-scm-server/keystore':
+      ensure       => latest,
+      certificate  => $server_ca_file,
+      password     => $server_keypw,
+      trustcacerts => true,
+      require      => Package['cloudera-manager-server'],
+      notify       => Service['cloudera-scm-server'],
+    }
+
+    java_ks { 'jetty:/etc/cloudera-scm-server/keystore':
+      ensure      => latest,
+      certificate => $server_cert_file,
+      private_key => $server_key_file,
+      chain       => $server_chain_file,
+      password    => $server_keypw,
+      require     => Package['cloudera-manager-server'],
+      notify      => Service['cloudera-scm-server'],
+    }
   }
 }

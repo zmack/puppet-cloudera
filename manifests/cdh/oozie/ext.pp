@@ -6,7 +6,7 @@
 #
 # [*oozie_ext*]
 #   URI of the ext-2.2.zip file required by Oozie in order to enable the WebUI.
-#   Default: http://extjs.com/deploy/ext-2.2.zip
+#   Default: http://archive.cloudera.com/gplextras/misc/ext-2.2.zip
 #
 # === Actions:
 #

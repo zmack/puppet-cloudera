@@ -114,6 +114,41 @@ class { 'cloudera::cm': } ->
 class { 'cloudera::cm::server': }
 ```
 
+## TLS
+[Configuring TLS Encryption only for Cloudera Manager](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Administration-Guide/cmag_config_tls_encr.html)
+Path to TLS Keystore File `/etc/cloudera-scm-server/keystore`.
+Keystore Password `myPassWord`.
+```Puppet
+# The node that will be the CM agent may use this declaration:
+cmserver = 'smhost.example.com'
+class { 'cloudera::repo': } ->
+class { 'cloudera::java': } ->
+class { 'cloudera::java::jce': } ->
+class { 'cloudera::cm':
+  server_host => $cmserver,
+  use_tls     => true,
+}
+file { "/etc/pki/tls/certs/${cmserver}-cloudera_manager.crt": }
+
+# The node that will be the CM server may use this declaration:
+class { 'cloudera::repo': } ->
+class { 'cloudera::java': } ->
+class { 'cloudera::java::jce': } ->
+class { 'cloudera::cm':
+  server_host => 'smhost.example.com',
+  use_tls     => true,
+} ->
+class { 'cloudera::cm::server':
+  use_tls      => true,
+  server_keypw => 'myPassWord',
+}
+file { '/etc/pki/tls/certs/cloudera_manager-ca.crt': }
+file { "/etc/pki/tls/certs/${::fqdn}-cloudera_manager.crt": }
+file { "/etc/pki/tls/private/${::fqdn}-cloudera_manager.key": }
+```
+
+[Configuring TLS Authentication of Server to Agents and Users](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Administration-Guide/cmag_config_tls_auth.html)
+
 Notes
 -----
 
