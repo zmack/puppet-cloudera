@@ -374,7 +374,7 @@ describe 'cloudera::cm::server', :type => 'class' do
       end
       it { should contain_java_ks('cmca:/etc/cloudera-scm-server/keystore').with(
         :ensure       => 'latest',
-        :certificate  => '/etc/pki/tls/certs/cloudera_manager_ca.crt',
+        :certificate  => '/etc/pki/tls/certs/cloudera_manager-ca.crt',
         :password     => nil,
         :trustcacerts => true,
         :require      => 'Package[cloudera-manager-server]',

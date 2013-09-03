@@ -53,7 +53,7 @@ class cloudera::params {
 #  }
 
   $server_ca_file = $::cloudera_server_ca_file ? {
-    undef   => '/etc/pki/tls/certs/cloudera_manager_ca.crt',
+    undef   => '/etc/pki/tls/certs/cloudera_manager-ca.crt',
     default => $::cloudera_server_ca_file,
   }
 
