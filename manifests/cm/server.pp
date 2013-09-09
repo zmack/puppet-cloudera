@@ -54,21 +54,21 @@
 #   Default: false
 #
 # [*server_ca_file*]
-#   The file holding the public key of the Cloudera Manager server certificate
-#   authority.
+#   The file holding the PEM public key of the Cloudera Manager server
+#   certificate authority.
 #   Default: /etc/pki/tls/certs/cloudera_manager-ca.crt
 #
 # [*server_cert_file*]
-#   The file holding the public key of the Cloudera Manager server.
+#   The file holding the PEM public key of the Cloudera Manager server.
 #   Default: /etc/pki/tls/certs/${::fqdn}-cloudera_manager.crt
 #
 # [*server_key_file*]
-#   The file holding the private key of the Cloudera Manager server.
+#   The file holding the PEM private key of the Cloudera Manager server.
 #   Default: /etc/pki/tls/private/${::fqdn}-cloudera_manager.key
 #
 # [*server_chain_file*]
-#   The file holding the public key of the Cloudera Manager server intermediary
-#   certificate authority.
+#   The file holding the PEM public key(s) of the Cloudera Manager server
+#   intermediary certificate authority.
 #   Default: none
 #
 # [*server_keypw*]

@@ -46,11 +46,10 @@ class cloudera::params {
     default => $::cloudera_cm_server_port,
   }
 
-# This evil will not work.
-#  $verify_cert_file = $::cloudera_verify_cert_file ? {
-#    undef   => "/etc/pki/tls/certs/${server_host}-cloudera_manager.crt",
-#    default => $::cloudera_verify_cert_file,
-#  }
+  $verify_cert_file = $::cloudera_verify_cert_file ? {
+    undef   => '/etc/pki/tls/certs/cloudera_manager.crt',
+    default => $::cloudera_verify_cert_file,
+  }
 
   $server_ca_file = $::cloudera_server_ca_file ? {
     undef   => '/etc/pki/tls/certs/cloudera_manager-ca.crt',

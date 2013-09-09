@@ -133,8 +133,7 @@ describe 'cloudera::cm', :type => 'class' do
           'server_port=9000',
           'listening_hostname=myhost',
           'use_tls=1',
-          'verify_cert_file=/etc/pki/tls/certs/some.other.host-cloudera_manager.crt',
-#          'verify_cert_file=/etc/pki/tls/certs/${server_host}-cloudera_manager.crt',
+          'verify_cert_file=/etc/pki/tls/certs/cloudera_manager.crt',
         ])
       end
     end

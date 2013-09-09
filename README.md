@@ -121,11 +121,14 @@ Level 3: [Configuring TLS Authentication of Agents to Server](http://www.clouder
 
 This module's deployment of TLS provides both level 1 and level 2 configuration (encryption and authentication of the server to the agents).  Level 3 is presently much more difficult to implement.  You will need to provide a TLS certificate and the signing certificate authority for the CM server.  See the File resources in the below example for where the files need to be deployed.
 
-There are some settings inside CM that can only be configured manually.  See the [Level 1](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Administration-Guide/cmag_config_tls_encr.html) instructions for the details of what to change and use the below values:
+There are some settings inside CM that can only be configured manually.  See the [Level 1](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Administration-Guide/cmag_config_tls_encr.html) instructions for the details of what to change in the WebUI and use the below values:
 
-    Setting                    Description
-    Path to TLS Keystore File  /etc/cloudera-scm-server/keystore
-    Keystore Password          The value of parameter server_keypw in Class['cloudera::cm::server'].
+    Setting                       Value
+    Use TLS Encryption for Agents (check)
+    Path to TLS Keystore File     /etc/cloudera-scm-server/keystore
+    Keystore Password             The value of server_keypw in Class['cloudera::cm::server'].
+    Use TLS Encryption for        (check)
+      Admin Console
 
 ```puppet
 # The node that will be the CM agent may use this declaration:
@@ -137,7 +140,7 @@ class { 'cloudera::cm':
   server_host => $cmserver,
   use_tls     => true,
 }
-file { "/etc/pki/tls/certs/${cmserver}-cloudera_manager.crt": }
+file { '/etc/pki/tls/certs/cloudera_manager.crt': }
 ```
 
 ```puppet
@@ -153,6 +156,7 @@ class { 'cloudera::cm::server':
   use_tls      => true,
   server_keypw => 'myPassWord',
 }
+file { '/etc/pki/tls/certs/cloudera_manager.crt': }
 file { '/etc/pki/tls/certs/cloudera_manager-ca.crt': }
 file { "/etc/pki/tls/certs/${::fqdn}-cloudera_manager.crt": }
 file { "/etc/pki/tls/private/${::fqdn}-cloudera_manager.key": }
@@ -164,6 +168,7 @@ Notes
 * Supports Top Scope variables (i.e. via Dashboard) and Parameterized Classes.
 * Installing CDH3 is not presently supported.
 * Based on the [Cloudera Manager 4.1 Installation Guide](https://ccp.cloudera.com/download/attachments/22151983/CM-4.1-enterprise-install-guide.pdf?version=3&modificationDate=1358553325305)
+* TLS certificates must be in PEM format and are not deployed by this module.
 
 Issues
 ------
