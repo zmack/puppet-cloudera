@@ -79,14 +79,14 @@ This class handles installing and configuring the Cloudera Manager Server.  This
 Examples
 --------
 
-```Puppet
+```puppet
 # Most nodes in the cluster will use this declaration:
 class { 'cloudera':
   cm_server_host => 'smhost.example.com',
 }
 ```
 
-```Puppet
+```puppet
 # Nodes that will be Gateways may use this declaration:
 class { 'cloudera':
   cm_server_host => 'smhost.example.com',
@@ -101,7 +101,7 @@ class { 'cloudera::cdh::sqoop': }
 #class { 'cloudera::cdh::oozie::mysql': }
 ```
 
-```Puppet
+```puppet
 # The node that will be the CM server may use this declaration:
 # This will skip installation of the CDH software as it is not required.
 class { 'cloudera::repo':
@@ -114,12 +114,61 @@ class { 'cloudera::cm': } ->
 class { 'cloudera::cm::server': }
 ```
 
+### TLS
+Level 1: [Configuring TLS Encryption only for Cloudera Manager](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Administration-Guide/cmag_config_tls_encr.html)  
+Level 2: [Configuring TLS Authentication of Server to Agents and Users](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Administration-Guide/cmag_config_tls_auth.html)  
+Level 3: [Configuring TLS Authentication of Agents to Server](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Administration-Guide/cmag_config_tls_agent_auth.html)
+
+This module's deployment of TLS provides both level 1 and level 2 configuration (encryption and authentication of the server to the agents).  Level 3 is presently much more difficult to implement.  You will need to provide a TLS certificate and the signing certificate authority for the CM server.  See the File resources in the below example for where the files need to be deployed.
+
+There are some settings inside CM that can only be configured manually.  See the [Level 1](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Administration-Guide/cmag_config_tls_encr.html) instructions for the details of what to change in the WebUI and use the below values:
+
+    Setting                       Value
+    Use TLS Encryption for Agents (check)
+    Path to TLS Keystore File     /etc/cloudera-scm-server/keystore
+    Keystore Password             The value of server_keypw in Class['cloudera::cm::server'].
+    Use TLS Encryption for        (check)
+      Admin Console
+
+```puppet
+# The node that will be the CM agent may use this declaration:
+$cmserver = 'smhost.example.com'
+class { 'cloudera::repo': } ->
+class { 'cloudera::java': } ->
+class { 'cloudera::java::jce': } ->
+class { 'cloudera::cm':
+  server_host => $cmserver,
+  use_tls     => true,
+}
+file { '/etc/pki/tls/certs/cloudera_manager.crt': }
+```
+
+```puppet
+# The node that will be the CM server may use this declaration:
+class { 'cloudera::repo': } ->
+class { 'cloudera::java': } ->
+class { 'cloudera::java::jce': } ->
+class { 'cloudera::cm':
+  server_host => 'smhost.example.com',
+  use_tls     => true,
+} ->
+class { 'cloudera::cm::server':
+  use_tls      => true,
+  server_keypw => 'myPassWord',
+}
+file { '/etc/pki/tls/certs/cloudera_manager.crt': }
+file { '/etc/pki/tls/certs/cloudera_manager-ca.crt': }
+file { "/etc/pki/tls/certs/${::fqdn}-cloudera_manager.crt": }
+file { "/etc/pki/tls/private/${::fqdn}-cloudera_manager.key": }
+```
+
 Notes
 -----
 
 * Supports Top Scope variables (i.e. via Dashboard) and Parameterized Classes.
 * Installing CDH3 is not presently supported.
 * Based on the [Cloudera Manager 4.1 Installation Guide](https://ccp.cloudera.com/download/attachments/22151983/CM-4.1-enterprise-install-guide.pdf?version=3&modificationDate=1358553325305)
+* TLS certificates must be in PEM format and are not deployed by this module.
 
 Issues
 ------
