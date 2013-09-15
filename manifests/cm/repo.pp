@@ -22,6 +22,18 @@
 #   The version of Cloudera Manager to install.
 #   Default: 4
 #
+# [*proxy*]
+#   The URL to the proxy server for the YUM repositories.
+#   Default: absent
+#
+# [*proxy_username*]
+#   The username for the YUM proxy.
+#   Default: absent
+#
+# [*proxy_password*]
+#   The password for the YUM proxy.
+#   Default: absent
+#
 # === Actions:
 #
 # Installs YUM repository configuration files.
@@ -45,10 +57,13 @@
 # Copyright (C) 2013 Mike Arnold, unless otherwise noted.
 #
 class cloudera::cm::repo (
-  $ensure        = $cloudera::params::ensure,
-  $cm_yumserver  = $cloudera::params::cm_yumserver,
-  $cm_yumpath    = $cloudera::params::cm_yumpath,
-  $cm_version    = $cloudera::params::cm_version
+  $ensure         = $cloudera::params::ensure,
+  $cm_yumserver   = $cloudera::params::cm_yumserver,
+  $cm_yumpath     = $cloudera::params::cm_yumpath,
+  $cm_version     = $cloudera::params::cm_version,
+  $proxy          = $cloudera::params::proxy,
+  $proxy_username = $cloudera::params::proxy_username,
+  $proxy_password = $cloudera::params::proxy_password
 ) inherits cloudera::params {
   case $ensure {
     /(present)/: {
@@ -65,13 +80,16 @@ class cloudera::cm::repo (
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OEL', 'OracleLinux': {
       yumrepo { 'cloudera-manager':
-        descr    => 'Cloudera Manager',
-        enabled  => $enabled,
-        gpgcheck => 1,
-        gpgkey   => "${cm_yumserver}${cm_yumpath}RPM-GPG-KEY-cloudera",
-        baseurl  => "${cm_yumserver}${cm_yumpath}${cm_version}/",
-        priority => $cloudera::params::yum_priority,
-        protect  => $cloudera::params::yum_protect,
+        descr          => 'Cloudera Manager',
+        enabled        => $enabled,
+        gpgcheck       => 1,
+        gpgkey         => "${cm_yumserver}${cm_yumpath}RPM-GPG-KEY-cloudera",
+        baseurl        => "${cm_yumserver}${cm_yumpath}${cm_version}/",
+        priority       => $cloudera::params::yum_priority,
+        protect        => $cloudera::params::yum_protect,
+        proxy          => $proxy,
+        proxy_username => $proxy_username,
+        proxy_password => $proxy_password,
       }
     }
     default: { }

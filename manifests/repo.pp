@@ -37,6 +37,18 @@
 #   The version of Cloudera Impala to install.
 #   Default: 1
 #
+# [*proxy*]
+#   The URL to the proxy server for the YUM repositories.
+#   Default: absent
+#
+# [*proxy_username*]
+#   The username for the YUM proxy.
+#   Default: absent
+#
+# [*proxy_password*]
+#   The password for the YUM proxy.
+#   Default: absent
+#
 # === Actions:
 #
 # Installs YUM repository configuration files.
@@ -60,13 +72,16 @@
 # Copyright (C) 2013 Mike Arnold, unless otherwise noted.
 #
 class cloudera::repo (
-  $ensure        = $cloudera::params::ensure,
-  $cdh_yumserver = $cloudera::params::cdh_yumserver,
-  $cdh_yumpath   = $cloudera::params::cdh_yumpath,
-  $cdh_version   = $cloudera::params::cdh_version,
-  $ci_yumserver  = $cloudera::params::ci_yumserver,
-  $ci_yumpath    = $cloudera::params::ci_yumpath,
-  $ci_version    = $cloudera::params::ci_version
+  $ensure         = $cloudera::params::ensure,
+  $cdh_yumserver  = $cloudera::params::cdh_yumserver,
+  $cdh_yumpath    = $cloudera::params::cdh_yumpath,
+  $cdh_version    = $cloudera::params::cdh_version,
+  $ci_yumserver   = $cloudera::params::ci_yumserver,
+  $ci_yumpath     = $cloudera::params::ci_yumpath,
+  $ci_version     = $cloudera::params::ci_version,
+  $proxy          = $cloudera::params::proxy,
+  $proxy_username = $cloudera::params::proxy_username,
+  $proxy_password = $cloudera::params::proxy_password
 ) inherits cloudera::params {
   case $ensure {
     /(present)/: {
@@ -83,22 +98,28 @@ class cloudera::repo (
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OEL', 'OracleLinux': {
       yumrepo { 'cloudera-cdh4':
-        descr    => 'Cloudera\'s Distribution for Hadoop, Version 4',
-        enabled  => $enabled,
-        gpgcheck => 1,
-        gpgkey   => "${cdh_yumserver}${cdh_yumpath}RPM-GPG-KEY-cloudera",
-        baseurl  => "${cdh_yumserver}${cdh_yumpath}${cdh_version}/",
-        priority => $cloudera::params::yum_priority,
-        protect  => $cloudera::params::yum_protect,
+        descr          => 'Cloudera\'s Distribution for Hadoop, Version 4',
+        enabled        => $enabled,
+        gpgcheck       => 1,
+        gpgkey         => "${cdh_yumserver}${cdh_yumpath}RPM-GPG-KEY-cloudera",
+        baseurl        => "${cdh_yumserver}${cdh_yumpath}${cdh_version}/",
+        priority       => $cloudera::params::yum_priority,
+        protect        => $cloudera::params::yum_protect,
+        proxy          => $proxy,
+        proxy_username => $proxy_username,
+        proxy_password => $proxy_password,
       }
       yumrepo { 'cloudera-impala':
-        descr    => 'Impala',
-        enabled  => $enabled,
-        gpgcheck => 1,
-        gpgkey   => "${ci_yumserver}${ci_yumpath}RPM-GPG-KEY-cloudera",
-        baseurl  => "${ci_yumserver}${ci_yumpath}${ci_version}/",
-        priority => $cloudera::params::yum_priority,
-        protect  => $cloudera::params::yum_protect,
+        descr          => 'Impala',
+        enabled        => $enabled,
+        gpgcheck       => 1,
+        gpgkey         => "${ci_yumserver}${ci_yumpath}RPM-GPG-KEY-cloudera",
+        baseurl        => "${ci_yumserver}${ci_yumpath}${ci_version}/",
+        priority       => $cloudera::params::yum_priority,
+        protect        => $cloudera::params::yum_protect,
+        proxy          => $proxy,
+        proxy_username => $proxy_username,
+        proxy_password => $proxy_password,
       }
     }
     default: { }

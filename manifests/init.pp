@@ -85,6 +85,18 @@
 #   Whether to use parcel format software install and not RPM.
 #   Default: false
 #
+# [*proxy*]
+#   The URL to the proxy server for the YUM repositories.
+#   Default: absent
+#
+# [*proxy_username*]
+#   The username for the YUM proxy.
+#   Default: absent
+#
+# [*proxy_password*]
+#   The password for the YUM proxy.
+#   Default: absent
+#
 # === Actions:
 #
 # Installs YUM repository configuration files.
@@ -139,7 +151,10 @@ class cloudera (
   $cm_server_port   = $cloudera::params::cm_server_port,
   $use_tls          = $cloudera::params::safe_cm_use_tls,
   $verify_cert_file = $cloudera::params::verify_cert_file,
-  $use_parcels      = $cloudera::params::safe_use_parcels
+  $use_parcels      = $cloudera::params::safe_use_parcels,
+  $proxy            = $cloudera::params::proxy,
+  $proxy_username   = $cloudera::params::proxy_username,
+  $proxy_password   = $cloudera::params::proxy_password
 ) inherits cloudera::params {
   # Validate our booleans
   validate_bool($autoupgrade)
@@ -167,10 +182,13 @@ class cloudera (
   # Skip installing the CDH RPMs if we are going to use parcels.
   if $use_parcels {
     class { 'cloudera::cm::repo':
-      ensure        => $ensure,
-      cm_yumserver  => $cm_yumserver,
-      cm_yumpath    => $cm_yumpath,
-      cm_version    => $cm_version,
+      ensure         => $ensure,
+      cm_yumserver   => $cm_yumserver,
+      cm_yumpath     => $cm_yumpath,
+      cm_version     => $cm_version,
+      proxy          => $proxy,
+      proxy_username => $proxy_username,
+      proxy_password => $proxy_password,
     }
     Anchor['cloudera::begin'] ->
     Class['cloudera::cm::repo'] ->
@@ -179,19 +197,25 @@ class cloudera (
     Anchor['cloudera::end']
   } else {
     class { 'cloudera::repo':
-      ensure        => $ensure,
-      cdh_yumserver => $cdh_yumserver,
-      ci_yumserver  => $ci_yumserver,
-      cdh_yumpath   => $cdh_yumpath,
-      ci_yumpath    => $ci_yumpath,
-      cdh_version   => $cdh_version,
-      ci_version    => $ci_version,
+      ensure         => $ensure,
+      cdh_yumserver  => $cdh_yumserver,
+      ci_yumserver   => $ci_yumserver,
+      cdh_yumpath    => $cdh_yumpath,
+      ci_yumpath     => $ci_yumpath,
+      cdh_version    => $cdh_version,
+      ci_version     => $ci_version,
+      proxy          => $proxy,
+      proxy_username => $proxy_username,
+      proxy_password => $proxy_password,
     }
     class { 'cloudera::cm::repo':
-      ensure        => $ensure,
-      cm_yumserver  => $cm_yumserver,
-      cm_yumpath    => $cm_yumpath,
-      cm_version    => $cm_version,
+      ensure         => $ensure,
+      cm_yumserver   => $cm_yumserver,
+      cm_yumpath     => $cm_yumpath,
+      cm_version     => $cm_version,
+      proxy          => $proxy,
+      proxy_username => $proxy_username,
+      proxy_password => $proxy_password,
     }
     class { 'cloudera::cdh':
       ensure         => $ensure,
