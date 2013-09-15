@@ -40,6 +40,7 @@ Class Descriptions
 ### Class['cloudera']
 
 Meta-class that includes:
+* Class['cloudera::cm::repo']
 * Class['cloudera::repo']
 * Class['cloudera::java']
 * Class['cloudera::cdh']
@@ -49,7 +50,11 @@ Requires the parameter `cm_server_host`.
 
 ### Class['cloudera::repo']
 
-This class handles installing the Cloudera software repositories.
+This class handles installing the Cloudera Hadoop and Impala software repositories.
+
+### Class['cloudera::cm::repo']
+
+This class handles installing the Cloudera Manager software repository.
 
 ### Class['cloudera::java']
 
@@ -79,15 +84,15 @@ This class handles installing and configuring the Cloudera Manager Server.  This
 Examples
 --------
 
-```Puppet
-# Most nodes in the cluster will use this declaration:
+Most nodes in the cluster will use this declaration:
+```puppet
 class { 'cloudera':
   cm_server_host => 'smhost.example.com',
 }
 ```
 
-```Puppet
-# Nodes that will be Gateways may use this declaration:
+Nodes that will be Gateways may use this declaration:
+```puppet
 class { 'cloudera':
   cm_server_host => 'smhost.example.com',
 }
@@ -101,9 +106,9 @@ class { 'cloudera::cdh::sqoop': }
 #class { 'cloudera::cdh::oozie::mysql': }
 ```
 
-```Puppet
-# The node that will be the CM server may use this declaration:
-# This will skip installation of the CDH software as it is not required.
+The node that will be the CM server may use this declaration:
+(This will skip installation of the CDH software as it is not required.)
+```puppet
 class { 'cloudera::repo':
   cdh_version => '4.1',
   cm_version  => '4.1',
@@ -114,12 +119,78 @@ class { 'cloudera::cm': } ->
 class { 'cloudera::cm::server': }
 ```
 
+### Parcels
+
+[Parcel](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) is an alternative binary distribution format supported by Cloudera Manager 4.5+ that simplifies distribution of CDH and other Cloudera products.  To allow Cloudera Manager to install parcels instead of RPMs, just set `use_parcels => true`.
+
+Nodes that will be cluster members or Gateways will use this declaration:
+```puppet
+class { 'cloudera':
+  cm_server_host => 'smhost.example.com',
+  use_parcels    => true,
+}
+```
+
+The node that will be the CM server may use this declaration:
+```puppet
+class { 'cloudera':
+  cm_server_host => 'smhost.example.com',
+  use_parcels    => true,
+} ->
+class { 'cloudera::cm::server': }
+```
+
+### TLS
+Level 1: [Configuring TLS Encryption only for Cloudera Manager](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Administration-Guide/cmag_config_tls_encr.html)  
+Level 2: [Configuring TLS Authentication of Server to Agents and Users](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Administration-Guide/cmag_config_tls_auth.html)  
+Level 3: [Configuring TLS Authentication of Agents to Server](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Administration-Guide/cmag_config_tls_agent_auth.html)
+
+This module's deployment of TLS provides both level 1 and level 2 configuration (encryption and authentication of the server to the agents).  Level 3 is presently much more difficult to implement.  You will need to provide a TLS certificate and the signing certificate authority for the CM server.  See the File resources in the below example for where the files need to be deployed.
+
+There are some settings inside CM that can only be configured manually.  See the [Level 1](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Administration-Guide/cmag_config_tls_encr.html) instructions for the details of what to change in the WebUI and use the below values:
+
+    Setting                       Value
+    Use TLS Encryption for Agents (check)
+    Path to TLS Keystore File     /etc/cloudera-scm-server/keystore
+    Keystore Password             The value of server_keypw in Class['cloudera::cm::server'].
+    Use TLS Encryption for        (check)
+      Admin Console
+
+```puppet
+# The node that will be the CM agent may use this declaration:
+class { 'cloudera':
+  server_host => 'smhost.example.com',
+  use_tls     => true,
+} ->
+class { 'cloudera::java::jce': }
+file { '/etc/pki/tls/certs/cloudera_manager.crt': }
+```
+
+```puppet
+# The node that will be the CM server may use this declaration:
+class { 'cloudera':
+  server_host => 'smhost.example.com',
+  use_tls     => true,
+} ->
+class { 'cloudera::java::jce': } ->
+class { 'cloudera::cm::server':
+  use_tls      => true,
+  server_keypw => 'myPassWord',
+}
+file { '/etc/pki/tls/certs/cloudera_manager.crt': }
+file { '/etc/pki/tls/certs/cloudera_manager-ca.crt': }
+file { "/etc/pki/tls/certs/${::fqdn}-cloudera_manager.crt": }
+file { "/etc/pki/tls/private/${::fqdn}-cloudera_manager.key": }
+```
+
 Notes
 -----
 
 * Supports Top Scope variables (i.e. via Dashboard) and Parameterized Classes.
 * Installing CDH3 is not presently supported.
 * Based on the [Cloudera Manager 4.1 Installation Guide](https://ccp.cloudera.com/download/attachments/22151983/CM-4.1-enterprise-install-guide.pdf?version=3&modificationDate=1358553325305)
+* TLS certificates must be in PEM format and are not deployed by this module.
+* When using parcels, the CDH software is not deployed by Puppet.  Puppet will only install the Cloudera Manager server/agent.  You must then configure Cloudera Manager to deploy the parcels.
 
 Issues
 ------

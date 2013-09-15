@@ -45,6 +45,8 @@ describe 'cloudera::cm::server', :type => 'class' do
       :hasrestart => true,
       :hasstatus  => true
     )}
+    it { should_not contain_java_ks('cmca:/etc/cloudera-scm-server/keystore') }
+    it { should_not contain_java_ks('jetty:/etc/cloudera-scm-server/keystore') }
   end
 
   context 'on a supported operatingsystem, custom parameters' do
@@ -341,6 +343,67 @@ describe 'cloudera::cm::server', :type => 'class' do
         :command => '/usr/share/cmf/schema/scm_prepare_database.sh postgresql --host=dbhost.example.com --port=9000 --scm-host=myhost.example.com --user=dbadmin --password=myPass clouderaDB dbuser myDbPass && touch /etc/cloudera-manager-server/.scm_prepare_database',
         :creates => '/etc/cloudera-manager-server/.scm_prepare_database',
         :require => 'Package[cloudera-manager-server]'
+      )}
+    end
+  end
+
+  context 'on a supported operatingsystem, custom parameters, use_tls => true' do
+    let :facts do {
+      :osfamily        => 'RedHat',
+      :operatingsystem => 'OracleLinux',
+      :fqdn            => 'localhost.localdomain'
+    }
+    end
+
+    describe 'use_tls => badvalue' do
+      let :params do {
+        :use_tls => 'badvalue'
+      }
+      end
+      it 'should fail' do
+        expect {
+          should raise_error(Puppet::Error, /"badvalue" is not a boolean./)
+        }
+      end
+    end
+
+    describe 'use_tls => true' do
+      let :params do {
+        :use_tls => true
+      }
+      end
+      it { should contain_java_ks('cmca:/etc/cloudera-scm-server/keystore').with(
+        :ensure       => 'latest',
+        :certificate  => '/etc/pki/tls/certs/cloudera_manager-ca.crt',
+        :password     => nil,
+        :trustcacerts => true,
+        :require      => 'Package[cloudera-manager-server]',
+        :notify       => 'Service[cloudera-scm-server]'
+      )}
+      it { should contain_java_ks('jetty:/etc/cloudera-scm-server/keystore').with(
+        :ensure       => 'latest',
+        :certificate  => '/etc/pki/tls/certs/localhost.localdomain-cloudera_manager.crt',
+        :private_key  => '/etc/pki/tls/private/localhost.localdomain-cloudera_manager.key',
+        :chain        => nil,
+        :password     => nil,
+        :require      => 'Package[cloudera-manager-server]',
+        :notify       => 'Service[cloudera-scm-server]'
+      )}
+    end
+
+    describe 'server_keypw => somePass; server_chain_file => /etc/pki/tls/certs/intermediateCA.pem' do
+      let :params do {
+        :use_tls           => true,
+        :server_keypw      => 'somePass',
+        :server_chain_file => '/etc/pki/tls/certs/intermediateCA.pem'
+      }
+      end
+      it { should contain_java_ks('cmca:/etc/cloudera-scm-server/keystore').with(
+        :password => 'somePass'
+      )}
+      it { should contain_java_ks('jetty:/etc/cloudera-scm-server/keystore').with(
+        :chain    => '/etc/pki/tls/certs/intermediateCA.pem',
+        :password => 'somePass'
       )}
     end
   end
