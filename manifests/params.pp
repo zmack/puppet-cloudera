@@ -93,6 +93,21 @@ class cloudera::params {
     default => $::cloudera_service_ensure,
   }
 
+  $proxy = $::cloudera_proxy ? {
+    undef => 'absent',
+    default => $::cloudera_proxy,
+  }
+
+  $proxy_username = $::cloudera_proxy_username ? {
+    undef => 'absent',
+    default => $::cloudera_proxy_username,
+  }
+
+  $proxy_password = $::cloudera_proxy_password ? {
+    undef => 'absent',
+    default => $::cloudera_proxy_password,
+  }
+
   # Since the top scope variable could be a string (if from an ENC), we might
   # need to convert it to a boolean.
   $autoupgrade = $::cloudera_autoupgrade ? {
@@ -123,6 +138,16 @@ class cloudera::params {
     $safe_cm_use_tls = str2bool($cm_use_tls)
   } else {
     $safe_cm_use_tls = $cm_use_tls
+  }
+
+  $use_parcels = $::cloudera_use_parcels ? {
+    undef => false,
+    default => $::cloudera_use_parcels,
+  }
+  if is_string($use_parcels) {
+    $safe_use_parcels = str2bool($use_parcels)
+  } else {
+    $safe_use_parcels = $use_parcels
   }
 
   $cdh_version = '4'

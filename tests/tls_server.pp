@@ -1,11 +1,10 @@
 # The node that will be the CM server may use this declaration:
-class { 'cloudera::repo': } ->
-class { 'cloudera::java': } ->
-class { 'cloudera::java::jce': } ->
-class { 'cloudera::cm':
-  server_host => $::fqdn,
-  use_tls     => true,
+class { 'cloudera':
+  server_host    => $::fqdn,
+  use_tls        => true,
+  use_parcels    => true,
 } ->
+class { 'cloudera::java::jce': } ->
 class { 'cloudera::cm::server':
   use_tls      => true,
   server_keypw => 'myPassWord',
