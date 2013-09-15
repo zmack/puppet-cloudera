@@ -71,6 +71,32 @@
 #   Port to which the Cloudera Manager server is listening.
 #   Default: 7182
 #
+# [*use_tls*]
+#   Whether to enable TLS on the Cloudera Manager agent. TLS needs to be enabled
+#   on the server prior to setting this to true.
+#   Default: false
+#
+# [*verify_cert_file*]
+#   The file holding the public key of the Cloudera Manager server as well as
+#   the chain of signing certificate authorities. PEM format.
+#   Default: /etc/pki/tls/certs/cloudera_manager.crt
+#
+# [*use_parcels*]
+#   Whether to use parcel format software install and not RPM.
+#   Default: false
+#
+# [*proxy*]
+#   The URL to the proxy server for the YUM repositories.
+#   Default: absent
+#
+# [*proxy_username*]
+#   The username for the YUM proxy.
+#   Default: absent
+#
+# [*proxy_password*]
+#   The password for the YUM proxy.
+#   Default: absent
+#
 # === Actions:
 #
 # Installs YUM repository configuration files.
@@ -108,72 +134,101 @@
 #  License.
 #
 class cloudera (
-  $ensure         = $cloudera::params::ensure,
-  $autoupgrade    = $cloudera::params::safe_autoupgrade,
-  $service_ensure = $cloudera::params::service_ensure,
-  $service_enable = $cloudera::params::safe_service_enable,
-  $cdh_yumserver  = $cloudera::params::cdh_yumserver,
-  $cdh_yumpath    = $cloudera::params::cdh_yumpath,
-  $cdh_version    = $cloudera::params::cdh_version,
-  $cm_yumserver   = $cloudera::params::cm_yumserver,
-  $cm_yumpath     = $cloudera::params::cm_yumpath,
-  $cm_version     = $cloudera::params::cm_version,
-  $ci_yumserver   = $cloudera::params::ci_yumserver,
-  $ci_yumpath     = $cloudera::params::ci_yumpath,
-  $ci_version     = $cloudera::params::ci_version,
-  $cm_server_host = $cloudera::params::cm_server_host,
-  $cm_server_port = $cloudera::params::cm_server_port
+  $ensure           = $cloudera::params::ensure,
+  $autoupgrade      = $cloudera::params::safe_autoupgrade,
+  $service_ensure   = $cloudera::params::service_ensure,
+  $service_enable   = $cloudera::params::safe_service_enable,
+  $cdh_yumserver    = $cloudera::params::cdh_yumserver,
+  $cdh_yumpath      = $cloudera::params::cdh_yumpath,
+  $cdh_version      = $cloudera::params::cdh_version,
+  $cm_yumserver     = $cloudera::params::cm_yumserver,
+  $cm_yumpath       = $cloudera::params::cm_yumpath,
+  $cm_version       = $cloudera::params::cm_version,
+  $ci_yumserver     = $cloudera::params::ci_yumserver,
+  $ci_yumpath       = $cloudera::params::ci_yumpath,
+  $ci_version       = $cloudera::params::ci_version,
+  $cm_server_host   = $cloudera::params::cm_server_host,
+  $cm_server_port   = $cloudera::params::cm_server_port,
+  $use_tls          = $cloudera::params::safe_cm_use_tls,
+  $verify_cert_file = $cloudera::params::verify_cert_file,
+  $use_parcels      = $cloudera::params::safe_use_parcels,
+  $proxy            = $cloudera::params::proxy,
+  $proxy_username   = $cloudera::params::proxy_username,
+  $proxy_password   = $cloudera::params::proxy_password
 ) inherits cloudera::params {
   # Validate our booleans
   validate_bool($autoupgrade)
   validate_bool($service_enable)
+  validate_bool($use_tls)
+  validate_bool($use_parcels)
 
   anchor { 'cloudera::begin': }
   anchor { 'cloudera::end': }
 
-  class { 'cloudera::repo':
-    ensure        => $ensure,
-    cdh_yumserver => $cdh_yumserver,
-    cm_yumserver  => $cm_yumserver,
-    ci_yumserver  => $ci_yumserver,
-    cdh_yumpath   => $cdh_yumpath,
-    cm_yumpath    => $cm_yumpath,
-    ci_yumpath    => $ci_yumpath,
-    cdh_version   => $cdh_version,
-    cm_version    => $cm_version,
-    ci_version    => $ci_version,
-#    require       => Anchor['cloudera::begin'],
-#    before        => Anchor['cloudera::end'],
-  }
   class { 'cloudera::java':
     ensure      => $ensure,
     autoupgrade => $autoupgrade,
   }
-  class { 'cloudera::cdh':
-    ensure         => $ensure,
-    autoupgrade    => $autoupgrade,
-    service_ensure => $service_ensure,
-#    service_enable => $service_enable,
-    require        => Class['cloudera::repo'],
-#    require        => Anchor['cloudera::begin'],
-#    before         => Anchor['cloudera::end'],
-  }
   class { 'cloudera::cm':
-    ensure         => $ensure,
-    autoupgrade    => $autoupgrade,
-    service_ensure => $service_ensure,
-#    service_enable => $service_enable,
-    server_host    => $cm_server_host,
-    server_port    => $cm_server_port,
-    require        => [ Class['cloudera::repo'], Class['cloudera::cdh'], ],
-#    require        => Anchor['cloudera::begin'],
-#    before         => Anchor['cloudera::end'],
+    ensure           => $ensure,
+    autoupgrade      => $autoupgrade,
+    service_ensure   => $service_ensure,
+#    service_enable   => $service_enable,
+    server_host      => $cm_server_host,
+    server_port      => $cm_server_port,
+    use_tls          => $use_tls,
+    verify_cert_file => $verify_cert_file,
   }
-
-  Anchor['cloudera::begin'] ->
-  Class['cloudera::repo'] ->
-  Class['cloudera::java'] ->
-  Class['cloudera::cdh'] ->
-  Class['cloudera::cm'] ->
-  Anchor['cloudera::end']
+  # Skip installing the CDH RPMs if we are going to use parcels.
+  if $use_parcels {
+    class { 'cloudera::cm::repo':
+      ensure         => $ensure,
+      cm_yumserver   => $cm_yumserver,
+      cm_yumpath     => $cm_yumpath,
+      cm_version     => $cm_version,
+      proxy          => $proxy,
+      proxy_username => $proxy_username,
+      proxy_password => $proxy_password,
+    }
+    Anchor['cloudera::begin'] ->
+    Class['cloudera::cm::repo'] ->
+    Class['cloudera::java'] ->
+    Class['cloudera::cm'] ->
+    Anchor['cloudera::end']
+  } else {
+    class { 'cloudera::repo':
+      ensure         => $ensure,
+      cdh_yumserver  => $cdh_yumserver,
+      ci_yumserver   => $ci_yumserver,
+      cdh_yumpath    => $cdh_yumpath,
+      ci_yumpath     => $ci_yumpath,
+      cdh_version    => $cdh_version,
+      ci_version     => $ci_version,
+      proxy          => $proxy,
+      proxy_username => $proxy_username,
+      proxy_password => $proxy_password,
+    }
+    class { 'cloudera::cm::repo':
+      ensure         => $ensure,
+      cm_yumserver   => $cm_yumserver,
+      cm_yumpath     => $cm_yumpath,
+      cm_version     => $cm_version,
+      proxy          => $proxy,
+      proxy_username => $proxy_username,
+      proxy_password => $proxy_password,
+    }
+    class { 'cloudera::cdh':
+      ensure         => $ensure,
+      autoupgrade    => $autoupgrade,
+      service_ensure => $service_ensure,
+#      service_enable => $service_enable,
+    }
+    Anchor['cloudera::begin'] ->
+    Class['cloudera::cm::repo'] ->
+    Class['cloudera::repo'] ->
+    Class['cloudera::java'] ->
+    Class['cloudera::cdh'] ->
+    Class['cloudera::cm'] ->
+    Anchor['cloudera::end']
+  }
 }

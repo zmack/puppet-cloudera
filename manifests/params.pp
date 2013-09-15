@@ -46,6 +46,36 @@ class cloudera::params {
     default => $::cloudera_cm_server_port,
   }
 
+  $verify_cert_file = $::cloudera_verify_cert_file ? {
+    undef   => '/etc/pki/tls/certs/cloudera_manager.crt',
+    default => $::cloudera_verify_cert_file,
+  }
+
+  $server_ca_file = $::cloudera_server_ca_file ? {
+    undef   => '/etc/pki/tls/certs/cloudera_manager-ca.crt',
+    default => $::cloudera_server_ca_file,
+  }
+
+  $server_cert_file = $::cloudera_server_cert_file ? {
+    undef   => "/etc/pki/tls/certs/${::fqdn}-cloudera_manager.crt",
+    default => $::cloudera_server_cert_file,
+  }
+
+  $server_key_file = $::cloudera_server_key_file ? {
+    undef   => "/etc/pki/tls/private/${::fqdn}-cloudera_manager.key",
+    default => $::cloudera_server_key_file,
+  }
+
+  $server_chain_file = $::cloudera_server_chain_file ? {
+    undef   => undef,
+    default => $::cloudera_server_chain_file,
+  }
+
+  $server_keypw = $::cloudera_server_keypw ? {
+    undef   => undef,
+    default => $::cloudera_server_keypw,
+  }
+
   $oozie_ext = $::cloudera_oozie_ext ? {
     undef   => 'http://archive.cloudera.com/gplextras/misc/ext-2.2.zip',
     default => $::cloudera_oozie_ext,
@@ -61,6 +91,21 @@ class cloudera::params {
   $service_ensure = $::cloudera_service_ensure ? {
     undef => 'running',
     default => $::cloudera_service_ensure,
+  }
+
+  $proxy = $::cloudera_proxy ? {
+    undef => 'absent',
+    default => $::cloudera_proxy,
+  }
+
+  $proxy_username = $::cloudera_proxy_username ? {
+    undef => 'absent',
+    default => $::cloudera_proxy_username,
+  }
+
+  $proxy_password = $::cloudera_proxy_password ? {
+    undef => 'absent',
+    default => $::cloudera_proxy_password,
   }
 
   # Since the top scope variable could be a string (if from an ENC), we might
@@ -83,6 +128,26 @@ class cloudera::params {
     $safe_service_enable = str2bool($service_enable)
   } else {
     $safe_service_enable = $service_enable
+  }
+
+  $cm_use_tls = $::cloudera_cm_use_tls ? {
+    undef => false,
+    default => $::cloudera_cm_use_tls,
+  }
+  if is_string($cm_use_tls) {
+    $safe_cm_use_tls = str2bool($cm_use_tls)
+  } else {
+    $safe_cm_use_tls = $cm_use_tls
+  }
+
+  $use_parcels = $::cloudera_use_parcels ? {
+    undef => false,
+    default => $::cloudera_use_parcels,
+  }
+  if is_string($use_parcels) {
+    $safe_use_parcels = str2bool($use_parcels)
+  } else {
+    $safe_use_parcels = $use_parcels
   }
 
   $cdh_version = '4'
