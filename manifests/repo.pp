@@ -1,6 +1,7 @@
 # == Class: cloudera::repo
 #
-# This class handles installing the Cloudera software repositories.
+# This class handles installing the Cloudera CDH and Impala software
+# repositories.
 #
 # === Parameters:
 #
@@ -20,20 +21,6 @@
 #
 # [*cdh_version*]
 #   The version of Cloudera's Distribution, including Apache Hadoop to install.
-#   Default: 4
-#
-# [*cm_yumserver*]
-#   URI of the YUM server.
-#   Default: http://archive.cloudera.com
-#
-# [*cm_yumpath*]
-#   The path to add to the $cm_yumserver URI.
-#   Only set this if your platform is not supported or you know what you are
-#   doing.
-#   Default: auto-set, platform specific
-#
-# [*cm_version*]
-#   The version of Cloudera Manager to install.
 #   Default: 4
 #
 # [*ci_yumserver*]
@@ -62,7 +49,6 @@
 #
 #   class { 'cloudera::repo':
 #     cdh_version => '4.1',
-#     cm_version  => '4.1',
 #   }
 #
 # === Authors:
@@ -78,9 +64,6 @@ class cloudera::repo (
   $cdh_yumserver = $cloudera::params::cdh_yumserver,
   $cdh_yumpath   = $cloudera::params::cdh_yumpath,
   $cdh_version   = $cloudera::params::cdh_version,
-  $cm_yumserver  = $cloudera::params::cm_yumserver,
-  $cm_yumpath    = $cloudera::params::cm_yumpath,
-  $cm_version    = $cloudera::params::cm_version,
   $ci_yumserver  = $cloudera::params::ci_yumserver,
   $ci_yumpath    = $cloudera::params::ci_yumpath,
   $ci_version    = $cloudera::params::ci_version
@@ -105,15 +88,6 @@ class cloudera::repo (
         gpgcheck => 1,
         gpgkey   => "${cdh_yumserver}${cdh_yumpath}RPM-GPG-KEY-cloudera",
         baseurl  => "${cdh_yumserver}${cdh_yumpath}${cdh_version}/",
-        priority => $cloudera::params::yum_priority,
-        protect  => $cloudera::params::yum_protect,
-      }
-      yumrepo { 'cloudera-manager':
-        descr    => 'Cloudera Manager',
-        enabled  => $enabled,
-        gpgcheck => 1,
-        gpgkey   => "${cm_yumserver}${cm_yumpath}RPM-GPG-KEY-cloudera",
-        baseurl  => "${cm_yumserver}${cm_yumpath}${cm_version}/",
         priority => $cloudera::params::yum_priority,
         protect  => $cloudera::params::yum_protect,
       }

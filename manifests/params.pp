@@ -125,6 +125,16 @@ class cloudera::params {
     $safe_cm_use_tls = $cm_use_tls
   }
 
+  $use_parcels = $::cloudera_use_parcels ? {
+    undef => false,
+    default => $::cloudera_use_parcels,
+  }
+  if is_string($use_parcels) {
+    $safe_use_parcels = str2bool($use_parcels)
+  } else {
+    $safe_use_parcels = $use_parcels
+  }
+
   $cdh_version = '4'
   $cm_version  = '4'
   $ci_version  = '1'

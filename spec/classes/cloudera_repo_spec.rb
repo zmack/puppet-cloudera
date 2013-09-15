@@ -15,9 +15,6 @@ describe 'cloudera::repo', :type => 'class' do
         should raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
       }
     end
-#    it { should_not contain_yumrepo('cloudera-cdh4') }
-#    it { should_not contain_yumrepo('cloudera-manager') }
-#    it { should_not contain_yumrepo('cloudera-impala') }
   end
 
   context 'on a supported operatingsystem, default parameters' do
@@ -38,15 +35,6 @@ describe 'cloudera::repo', :type => 'class' do
       :priority => '50',
       :protect  => '0'
     )}
-    it { should contain_yumrepo('cloudera-manager').with(
-      :descr    => 'Cloudera Manager',
-      :enabled  => '1',
-      :gpgcheck => '1',
-      :gpgkey   => 'http://archive.cloudera.com/cm4/redhat/6/x86_64/cm/RPM-GPG-KEY-cloudera',
-      :baseurl  => 'http://archive.cloudera.com/cm4/redhat/6/x86_64/cm/4/',
-      :priority => '50',
-      :protect  => '0'
-    )}
     it { should contain_yumrepo('cloudera-impala').with(
       :descr    => 'Impala',
       :enabled  => '1',
@@ -56,6 +44,7 @@ describe 'cloudera::repo', :type => 'class' do
       :priority => '50',
       :protect  => '0'
     )}
+    it { should_not contain_yumrepo('cloudera-manager') }
   end
 
   context 'on a supported operatingsystem, custom parameters' do
@@ -71,7 +60,6 @@ describe 'cloudera::repo', :type => 'class' do
       }
       end
       it { should contain_yumrepo('cloudera-cdh4').with_enabled('0') }
-      it { should contain_yumrepo('cloudera-manager').with_enabled('0') }
       it { should contain_yumrepo('cloudera-impala').with_enabled('0') }
     end
 
@@ -80,9 +68,6 @@ describe 'cloudera::repo', :type => 'class' do
         :cdh_yumserver => 'http://localhost',
         :cdh_yumpath   => '/somepath/',
         :cdh_version   => '999',
-        :cm_yumserver => 'http://localhost',
-        :cm_yumpath   => '/somepath/3/',
-        :cm_version   => '888',
         :ci_yumserver => 'http://localhost',
         :ci_yumpath   => '/somepath/2/',
         :ci_version   => '777'
@@ -91,10 +76,6 @@ describe 'cloudera::repo', :type => 'class' do
       it { should contain_yumrepo('cloudera-cdh4').with(
         :gpgkey   => 'http://localhost/somepath/RPM-GPG-KEY-cloudera',
         :baseurl  => 'http://localhost/somepath/999/'
-      )}
-      it { should contain_yumrepo('cloudera-manager').with(
-        :gpgkey   => 'http://localhost/somepath/3/RPM-GPG-KEY-cloudera',
-        :baseurl  => 'http://localhost/somepath/3/888/'
       )}
       it { should contain_yumrepo('cloudera-impala').with(
         :gpgkey   => 'http://localhost/somepath/2/RPM-GPG-KEY-cloudera',

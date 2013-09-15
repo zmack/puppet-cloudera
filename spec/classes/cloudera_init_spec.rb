@@ -24,10 +24,11 @@ describe 'cloudera', :type => 'class' do
       :operatingsystem => 'CentOS'
     }
     end
-    it { should contain_class('cloudera::repo').with_ensure('present') }
     it { should contain_class('cloudera::java').with_ensure('present') }
-    it { should contain_class('cloudera::cdh').with_ensure('present') }
     it { should contain_class('cloudera::cm').with_ensure('present') }
+    it { should contain_class('cloudera::repo').with_ensure('present') }
+    it { should contain_class('cloudera::cm::repo').with_ensure('present') }
+    it { should contain_class('cloudera::cdh').with_ensure('present') }
   end
 
   context 'on a supported operatingsystem, custom parameters' do
@@ -38,14 +39,21 @@ describe 'cloudera', :type => 'class' do
     end
 
     describe 'ensure => absent' do
-      let :params do {
-        :ensure => 'absent'
-      }
-      end
-    it { should contain_class('cloudera::repo').with_ensure('absent') }
-    it { should contain_class('cloudera::java').with_ensure('absent') }
-    it { should contain_class('cloudera::cdh').with_ensure('absent') }
-    it { should contain_class('cloudera::cm').with_ensure('absent') }
+      let(:params) {{ :ensure => 'absent' }}
+      it { should contain_class('cloudera::java').with_ensure('absent') }
+      it { should contain_class('cloudera::cm').with_ensure('absent') }
+      it { should contain_class('cloudera::repo').with_ensure('absent') }
+      it { should contain_class('cloudera::cm::repo').with_ensure('absent') }
+      it { should contain_class('cloudera::cdh').with_ensure('absent') }
+    end
+
+    describe 'use_parcels => true' do
+      let(:params) {{ :use_parcels => true }}
+      it { should contain_class('cloudera::java').with_ensure('present') }
+      it { should contain_class('cloudera::cm').with_ensure('present') }
+      it { should_not contain_class('cloudera::repo') }
+      it { should contain_class('cloudera::cm::repo').with_ensure('present') }
+      it { should_not contain_class('cloudera::cdh') }
     end
   end
 
