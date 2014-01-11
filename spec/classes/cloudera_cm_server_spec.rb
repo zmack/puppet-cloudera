@@ -47,6 +47,7 @@ describe 'cloudera::cm::server', :type => 'class' do
     )}
     it { should_not contain_java_ks('cmca:/etc/cloudera-scm-server/keystore') }
     it { should_not contain_java_ks('jetty:/etc/cloudera-scm-server/keystore') }
+    it { should_not contain_file('/etc/cloudera-scm-server/keystore') }
   end
 
   context 'on a supported operatingsystem, custom parameters' do
@@ -389,6 +390,13 @@ describe 'cloudera::cm::server', :type => 'class' do
         :require      => 'Package[cloudera-manager-server]',
         :notify       => 'Service[cloudera-scm-server]'
       )}
+      it { should contain_file('/etc/cloudera-scm-server/keystore').with(
+        :ensure  => 'present',
+        :owner   => 'cloudera-scm',
+        :group   => 'cloudera-scm',
+        :mode    => '0640',
+        :require => 'Java_ks[cmca:/etc/cloudera-scm-server/keystore]'
+      )}
     end
 
     describe 'server_keypw => somePass; server_chain_file => /etc/pki/tls/certs/intermediateCA.pem' do
@@ -405,6 +413,7 @@ describe 'cloudera::cm::server', :type => 'class' do
         :chain    => '/etc/pki/tls/certs/intermediateCA.pem',
         :password => 'somePass'
       )}
+      it { should contain_file('/etc/cloudera-scm-server/keystore') }
     end
   end
 end

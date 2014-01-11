@@ -275,6 +275,14 @@ class cloudera::cm::server (
   }
 
   if $use_tls {
+    file { '/etc/cloudera-scm-server/keystore':
+      ensure  => present,
+      mode    => '0640',
+      owner   => 'cloudera-scm',
+      group   => 'cloudera-scm',
+      require => Java_ks['cmca:/etc/cloudera-scm-server/keystore'],
+    }
+
     java_ks { 'cmca:/etc/cloudera-scm-server/keystore':
       ensure       => latest,
       certificate  => $server_ca_file,
