@@ -38,6 +38,12 @@ describe 'cloudera::repo', :type => 'class' do
       :proxy_username => 'absent',
       :proxy_password => 'absent'
     )}
+    it { should contain_file('/etc/yum.repos.d/cloudera-cdh4.repo').with(
+      :ensure => 'file',
+      :owner  => 'root',
+      :group  => 'root',
+      :mode   => '0644'
+    )}
     it { should contain_yumrepo('cloudera-impala').with(
       :descr          => 'Impala',
       :enabled        => '1',
@@ -49,6 +55,12 @@ describe 'cloudera::repo', :type => 'class' do
       :proxy          => 'absent',
       :proxy_username => 'absent',
       :proxy_password => 'absent'
+    )}
+    it { should contain_file('/etc/yum.repos.d/cloudera-impala.repo').with(
+      :ensure => 'file',
+      :owner  => 'root',
+      :group  => 'root',
+      :mode   => '0644'
     )}
     it { should_not contain_yumrepo('cloudera-manager') }
   end
@@ -67,6 +79,8 @@ describe 'cloudera::repo', :type => 'class' do
       end
       it { should contain_yumrepo('cloudera-cdh4').with_enabled('0') }
       it { should contain_yumrepo('cloudera-impala').with_enabled('0') }
+      it { should contain_file('/etc/yum.repos.d/cloudera-cdh4.repo').with_ensure('file') }
+      it { should contain_file('/etc/yum.repos.d/cloudera-impala.repo').with_ensure('file') }
     end
 
     describe 'all other parameters' do
@@ -96,6 +110,8 @@ describe 'cloudera::repo', :type => 'class' do
         :proxy_username => 'myUser',
         :proxy_password => 'myPass'
       )}
+      it { should contain_file('/etc/yum.repos.d/cloudera-cdh4.repo').with_ensure('file') }
+      it { should contain_file('/etc/yum.repos.d/cloudera-impala.repo').with_ensure('file') }
     end
   end
 end

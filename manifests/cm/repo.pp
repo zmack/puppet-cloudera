@@ -91,6 +91,13 @@ class cloudera::cm::repo (
         proxy_username => $proxy_username,
         proxy_password => $proxy_password,
       }
+
+      file { '/etc/yum.repos.d/cloudera-manager.repo':
+        ensure => 'file',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+      }
     }
     default: { }
   }
