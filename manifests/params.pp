@@ -150,15 +150,25 @@ class cloudera::params {
     $safe_use_parcels = $use_parcels
   }
 
+  if $::operatingsystemmajrelease { # facter 1.7+
+    $majdistrelease = $::operatingsystemmajrelease
+  } elsif $::lsbmajdistrelease {    # requires LSB to already be installed
+    $majdistrelease = $::lsbmajdistrelease
+  } elsif $::os_maj_version {       # requires stahnma/epel
+    $majdistrelease = $::os_maj_version
+  } else {
+    $majdistrelease = regsubst($::operatingsystemrelease,'^(\d+)\.(\d+)','\1')
+  }
+
   $cdh_version = '4'
   $cm_version  = '4'
   $ci_version  = '1'
 
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OEL', 'OracleLinux': {
-      $cdh_yumpath = "/cdh4/redhat/${::os_maj_version}/${::architecture}/cdh/"
-      $cm_yumpath = "/cm4/redhat/${::os_maj_version}/${::architecture}/cm/"
-      $ci_yumpath = "/impala/redhat/${::os_maj_version}/${::architecture}/impala/"
+      $cdh_yumpath = "/cdh4/redhat/${majdistrelease}/${::architecture}/cdh/"
+      $cm_yumpath = "/cm4/redhat/${majdistrelease}/${::architecture}/cm/"
+      $ci_yumpath = "/impala/redhat/${majdistrelease}/${::architecture}/impala/"
     }
     default: {
       fail("Module ${module_name} is not supported on ${::operatingsystem}")
