@@ -164,7 +164,7 @@ class cloudera::cm::server (
   }
 
   if $db_type != 'embedded' {
-    $file_content = template('cloudera/db.properties.erb')
+    $file_content = template("${module_name}/db.properties.erb")
   }
 
   package { 'cloudera-manager-server':
