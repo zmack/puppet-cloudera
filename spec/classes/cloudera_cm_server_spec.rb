@@ -10,10 +10,10 @@ describe 'cloudera::cm::server', :type => 'class' do
       :operatingsystem => 'bar'
     }
     end
-    it 'should fail' do
+    it do
       expect {
-        should raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
-      }
+        should compile
+      }.to raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
     end
   end
 
@@ -23,6 +23,7 @@ describe 'cloudera::cm::server', :type => 'class' do
       :operatingsystem => 'CentOS'
     }
     end
+    it { should compile.with_all_deps }
     it { should contain_package('cloudera-manager-server').with_ensure('present') }
     it { should contain_file('/etc/cloudera-scm-server/db.properties').with(
       :ensure => 'present',

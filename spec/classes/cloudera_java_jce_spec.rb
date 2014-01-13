@@ -10,19 +10,21 @@ describe 'cloudera::java::jce', :type => 'class' do
       :operatingsystem => 'bar'
     }
     end
-    it 'should fail' do
+    it do
       expect {
-        should raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
-      }
+        should compile
+      }.to raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
     end
   end
 
   context 'on a supported operatingsystem, default parameters' do
+    let(:pre_condition) { 'class {"cloudera::java":}' }
     let :facts do {
       :osfamily        => 'RedHat',
       :operatingsystem => 'CentOS'
     }
     end
+    it { should compile.with_all_deps }
     it { should contain_file('/usr/java/default/jre/lib/security/README.txt').with(
       :ensure  => 'present',
       :source  => 'puppet:///modules/cloudera/jce/README.txt',

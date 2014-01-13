@@ -10,10 +10,10 @@ describe 'cloudera::cm::repo', :type => 'class' do
       :operatingsystem => 'bar'
     }
     end
-    it 'should fail' do
+    it do
       expect {
-        should raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
-      }
+        should compile
+      }.to raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
     end
   end
 
@@ -26,6 +26,7 @@ describe 'cloudera::cm::repo', :type => 'class' do
       :architecture           => 'x86_64'
     }
     end
+    it { should compile.with_all_deps }
     it { should contain_yumrepo('cloudera-manager').with(
       :descr          => 'Cloudera Manager',
       :enabled        => '1',

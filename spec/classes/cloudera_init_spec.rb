@@ -10,10 +10,10 @@ describe 'cloudera', :type => 'class' do
       :operatingsystem => 'bar'
     }
     end
-    it 'should fail' do
+    it do
       expect {
-        should raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
-      }
+        should compile
+      }.to raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
     end
   end
 
@@ -24,6 +24,7 @@ describe 'cloudera', :type => 'class' do
       :operatingsystem => 'CentOS'
     }
     end
+    it { should compile.with_all_deps }
     it { should contain_class('cloudera::java').with_ensure('present') }
     it { should contain_class('cloudera::cm').with_ensure('present') }
     it { should contain_class('cloudera::repo').with_ensure('present') }
