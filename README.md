@@ -187,7 +187,7 @@ Notes
 -----
 
 * Supports Top Scope variables (i.e. via Dashboard) and Parameterized Classes.
-* Installing CDH3 is not presently supported.
+* Installing CDH3 will not be supported.
 * Based on the [Cloudera Manager 4.1 Installation Guide](https://ccp.cloudera.com/download/attachments/22151983/CM-4.1-enterprise-install-guide.pdf?version=3&modificationDate=1358553325305)
 * TLS certificates must be in PEM format and are not deployed by this module.
 * When using parcels, the CDH software is not deployed by Puppet.  Puppet will only install the Cloudera Manager server/agent.  You must then configure Cloudera Manager to deploy the parcels.
@@ -206,6 +206,30 @@ TODO
 * Document hive-metastore installation.
 * Document sqoop-metastore installation.
 * Document whirr installation.
+
+Deprecation Warning
+-------------------
+
+The default for `use_parcels` will switch to `true` before the 1.0.0 release.
+
+This:
+
+```puppet
+class { 'cloudera':
+  cm_server_host => 'smhost.example.com',
+}
+```
+
+would become this:
+
+```puppet
+class { 'cloudera':
+  cm_server_host => 'smhost.example.com',
+  use_parcels    => false,
+}
+```
+
+The puppetlabs/mysql and puppetlabs/postgresql dependencies will update to versions 2 and 3 respectively.  Make sure to review their changelogs in the case of an upgrade.
 
 Contributing
 ------------
