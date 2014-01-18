@@ -16,5 +16,6 @@
 class cloudera::cdh::sqoop::client {
   package { 'sqoop':
     ensure => present,
+    tag    => 'cloudera-cdh4',
   }
 }

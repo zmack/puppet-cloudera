@@ -168,11 +168,13 @@ class cloudera::cm::server (
   }
 
   package { 'cloudera-manager-server':
-    ensure  => $package_ensure,
+    ensure => $package_ensure,
+    tag    => 'cloudera-manager',
   }
 
 #  package { 'cloudera-manager-daemons':
 #    ensure => $package_ensure,
+#    tag    => 'cloudera-manager',
 #  }
 
   file { '/etc/cloudera-scm-server/db.properties':
@@ -194,7 +196,8 @@ class cloudera::cm::server (
   case $db_type {
     'embedded': {
       package { 'cloudera-manager-server-db':
-        ensure  => $package_ensure,
+        ensure => $package_ensure,
+        tag    => 'cloudera-manager',
       }
 
       exec { 'cloudera-manager-server-db':

@@ -23,6 +23,7 @@
 class cloudera::cdh::hive::metastore {
   package { 'hive-metastore':
     ensure => present,
+    tag    => 'cloudera-cdh4',
   }
 
   service { 'hive-metastore':

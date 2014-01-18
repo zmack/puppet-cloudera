@@ -23,6 +23,7 @@
 class cloudera::cdh::hive::server2 {
   package { 'hive-server2':
     ensure => present,
+    tag    => 'cloudera-cdh4',
   }
 
   service { 'hive-server2':

@@ -98,6 +98,8 @@ class cloudera::cm::repo (
         group  => 'root',
         mode   => '0644',
       }
+
+      Yumrepo['cloudera-manager'] -> Package<|tag == 'cloudera-manager'|>
     }
     default: { }
   }

@@ -16,6 +16,7 @@
 class cloudera::cdh::sqoop::metastore {
   package { 'sqoop-metastore':
     ensure => present,
+    tag    => 'cloudera-cdh4',
   }
 
   service { 'sqoop-metastore':

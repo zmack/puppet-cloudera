@@ -23,11 +23,13 @@
 class cloudera::cdh::hue::plugins {
   package { 'hue-plugins':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 
   # CDH 4.1.1 had the required file in hue-plugins. In CDH 4.1.2 said file
   # becomes a symlink to a file in hue-common.
   package { 'hue-common':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 }
