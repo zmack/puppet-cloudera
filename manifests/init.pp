@@ -83,7 +83,7 @@
 #
 # [*use_parcels*]
 #   Whether to use parcel format software install and not RPM.
-#   Default: false
+#   Default: true
 #
 # [*proxy*]
 #   The URL to the proxy server for the YUM repositories.

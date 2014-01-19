@@ -141,7 +141,7 @@ class cloudera::params {
   }
 
   $use_parcels = $::cloudera_use_parcels ? {
-    undef => false,
+    undef => true,
     default => $::cloudera_use_parcels,
   }
   if is_string($use_parcels) {
