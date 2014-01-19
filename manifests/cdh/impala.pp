@@ -23,9 +23,11 @@
 class cloudera::cdh::impala {
   package { 'impala':
     ensure => 'present',
+    tag    => 'cloudera-impala',
   }
 
   package { 'impala-shell':
     ensure => 'present',
+    tag    => 'cloudera-impala',
   }
 }

@@ -16,5 +16,6 @@
 class cloudera::cdh::whirr {
   package { 'whirr':
     ensure => present,
+    tag    => 'cloudera-cdh4',
   }
 }

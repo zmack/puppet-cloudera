@@ -26,6 +26,7 @@ class cloudera::cdh::oozie {
 
   package { 'oozie':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 
   service { 'oozie':

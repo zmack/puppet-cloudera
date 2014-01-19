@@ -63,6 +63,7 @@ class cloudera::java (
 
   package { 'jdk':
     ensure => $package_ensure,
+    tag    => 'cloudera-manager',
   }
 
   file { 'java-profile.d':

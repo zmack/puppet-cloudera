@@ -100,10 +100,12 @@ class cloudera::cm (
 
   package { 'cloudera-manager-agent':
     ensure => $package_ensure,
+    tag    => 'cloudera-manager',
   }
 
   package { 'cloudera-manager-daemons':
     ensure => $package_ensure,
+    tag    => 'cloudera-manager',
   }
 
   file { 'scm-config.ini':

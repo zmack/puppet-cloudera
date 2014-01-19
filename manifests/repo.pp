@@ -134,6 +134,9 @@ class cloudera::repo (
         group  => 'root',
         mode   => '0644',
       }
+
+      Yumrepo['cloudera-cdh4'] -> Package<|tag == 'cloudera-cdh4'|>
+      Yumrepo['cloudera-impala'] -> Package<|tag == 'cloudera-impala'|>
     }
     default: { }
   }
