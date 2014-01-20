@@ -108,7 +108,7 @@ class { 'cloudera::cm::server': }
 
 [Parcel](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) is an alternative binary distribution format supported by Cloudera Manager 4.5+ that simplifies distribution of CDH and other Cloudera products.  By default, this module assumes software deployment via parcel.  To allow Cloudera Manager to install RPMs (or DEBs) instead of parcels, just set `use_parcels => false`.
 
-Nodes that will be cluster members or Gateways will use this declaration:
+Nodes that will be cluster members will use this declaration:
 ```puppet
 class { 'cloudera':
   cm_server_host => 'smhost.example.com',

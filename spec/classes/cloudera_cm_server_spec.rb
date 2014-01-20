@@ -179,11 +179,13 @@ describe 'cloudera::cm::server', :type => 'class' do
           'com.cloudera.cmf.db.password=scm',
         ])
       end
-      it { should contain_class('mysql::java') }
+      it { should contain_class('mysql::bindings') }
+      it { should contain_class('mysql::bindings::java') }
       it { should contain_exec('scm_prepare_database').with(
-        :command => '/usr/share/cmf/schema/scm_prepare_database.sh mysql  --user=root --password= scm scm scm && touch /etc/cloudera-manager-server/.scm_prepare_database',
-        :creates => '/etc/cloudera-manager-server/.scm_prepare_database',
-        :require => [ 'Package[cloudera-manager-server]', 'Service[mysqld]' ]
+        :command => '/usr/share/cmf/schema/scm_prepare_database.sh mysql  --user=root --password= scm scm scm && touch /etc/cloudera-scm-server/.scm_prepare_database',
+        :creates => '/etc/cloudera-scm-server/.scm_prepare_database',
+        :require => [ 'Package[cloudera-manager-server]', 'Class[Mysql::Server]' ],
+        :before  => 'Service[cloudera-scm-server]'
       )}
     end
 
@@ -210,11 +212,13 @@ describe 'cloudera::cm::server', :type => 'class' do
           'com.cloudera.cmf.db.password=myDbPass',
         ])
       end
-      it { should contain_class('mysql::java') }
+      it { should contain_class('mysql::bindings') }
+      it { should contain_class('mysql::bindings::java') }
       it { should contain_exec('scm_prepare_database').with(
-        :command => '/usr/share/cmf/schema/scm_prepare_database.sh mysql --host=dbhost.example.com --port=9000 --scm-host=myhost.example.com --user=dbadmin --password=myPass clouderaDB dbuser myDbPass && touch /etc/cloudera-manager-server/.scm_prepare_database',
-        :creates => '/etc/cloudera-manager-server/.scm_prepare_database',
-        :require => 'Package[cloudera-manager-server]'
+        :command => '/usr/share/cmf/schema/scm_prepare_database.sh mysql --host=dbhost.example.com --port=9000 --scm-host=myhost.example.com --user=dbadmin --password=myPass clouderaDB dbuser myDbPass && touch /etc/cloudera-scm-server/.scm_prepare_database',
+        :creates => '/etc/cloudera-scm-server/.scm_prepare_database',
+        :require => 'Package[cloudera-manager-server]',
+        :before  => 'Service[cloudera-scm-server]'
       )}
     end
   end
@@ -245,9 +249,10 @@ describe 'cloudera::cm::server', :type => 'class' do
       end
 #      it { should contain_class('oraclerdbms::java') }
       it { should contain_exec('scm_prepare_database').with(
-        :command => '/usr/share/cmf/schema/scm_prepare_database.sh oracle  --user=root --password= scm scm scm && touch /etc/cloudera-manager-server/.scm_prepare_database',
-        :creates => '/etc/cloudera-manager-server/.scm_prepare_database',
-        :require => 'Package[cloudera-manager-server]'
+        :command => '/usr/share/cmf/schema/scm_prepare_database.sh oracle  --user=root --password= scm scm scm && touch /etc/cloudera-scm-server/.scm_prepare_database',
+        :creates => '/etc/cloudera-scm-server/.scm_prepare_database',
+        :require => 'Package[cloudera-manager-server]',
+        :before  => 'Service[cloudera-scm-server]'
       )}
     end
 
@@ -276,9 +281,10 @@ describe 'cloudera::cm::server', :type => 'class' do
       end
 #      it { should contain_class('oraclerdbms::java') }
       it { should contain_exec('scm_prepare_database').with(
-        :command => '/usr/share/cmf/schema/scm_prepare_database.sh oracle --host=dbhost.example.com --port=9000 --scm-host=myhost.example.com --user=dbadmin --password=myPass clouderaDB dbuser myDbPass && touch /etc/cloudera-manager-server/.scm_prepare_database',
-        :creates => '/etc/cloudera-manager-server/.scm_prepare_database',
-        :require => 'Package[cloudera-manager-server]'
+        :command => '/usr/share/cmf/schema/scm_prepare_database.sh oracle --host=dbhost.example.com --port=9000 --scm-host=myhost.example.com --user=dbadmin --password=myPass clouderaDB dbuser myDbPass && touch /etc/cloudera-scm-server/.scm_prepare_database',
+        :creates => '/etc/cloudera-scm-server/.scm_prepare_database',
+        :require => 'Package[cloudera-manager-server]',
+        :before  => 'Service[cloudera-scm-server]'
       )}
     end
   end
@@ -289,7 +295,8 @@ describe 'cloudera::cm::server', :type => 'class' do
       :fqdn                     => 'myhost.example.com',
       :postgres_default_version => 'somevar',
       :osfamily                 => 'RedHat',
-      :operatingsystem          => 'OracleLinux'
+      :operatingsystem          => 'OracleLinux',
+      :operatingsystemrelease   => '6.4'
     }
     end
 
@@ -309,16 +316,16 @@ describe 'cloudera::cm::server', :type => 'class' do
           'com.cloudera.cmf.db.password=scm',
         ])
       end
-      it { should contain_class('postgresql::java') }
+      it { should contain_class('postgresql::lib::java') }
       it { should contain_exec('scm_prepare_database').with(
-        :command => '/usr/share/cmf/schema/scm_prepare_database.sh postgresql  --user=root --password= scm scm scm && touch /etc/cloudera-manager-server/.scm_prepare_database',
-        :creates => '/etc/cloudera-manager-server/.scm_prepare_database',
-        :require => [ 'Package[cloudera-manager-server]', 'Service[postgresqld]' ]
+        :command => '/usr/share/cmf/schema/scm_prepare_database.sh postgresql  --user=root --password= scm scm scm && touch /etc/cloudera-scm-server/.scm_prepare_database',
+        :creates => '/etc/cloudera-scm-server/.scm_prepare_database',
+        :require => [ 'Package[cloudera-manager-server]', 'Class[Postgresql::Server]' ],
+        :before  => 'Service[cloudera-scm-server]'
       )}
     end
 
     describe 'with custom parameters' do
-      let(:pre_condition) { 'class {"postgresql::server":}' }
       let :params do {
         :db_type       => 'postgresql',
         :database_name => 'clouderaDB',
@@ -340,11 +347,12 @@ describe 'cloudera::cm::server', :type => 'class' do
           'com.cloudera.cmf.db.password=myDbPass',
         ])
       end
-      it { should contain_class('postgresql::java') }
+      it { should contain_class('postgresql::lib::java') }
       it { should contain_exec('scm_prepare_database').with(
-        :command => '/usr/share/cmf/schema/scm_prepare_database.sh postgresql --host=dbhost.example.com --port=9000 --scm-host=myhost.example.com --user=dbadmin --password=myPass clouderaDB dbuser myDbPass && touch /etc/cloudera-manager-server/.scm_prepare_database',
-        :creates => '/etc/cloudera-manager-server/.scm_prepare_database',
-        :require => 'Package[cloudera-manager-server]'
+        :command => '/usr/share/cmf/schema/scm_prepare_database.sh postgresql --host=dbhost.example.com --port=9000 --scm-host=myhost.example.com --user=dbadmin --password=myPass clouderaDB dbuser myDbPass && touch /etc/cloudera-scm-server/.scm_prepare_database',
+        :creates => '/etc/cloudera-scm-server/.scm_prepare_database',
+        :require => 'Package[cloudera-manager-server]',
+        :before  => 'Service[cloudera-scm-server]'
       )}
     end
   end

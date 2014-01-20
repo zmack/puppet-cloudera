@@ -21,7 +21,8 @@
 # Copyright (C) 2013 Mike Arnold, unless otherwise noted.
 #
 class cloudera::cdh::oozie::mysql {
-  include mysql::java
+  include '::mysql::bindings'
+  include '::mysql::bindings::java'
 
   file { '/usr/lib/oozie/libext/mysql-connector-java.jar':
     ensure => link,
