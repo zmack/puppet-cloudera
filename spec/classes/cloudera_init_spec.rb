@@ -53,6 +53,8 @@ describe 'cloudera', :type => 'class' do
       it { should contain_class('cloudera::repo').with_ensure('present') }
       it { should contain_class('cloudera::cm::repo').with_ensure('present') }
       it { should contain_class('cloudera::cdh').with_ensure('present') }
+      it { should contain_class('cloudera::impala::repo').with_ensure('present') }
+      it { should contain_class('cloudera::impala').with_ensure('present') }
     end
   end
 

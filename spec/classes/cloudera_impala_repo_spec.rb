@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'cloudera::repo', :type => 'class' do
+describe 'cloudera::impala::repo', :type => 'class' do
 
   context 'on a non-supported operatingsystem' do
     let :facts do {
@@ -27,25 +27,24 @@ describe 'cloudera::repo', :type => 'class' do
     }
     end
     it { should compile.with_all_deps }
-    it { should contain_yumrepo('cloudera-cdh4').with(
-      :descr          => 'Cloudera\'s Distribution for Hadoop, Version 4',
+    it { should contain_yumrepo('cloudera-impala').with(
+      :descr          => 'Impala',
       :enabled        => '1',
       :gpgcheck       => '1',
-      :gpgkey         => 'http://archive.cloudera.com/cdh4/redhat/6/x86_64/cdh/RPM-GPG-KEY-cloudera',
-      :baseurl        => 'http://archive.cloudera.com/cdh4/redhat/6/x86_64/cdh/4/',
+      :gpgkey         => 'http://archive.cloudera.com/impala/redhat/6/x86_64/impala/RPM-GPG-KEY-cloudera',
+      :baseurl        => 'http://archive.cloudera.com/impala/redhat/6/x86_64/impala/1/',
       :priority       => '50',
       :protect        => '0',
       :proxy          => 'absent',
       :proxy_username => 'absent',
       :proxy_password => 'absent'
     )}
-    it { should contain_file('/etc/yum.repos.d/cloudera-cdh4.repo').with(
+    it { should contain_file('/etc/yum.repos.d/cloudera-impala.repo').with(
       :ensure => 'file',
       :owner  => 'root',
       :group  => 'root',
       :mode   => '0644'
     )}
-    it { should_not contain_yumrepo('cloudera-impala') }
     it { should_not contain_yumrepo('cloudera-manager') }
   end
 
@@ -61,28 +60,28 @@ describe 'cloudera::repo', :type => 'class' do
         :ensure => 'absent'
       }
       end
-      it { should contain_yumrepo('cloudera-cdh4').with_enabled('0') }
-      it { should contain_file('/etc/yum.repos.d/cloudera-cdh4.repo').with_ensure('file') }
+      it { should contain_yumrepo('cloudera-impala').with_enabled('0') }
+      it { should contain_file('/etc/yum.repos.d/cloudera-impala.repo').with_ensure('file') }
     end
 
     describe 'all other parameters' do
       let :params do {
-        :cdh_yumserver  => 'http://localhost',
-        :cdh_yumpath    => '/somepath/',
-        :cdh_version    => '999',
+        :ci_yumserver   => 'http://localhost',
+        :ci_yumpath     => '/somepath/2/',
+        :ci_version     => '777',
         :proxy          => 'http://proxy:3128/',
         :proxy_username => 'myUser',
         :proxy_password => 'myPass'
       }
       end
-      it { should contain_yumrepo('cloudera-cdh4').with(
-        :gpgkey         => 'http://localhost/somepath/RPM-GPG-KEY-cloudera',
-        :baseurl        => 'http://localhost/somepath/999/',
+      it { should contain_yumrepo('cloudera-impala').with(
+        :gpgkey         => 'http://localhost/somepath/2/RPM-GPG-KEY-cloudera',
+        :baseurl        => 'http://localhost/somepath/2/777/',
         :proxy          => 'http://proxy:3128/',
         :proxy_username => 'myUser',
         :proxy_password => 'myPass'
       )}
-      it { should contain_file('/etc/yum.repos.d/cloudera-cdh4.repo').with_ensure('file') }
+      it { should contain_file('/etc/yum.repos.d/cloudera-impala.repo').with_ensure('file') }
     end
   end
 end

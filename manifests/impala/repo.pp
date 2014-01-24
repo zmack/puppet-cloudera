@@ -1,6 +1,6 @@
-# == Class: cloudera::repo
+# == Class: cloudera::impala::repo
 #
-# This class handles installing the Cloudera CDH software repositories.
+# This class handles installing the Cloudera Impala software repositories.
 #
 # === Parameters:
 #
@@ -8,19 +8,19 @@
 #   Ensure if present or absent.
 #   Default: present
 #
-# [*cdh_yumserver*]
+# [*ci_yumserver*]
 #   URI of the YUM server.
 #   Default: http://archive.cloudera.com
 #
-# [*cdh_yumpath*]
-#   The path to add to the $cdh_yumserver URI.
+# [*ci_yumpath*]
+#   The path to add to the $ci_yumserver URI.
 #   Only set this if your platform is not supported or you know what you are
 #   doing.
 #   Default: auto-set, platform specific
 #
-# [*cdh_version*]
-#   The version of Cloudera's Distribution, including Apache Hadoop to install.
-#   Default: 4
+# [*ci_version*]
+#   The version of Cloudera Impala to install.
+#   Default: 1
 #
 # [*proxy*]
 #   The URL to the proxy server for the YUM repositories.
@@ -44,8 +44,8 @@
 #
 # === Sample Usage:
 #
-#   class { 'cloudera::repo':
-#     cdh_version => '4.1',
+#   class { 'cloudera::impala::repo':
+#     ci_version => '4.1',
 #   }
 #
 # === Authors:
@@ -54,13 +54,13 @@
 #
 # === Copyright:
 #
-# Copyright (C) 2013 Mike Arnold, unless otherwise noted.
+# Copyright (C) 2014 Mike Arnold, unless otherwise noted.
 #
-class cloudera::repo (
+class cloudera::impala::repo (
   $ensure         = $cloudera::params::ensure,
-  $cdh_yumserver  = $cloudera::params::cdh_yumserver,
-  $cdh_yumpath    = $cloudera::params::cdh_yumpath,
-  $cdh_version    = $cloudera::params::cdh_version,
+  $ci_yumserver   = $cloudera::params::ci_yumserver,
+  $ci_yumpath     = $cloudera::params::ci_yumpath,
+  $ci_version     = $cloudera::params::ci_version,
   $proxy          = $cloudera::params::proxy,
   $proxy_username = $cloudera::params::proxy_username,
   $proxy_password = $cloudera::params::proxy_password
@@ -79,12 +79,12 @@ class cloudera::repo (
 
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OEL', 'OracleLinux': {
-      yumrepo { 'cloudera-cdh4':
-        descr          => 'Cloudera\'s Distribution for Hadoop, Version 4',
+      yumrepo { 'cloudera-impala':
+        descr          => 'Impala',
         enabled        => $enabled,
         gpgcheck       => 1,
-        gpgkey         => "${cdh_yumserver}${cdh_yumpath}RPM-GPG-KEY-cloudera",
-        baseurl        => "${cdh_yumserver}${cdh_yumpath}${cdh_version}/",
+        gpgkey         => "${ci_yumserver}${ci_yumpath}RPM-GPG-KEY-cloudera",
+        baseurl        => "${ci_yumserver}${ci_yumpath}${ci_version}/",
         priority       => $cloudera::params::yum_priority,
         protect        => $cloudera::params::yum_protect,
         proxy          => $proxy,
@@ -92,14 +92,14 @@ class cloudera::repo (
         proxy_password => $proxy_password,
       }
 
-      file { '/etc/yum.repos.d/cloudera-cdh4.repo':
+      file { '/etc/yum.repos.d/cloudera-impala.repo':
         ensure => 'file',
         owner  => 'root',
         group  => 'root',
         mode   => '0644',
       }
 
-      Yumrepo['cloudera-cdh4'] -> Package<|tag == 'cloudera-cdh4'|>
+      Yumrepo['cloudera-impala'] -> Package<|tag == 'cloudera-impala'|>
     }
     default: { }
   }

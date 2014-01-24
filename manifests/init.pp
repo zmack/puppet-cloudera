@@ -199,10 +199,16 @@ class cloudera (
     class { 'cloudera::repo':
       ensure         => $ensure,
       cdh_yumserver  => $cdh_yumserver,
-      ci_yumserver   => $ci_yumserver,
       cdh_yumpath    => $cdh_yumpath,
-      ci_yumpath     => $ci_yumpath,
       cdh_version    => $cdh_version,
+      proxy          => $proxy,
+      proxy_username => $proxy_username,
+      proxy_password => $proxy_password,
+    }
+    class { 'cloudera::impala::repo':
+      ensure         => $ensure,
+      ci_yumserver   => $ci_yumserver,
+      ci_yumpath     => $ci_yumpath,
       ci_version     => $ci_version,
       proxy          => $proxy,
       proxy_username => $proxy_username,
@@ -223,11 +229,19 @@ class cloudera (
       service_ensure => $service_ensure,
 #      service_enable => $service_enable,
     }
+    class { 'cloudera::impala':
+      ensure         => $ensure,
+      autoupgrade    => $autoupgrade,
+      service_ensure => $service_ensure,
+#      service_enable => $service_enable,
+    }
     Anchor['cloudera::begin'] ->
     Class['cloudera::cm::repo'] ->
     Class['cloudera::repo'] ->
+    Class['cloudera::impala::repo'] ->
     Class['cloudera::java'] ->
     Class['cloudera::cdh'] ->
+    Class['cloudera::impala'] ->
     Class['cloudera::cm'] ->
     Anchor['cloudera::end']
   }
