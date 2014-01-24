@@ -26,7 +26,8 @@ class cloudera::cdh::hive::mysql (
   $username      = 'hive',
   $hive_version  = '0.9.0'
 ) inherits cloudera::params {
-  include mysql::java
+  include '::mysql::bindings'
+  include '::mysql::bindings::java'
 
   file { '/usr/lib/hive/lib/mysql-connector-java.jar':
     ensure => link,
