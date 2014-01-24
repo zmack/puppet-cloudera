@@ -236,7 +236,7 @@ class { 'cloudera':
 }
 ```
 
-The [puppetlabs/mysql](https://forge.puppetlabs.com/puppetlabs/mysql) and [puppetlabs/postgresql](https://forge.puppetlabs.com/puppetlabs/postgresql) dependencies will update to versions 2 and 3 respectively.  Make sure to review their changelogs in the case of an upgrade.
+The [puppetlabs/mysql](https://forge.puppetlabs.com/puppetlabs/mysql) dependency will update to version 2.  Make sure to review its changelog in the case of an upgrade.
 
 Contributing
 ------------

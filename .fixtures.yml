@@ -6,7 +6,7 @@ fixtures:
       ref: "2.1.0"
     postgresql:
       repo: "git://github.com/puppetlabs/puppet-postgresql.git"
-      ref: "3.2.0"
+      ref: "2.5.0"
     concat: "git://github.com/ripienaar/puppet-concat.git"
     staging: "git://github.com/nanliu/puppet-staging.git"
     epel: "git://github.com/stahnma/puppet-module-epel.git"

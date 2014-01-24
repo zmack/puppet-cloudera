@@ -316,7 +316,7 @@ describe 'cloudera::cm::server', :type => 'class' do
           'com.cloudera.cmf.db.password=scm',
         ])
       end
-      it { should contain_class('postgresql::lib::java') }
+      it { should contain_class('postgresql::java') }
       it { should contain_exec('scm_prepare_database').with(
         :command => '/usr/share/cmf/schema/scm_prepare_database.sh postgresql  --user=root --password= scm scm scm && touch /etc/cloudera-scm-server/.scm_prepare_database',
         :creates => '/etc/cloudera-scm-server/.scm_prepare_database',
@@ -347,7 +347,7 @@ describe 'cloudera::cm::server', :type => 'class' do
           'com.cloudera.cmf.db.password=myDbPass',
         ])
       end
-      it { should contain_class('postgresql::lib::java') }
+      it { should contain_class('postgresql::java') }
       it { should contain_exec('scm_prepare_database').with(
         :command => '/usr/share/cmf/schema/scm_prepare_database.sh postgresql --host=dbhost.example.com --port=9000 --scm-host=myhost.example.com --user=dbadmin --password=myPass clouderaDB dbuser myDbPass && touch /etc/cloudera-scm-server/.scm_prepare_database',
         :creates => '/etc/cloudera-scm-server/.scm_prepare_database',
