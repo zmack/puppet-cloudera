@@ -27,7 +27,7 @@ describe 'cloudera', :type => 'class' do
     it { should compile.with_all_deps }
     it { should contain_class('cloudera::java').with_ensure('present') }
     it { should contain_class('cloudera::cm').with_ensure('present') }
-    it { should_not contain_class('cloudera::repo') }
+    it { should_not contain_class('cloudera::cdh::repo') }
     it { should contain_class('cloudera::cm::repo').with_ensure('present') }
     it { should_not contain_class('cloudera::cdh') }
   end
@@ -50,7 +50,7 @@ describe 'cloudera', :type => 'class' do
       let(:params) {{ :use_parcels => false }}
       it { should contain_class('cloudera::java').with_ensure('present') }
       it { should contain_class('cloudera::cm').with_ensure('present') }
-      it { should contain_class('cloudera::repo').with_ensure('present') }
+      it { should contain_class('cloudera::cdh::repo').with_ensure('present') }
       it { should contain_class('cloudera::cm::repo').with_ensure('present') }
       it { should contain_class('cloudera::cdh').with_ensure('present') }
       it { should contain_class('cloudera::impala::repo').with_ensure('present') }

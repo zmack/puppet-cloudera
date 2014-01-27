@@ -1,4 +1,4 @@
-# == Class: cloudera::repo
+# == Class: cloudera::cdh::repo
 #
 # This class handles installing the Cloudera CDH software repositories.
 #
@@ -44,7 +44,7 @@
 #
 # === Sample Usage:
 #
-#   class { 'cloudera::repo':
+#   class { 'cloudera::cdh::repo':
 #     cdh_version => '4.1',
 #   }
 #
@@ -56,7 +56,7 @@
 #
 # Copyright (C) 2013 Mike Arnold, unless otherwise noted.
 #
-class cloudera::repo (
+class cloudera::cdh::repo (
   $ensure         = $cloudera::params::ensure,
   $cdh_yumserver  = $cloudera::params::cdh_yumserver,
   $cdh_yumpath    = $cloudera::params::cdh_yumpath,

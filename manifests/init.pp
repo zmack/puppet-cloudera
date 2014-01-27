@@ -196,7 +196,7 @@ class cloudera (
     Class['cloudera::cm'] ->
     Anchor['cloudera::end']
   } else {
-    class { 'cloudera::repo':
+    class { 'cloudera::cdh::repo':
       ensure         => $ensure,
       cdh_yumserver  => $cdh_yumserver,
       cdh_yumpath    => $cdh_yumpath,
@@ -237,7 +237,7 @@ class cloudera (
     }
     Anchor['cloudera::begin'] ->
     Class['cloudera::cm::repo'] ->
-    Class['cloudera::repo'] ->
+    Class['cloudera::cdh::repo'] ->
     Class['cloudera::impala::repo'] ->
     Class['cloudera::java'] ->
     Class['cloudera::cdh'] ->

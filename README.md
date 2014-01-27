@@ -73,17 +73,25 @@ This class handles installing and configuring the Cloudera Manager Agent.  This 
 This class handles installing and configuring the Cloudera Manager Server.  This class should only be included on one node of your environment.  By default it will install the embeded PostgreSQL database on the same node.  With the correct parameters, it can also connect to local or remote MySQL, PostgreSQL, and Oracle RDBMS databases.
 
 
-### Class['cloudera::repo']
+### Class['cloudera::cdh::repo']
 
-This class handles installing the Cloudera Hadoop and Impala software repositories.
+This class handles installing the Cloudera Hadoop software repositories.
 
 ### Class['cloudera::cdh']
 
-This class handles installing the Cloudera Distribution, including Apache Hadoop.  No configuration is performed on the CDH software and all daemons are forced off so that Cloudera Manager can manage them.  This class installs Bigtop utils, Hadoop (HDFS, MapReduce, YARN), Hue-plugins, HBase, Hive, Oozie, Pig, ZooKeeper, Flume-NG, and Impala.
+This class handles installing the Cloudera Distribution, including Apache Hadoop.  No configuration is performed on the CDH software and all daemons are forced off so that Cloudera Manager can manage them.  This class installs Bigtop utils, Hadoop (HDFS, MapReduce, YARN), Hue-plugins, HBase, Hive, Oozie, Pig, ZooKeeper, and Flume-NG.
 
 ### Class['cloudera::cdh::hue']
 
 This class handles installing Hue.  This class is not currently included in Class['cloudera::cdh'] as this would conflict with the Cloudera installation instructions.
+
+### Class['cloudera::impala::repo']
+
+This class handles installing the Cloudera Impala software repositories.
+
+### Class['cloudera::impala']
+
+This class handles installing Cloudera Impala.  No configuration is performed on the Impala software and all daemons are forced off so that Cloudera Manager can manage them.
 
 
 Examples
@@ -135,9 +143,8 @@ class { 'cloudera::cdh::sqoop': }
 The node that will be the CM server may use this declaration:
 (This will skip installation of the CDH software as it is not required.)
 ```puppet
-class { 'cloudera::repo':
-  cdh_version => '4.1',
-  cm_version  => '4.1',
+class { 'cloudera::cm::repo':
+  cm_version => '4.1',
 } ->
 class { 'cloudera::java': } ->
 class { 'cloudera::java::jce': } ->
@@ -237,6 +244,28 @@ class { 'cloudera':
 ```
 
 The [puppetlabs/mysql](https://forge.puppetlabs.com/puppetlabs/mysql) dependency will update to version 2.  Make sure to review its changelog in the case of an upgrade.
+
+The class `cloudera::repo` will be renamed to `cloudera::cdh::repo` and the Impala repository will be split out into `cloudera::impala::repo`.
+
+This:
+
+```puppet
+class { 'cloudera::repo':
+  cdh_version => '4.1',
+  cm_version  => '4.1',
+}
+```
+
+would become this:
+
+```puppet
+class { 'cloudera::cdh::repo':
+  cdh_version => '4.1',
+}
+class { 'cloudera::impala::repo':
+  ci_version => '4.1',
+}
+```
 
 Contributing
 ------------

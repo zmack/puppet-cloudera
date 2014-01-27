@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'cloudera::repo', :type => 'class' do
+describe 'cloudera::cdh::repo', :type => 'class' do
 
   context 'on a non-supported operatingsystem' do
     let :facts do {
