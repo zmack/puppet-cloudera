@@ -20,7 +20,7 @@
 # === Actions:
 #
 # Installs Bigtop, Hadoop, Hue-plugins, HBase, Hive, Oozie, Pig, ZooKeeper,
-# Flume-NG, and Impala.
+# and Flume-NG.
 #
 # === Requires:
 #
@@ -117,12 +117,6 @@ class cloudera::cdh (
     before      => Anchor['cloudera::cdh::end'],
   }
   class { 'cloudera::cdh::flume':
-#    ensure      => $ensure,
-#    autoupgrade => $autoupgrade,
-    require     => Anchor['cloudera::cdh::begin'],
-    before      => Anchor['cloudera::cdh::end'],
-  }
-  class { 'cloudera::cdh::impala':
 #    ensure      => $ensure,
 #    autoupgrade => $autoupgrade,
     require     => Anchor['cloudera::cdh::begin'],

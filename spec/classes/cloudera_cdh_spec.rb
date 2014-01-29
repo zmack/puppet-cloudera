@@ -34,7 +34,7 @@ describe 'cloudera::cdh', :type => 'class' do
     it { should contain_class('cloudera::cdh::pig') }
     it { should contain_class('cloudera::cdh::zookeeper') }
     it { should contain_class('cloudera::cdh::flume') }
-    it { should contain_class('cloudera::cdh::impala') }
+    it { should_not contain_class('cloudera::impala') }
   end
 
 end
