@@ -5,6 +5,7 @@
 * update dependencies (mysql/postgresql)
 * separate install impala (manifests/impala/bla.pp)
 * separate install search (manifests/search/bla.pp)
+* refactor ::repo to autoinclude in cdh/impala/search
 * TLS level 3?
 * support SLES/Debian/Ubuntu?
 * apt repos?
