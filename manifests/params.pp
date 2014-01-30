@@ -36,6 +36,11 @@ class cloudera::params {
     default => $::cloudera_ci_yumserver,
   }
 
+  $cs_yumserver = $::cloudera_cs_yumserver ? {
+    undef   => 'http://archive.cloudera.com',
+    default => $::cloudera_cs_yumserver,
+  }
+
   $cm_server_host = $::cloudera_cm_server_host ? {
     undef   => 'localhost',
     default => $::cloudera_cm_server_host,
@@ -163,12 +168,14 @@ class cloudera::params {
   $cdh_version = '4'
   $cm_version  = '4'
   $ci_version  = '1'
+  $cs_version  = '1'
 
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OEL', 'OracleLinux': {
       $cdh_yumpath = "/cdh4/redhat/${majdistrelease}/${::architecture}/cdh/"
       $cm_yumpath = "/cm4/redhat/${majdistrelease}/${::architecture}/cm/"
       $ci_yumpath = "/impala/redhat/${majdistrelease}/${::architecture}/impala/"
+      $cs_yumpath = "/search/redhat/${majdistrelease}/${::architecture}/search/"
     }
     default: {
       fail("Module ${module_name} is not supported on ${::operatingsystem}")

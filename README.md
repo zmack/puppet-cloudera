@@ -7,7 +7,7 @@ develop branch: [![Build Status](https://secure.travis-ci.org/razorsedge/puppet-
 Introduction
 ------------
 
-This module manages the installation of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products/cloudera-manager.html).  It follows the standards written in the [Cloudera Manager Installation Guide](https://ccp.cloudera.com/display/ENT41DOC/Cloudera+Manager+Installation+Guide) [Installation Path B - Installation Using Your Own Method](https://ccp.cloudera.com/display/ENT41DOC/Installation+Path+B+-+Installation+Using+Your+Own+Method).  By default, this module assumes that [parcels](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) will be used to deploy CDH and Impala.  If parcels are not desired, this module can also manage the installation of [Cloudera's Distribution, including Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products/cdh.html) and [Cloudera Impala](http://www.cloudera.com/content/cloudera-content/cloudera-docs/Impala/latest/Installing-and-Using-Impala/Installing-and-Using-Impala.html).
+This module manages the installation of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products/cloudera-manager.html).  It follows the standards written in the [Cloudera Manager Installation Guide](https://ccp.cloudera.com/display/ENT41DOC/Cloudera+Manager+Installation+Guide) [Installation Path B - Installation Using Your Own Method](https://ccp.cloudera.com/display/ENT41DOC/Installation+Path+B+-+Installation+Using+Your+Own+Method).  By default, this module assumes that [parcels](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) will be used to deploy CDH, Impala, and Search.  If parcels are not desired, this module can also manage the installation of [Cloudera's Distribution, including Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products/cdh.html), [Cloudera Impala](http://www.cloudera.com/content/cloudera-content/cloudera-docs/Impala/latest/Installing-and-Using-Impala/Installing-and-Using-Impala.html), and [Cloudera Search](http://www.cloudera.com/content/cloudera-content/cloudera-docs/Search/latest/Cloudera-Search-Installation-Guide/Cloudera-Search-Installation-Guide.html).
 
 Actions:
 
@@ -21,15 +21,17 @@ Actions:
 
 Optional Actions (non-parcel):
 
-* Installs the Cloudera software repositories for CDH and Impala.
+* Installs the Cloudera software repositories for CDH, Impala, and Search.
 * Installs most components of CDH 4.
 * Installs Impala 1.
+* Installs Search 1.
 
 Software Support:
 
 * Cloudera Manager - tested with 4.1.2 and 4.8.0
 * CDH              - tested with 4.1.2 and 4.8.0
-* Cloudera Impala  - tested with 1.0
+* Cloudera Impala  - tested with 1.0 and 1.2.3
+* Cloudera Search  - tested with 1.1.0
 
 OS Support:
 
@@ -92,6 +94,14 @@ This class handles installing the Cloudera Impala software repositories.
 ### Class['cloudera::impala']
 
 This class handles installing Cloudera Impala.  No configuration is performed on the Impala software and all daemons are forced off so that Cloudera Manager can manage them.
+
+### Class['cloudera::search::repo']
+
+This class handles installing the Cloudera Search software repositories.
+
+### Class['cloudera::search']
+
+This class handles installing Cloudera Search.  No configuration is performed on the Search software and all daemons are forced off so that Cloudera Manager can manage them.
 
 
 Examples
