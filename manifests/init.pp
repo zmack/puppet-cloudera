@@ -63,6 +63,20 @@
 #   The version of Cloudera Impala to install.
 #   Default: 1
 #
+# [*cs_yumserver*]
+#   URI of the YUM server.
+#   Default: http://archive.cloudera.com
+#
+# [*cs_yumpath*]
+#   The path to add to the $cs_yumserver URI.
+#   Only set this if your platform is not supported or you know what you are
+#   doing.
+#   Default: auto-set, platform specific
+#
+# [*cs_version*]
+#   The version of Cloudera Search to install.
+#   Default: 1
+#
 # [*cm_server_host*]
 #   Hostname of the Cloudera Manager server.
 #   Default: localhost
@@ -147,6 +161,9 @@ class cloudera (
   $ci_yumserver     = $cloudera::params::ci_yumserver,
   $ci_yumpath       = $cloudera::params::ci_yumpath,
   $ci_version       = $cloudera::params::ci_version,
+  $cs_yumserver     = $cloudera::params::cs_yumserver,
+  $cs_yumpath       = $cloudera::params::cs_yumpath,
+  $cs_version       = $cloudera::params::cs_version,
   $cm_server_host   = $cloudera::params::cm_server_host,
   $cm_server_port   = $cloudera::params::cm_server_port,
   $use_tls          = $cloudera::params::safe_cm_use_tls,
@@ -214,6 +231,15 @@ class cloudera (
       proxy_username => $proxy_username,
       proxy_password => $proxy_password,
     }
+    class { 'cloudera::search::repo':
+      ensure         => $ensure,
+      yumserver      => $cs_yumserver,
+      yumpath        => $cs_yumpath,
+      version        => $cs_version,
+      proxy          => $proxy,
+      proxy_username => $proxy_username,
+      proxy_password => $proxy_password,
+    }
     class { 'cloudera::cm::repo':
       ensure         => $ensure,
       cm_yumserver   => $cm_yumserver,
@@ -235,13 +261,21 @@ class cloudera (
       service_ensure => $service_ensure,
 #      service_enable => $service_enable,
     }
+    class { 'cloudera::search':
+      ensure         => $ensure,
+      autoupgrade    => $autoupgrade,
+      service_ensure => $service_ensure,
+#      service_enable => $service_enable,
+    }
     Anchor['cloudera::begin'] ->
     Class['cloudera::cm::repo'] ->
     Class['cloudera::cdh::repo'] ->
     Class['cloudera::impala::repo'] ->
+    Class['cloudera::search::repo'] ->
     Class['cloudera::java'] ->
     Class['cloudera::cdh'] ->
     Class['cloudera::impala'] ->
+    Class['cloudera::search'] ->
     Class['cloudera::cm'] ->
     Anchor['cloudera::end']
   }
