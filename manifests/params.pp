@@ -36,6 +36,16 @@ class cloudera::params {
     default => $::cloudera_ci_yumserver,
   }
 
+  $cs_yumserver = $::cloudera_cs_yumserver ? {
+    undef   => 'http://archive.cloudera.com',
+    default => $::cloudera_cs_yumserver,
+  }
+
+  $cg_yumserver = $::cloudera_cg_yumserver ? {
+    undef   => 'http://archive.cloudera.com',
+    default => $::cloudera_cg_yumserver,
+  }
+
   $cm_server_host = $::cloudera_cm_server_host ? {
     undef   => 'localhost',
     default => $::cloudera_cm_server_host,
@@ -141,7 +151,7 @@ class cloudera::params {
   }
 
   $use_parcels = $::cloudera_use_parcels ? {
-    undef => false,
+    undef => true,
     default => $::cloudera_use_parcels,
   }
   if is_string($use_parcels) {
@@ -150,18 +160,42 @@ class cloudera::params {
     $safe_use_parcels = $use_parcels
   }
 
+  $use_gplextras = $::cloudera_use_gplextras ? {
+    undef => false,
+    default => $::cloudera_use_gplextras,
+  }
+  if is_string($use_gplextras) {
+    $safe_use_gplextras = str2bool($use_gplextras)
+  } else {
+    $safe_use_gplextras = $use_gplextras
+  }
+
+  if $::operatingsystemmajrelease { # facter 1.7+
+    $majdistrelease = $::operatingsystemmajrelease
+  } elsif $::lsbmajdistrelease {    # requires LSB to already be installed
+    $majdistrelease = $::lsbmajdistrelease
+  } elsif $::os_maj_version {       # requires stahnma/epel
+    $majdistrelease = $::os_maj_version
+  } else {
+    $majdistrelease = regsubst($::operatingsystemrelease,'^(\d+)\.(\d+)','\1')
+  }
+
   $cdh_version = '4'
   $cm_version  = '4'
   $ci_version  = '1'
+  $cs_version  = '1'
+  $cg_version  = '4'
 
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OEL', 'OracleLinux': {
-      $cdh_yumpath = "/cdh4/redhat/${::os_maj_version}/${::architecture}/cdh/"
-      $cm_yumpath = "/cm4/redhat/${::os_maj_version}/${::architecture}/cm/"
-      $ci_yumpath = "/impala/redhat/${::os_maj_version}/${::architecture}/impala/"
+      $cdh_yumpath = "/cdh4/redhat/${majdistrelease}/${::architecture}/cdh/"
+      $cm_yumpath = "/cm4/redhat/${majdistrelease}/${::architecture}/cm/"
+      $ci_yumpath = "/impala/redhat/${majdistrelease}/${::architecture}/impala/"
+      $cs_yumpath = "/search/redhat/${majdistrelease}/${::architecture}/search/"
+      $cg_yumpath = "/gplextras/redhat/${majdistrelease}/${::architecture}/gplextras/"
     }
     default: {
-      fail("Module ${::module} is not supported on ${::operatingsystem}")
+      fail("Module ${module_name} is not supported on ${::operatingsystem}")
     }
   }
 }

@@ -25,7 +25,8 @@ describe 'cloudera::cdh::hive::mysql', :type => 'class' do
       :operatingsystem => 'CentOS'
     }
     end
-    it { should contain_class('mysql::java') }
+    it { should contain_class('mysql::bindings') }
+    it { should contain_class('mysql::bindings::java') }
     it { should contain_file('/usr/lib/hive/lib/mysql-connector-java.jar').with(
       :ensure => 'link',
       :target => '/usr/share/java/mysql-connector-java.jar'

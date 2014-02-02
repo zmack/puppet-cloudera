@@ -19,5 +19,6 @@
 class cloudera::cdh::zookeeper {
   package { 'zookeeper':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 }

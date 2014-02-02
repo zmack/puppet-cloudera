@@ -23,13 +23,16 @@
 class cloudera::cdh::bigtop {
   package { 'bigtop-jsvc':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 
   package { 'bigtop-tomcat':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 
   package { 'bigtop-utils':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 }

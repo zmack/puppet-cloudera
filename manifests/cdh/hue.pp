@@ -19,6 +19,7 @@
 class cloudera::cdh::hue {
   package { 'hue':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 
   service { 'hue':

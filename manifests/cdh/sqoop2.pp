@@ -1,6 +1,6 @@
-# == Class: cloudera::cdh::impala
+# == Class: cloudera::cdh::sqoop2
 #
-# This class installs the Impala packages.
+# This class installes Sqoop2.
 #
 # === Parameters:
 #
@@ -10,7 +10,7 @@
 #
 # === Sample Usage:
 #
-#   class { 'cloudera::cdh::impala': }
+#   class { 'cloudera::cdh::sqoop2': }
 #
 # === Authors:
 #
@@ -20,12 +20,9 @@
 #
 # Copyright (C) 2013 Mike Arnold, unless otherwise noted.
 #
-class cloudera::cdh::impala {
-  package { 'impala':
+class cloudera::cdh::sqoop2 {
+  package { 'sqoop2':
     ensure => 'present',
-  }
-
-  package { 'impala-shell':
-    ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 }

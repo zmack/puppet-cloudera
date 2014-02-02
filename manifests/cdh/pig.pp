@@ -16,5 +16,6 @@
 class cloudera::cdh::pig {
   package { 'pig':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 }

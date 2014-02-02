@@ -63,12 +63,13 @@ class cloudera::java (
 
   package { 'jdk':
     ensure => $package_ensure,
+    tag    => 'cloudera-manager',
   }
 
   file { 'java-profile.d':
     ensure  => $file_ensure,
     path    => '/etc/profile.d/java.sh',
-    source  => 'puppet:///modules/cloudera/java.sh',
+    source  => "puppet:///modules/${module_name}/java.sh",
     mode    => '0755',
     owner   => 'root',
     group   => 'root',

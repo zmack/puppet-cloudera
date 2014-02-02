@@ -3,6 +3,11 @@
 # This class handles installing the Cloudera CDH and Impala software
 # repositories.
 #
+# == DEPRECATED
+# cloudera::repo has been split into cloudera::cdh::repo and
+# cloudera::impala::repo. This backwards compatibility shim will be removed on
+# 02 April 2014.
+#
 # === Parameters:
 #
 # [*ensure*]
@@ -83,45 +88,25 @@ class cloudera::repo (
   $proxy_username = $cloudera::params::proxy_username,
   $proxy_password = $cloudera::params::proxy_password
 ) inherits cloudera::params {
-  case $ensure {
-    /(present)/: {
-      $enabled = '1'
-    }
-    /(absent)/: {
-      $enabled = '0'
-    }
-    default: {
-      fail('ensure parameter must be present or absent')
-    }
-  }
 
-  case $::operatingsystem {
-    'CentOS', 'RedHat', 'OEL', 'OracleLinux': {
-      yumrepo { 'cloudera-cdh4':
-        descr          => 'Cloudera\'s Distribution for Hadoop, Version 4',
-        enabled        => $enabled,
-        gpgcheck       => 1,
-        gpgkey         => "${cdh_yumserver}${cdh_yumpath}RPM-GPG-KEY-cloudera",
-        baseurl        => "${cdh_yumserver}${cdh_yumpath}${cdh_version}/",
-        priority       => $cloudera::params::yum_priority,
-        protect        => $cloudera::params::yum_protect,
-        proxy          => $proxy,
-        proxy_username => $proxy_username,
-        proxy_password => $proxy_password,
-      }
-      yumrepo { 'cloudera-impala':
-        descr          => 'Impala',
-        enabled        => $enabled,
-        gpgcheck       => 1,
-        gpgkey         => "${ci_yumserver}${ci_yumpath}RPM-GPG-KEY-cloudera",
-        baseurl        => "${ci_yumserver}${ci_yumpath}${ci_version}/",
-        priority       => $cloudera::params::yum_priority,
-        protect        => $cloudera::params::yum_protect,
-        proxy          => $proxy,
-        proxy_username => $proxy_username,
-        proxy_password => $proxy_password,
-      }
-    }
-    default: { }
+  notify { 'cloudera::repo has been split into cloudera::cdh::repo and cloudera::impala::repo. This backwards compatibility shim will be removed on 02 April 2014.': }
+
+  class { 'cloudera::cdh::repo':
+    ensure         => $ensure,
+    cdh_yumserver  => $cdh_yumserver,
+    cdh_yumpath    => $cdh_yumpath,
+    cdh_version    => $cdh_version,
+    proxy          => $proxy,
+    proxy_username => $proxy_username,
+    proxy_password => $proxy_password,
+  }
+  class { 'cloudera::impala::repo':
+    ensure         => $ensure,
+    ci_yumserver   => $ci_yumserver,
+    ci_yumpath     => $ci_yumpath,
+    ci_version     => $ci_version,
+    proxy          => $proxy,
+    proxy_username => $proxy_username,
+    proxy_password => $proxy_password,
   }
 }

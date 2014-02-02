@@ -29,12 +29,15 @@ describe 'cloudera::cdh::hive::metastore', :type => 'class' do
       :ensure     => 'running',
       :enable     => true,
       :hasrestart => true,
-      :hasstatus  => true
+      :hasstatus  => true,
+      :require    => [ 'Package[hive-metastore]', 'File[/usr/lib/hive/lib/mysql-connector-java.jar]' ]
     )}
-    it { should contain_class('mysql::java') }
+    it { should contain_class('mysql::bindings') }
+    it { should contain_class('mysql::bindings::java') }
     it { should contain_file('/usr/lib/hive/lib/mysql-connector-java.jar').with(
-      :ensure => 'link',
-      :target => '/usr/share/java/mysql-connector-java.jar'
+      :ensure  => 'link',
+      :target  => '/usr/share/java/mysql-connector-java.jar',
+      :require => 'Class[Mysql::Bindings::Java]'
     )}
   end
 end

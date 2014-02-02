@@ -23,6 +23,7 @@
 class cloudera::cdh::hive::metastore {
   package { 'hive-metastore':
     ensure => present,
+    tag    => 'cloudera-cdh4',
   }
 
   service { 'hive-metastore':
@@ -30,13 +31,15 @@ class cloudera::cdh::hive::metastore {
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
-    require    => Package['hive-metastore'],
+    require    => [ Package['hive-metastore'], File['/usr/lib/hive/lib/mysql-connector-java.jar'], ],
   }
 
-  include mysql::java
+  include '::mysql::bindings'
+  include '::mysql::bindings::java'
 
   file { '/usr/lib/hive/lib/mysql-connector-java.jar':
-    ensure => link,
-    target => '/usr/share/java/mysql-connector-java.jar',
+    ensure  => link,
+    target  => '/usr/share/java/mysql-connector-java.jar',
+    require => Class['::mysql::bindings::java'],
   }
 }

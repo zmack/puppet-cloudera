@@ -19,5 +19,6 @@
 class cloudera::cdh::hive {
   package { 'hive':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 }

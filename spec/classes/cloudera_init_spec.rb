@@ -10,10 +10,10 @@ describe 'cloudera', :type => 'class' do
       :operatingsystem => 'bar'
     }
     end
-    it 'should fail' do
+    it do
       expect {
-        should raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
-      }
+        should compile
+      }.to raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
     end
   end
 
@@ -24,11 +24,12 @@ describe 'cloudera', :type => 'class' do
       :operatingsystem => 'CentOS'
     }
     end
+    it { should compile.with_all_deps }
     it { should contain_class('cloudera::java').with_ensure('present') }
     it { should contain_class('cloudera::cm').with_ensure('present') }
-    it { should contain_class('cloudera::repo').with_ensure('present') }
+    it { should_not contain_class('cloudera::cdh::repo') }
     it { should contain_class('cloudera::cm::repo').with_ensure('present') }
-    it { should contain_class('cloudera::cdh').with_ensure('present') }
+    it { should_not contain_class('cloudera::cdh') }
   end
 
   context 'on a supported operatingsystem, custom parameters' do
@@ -42,18 +43,20 @@ describe 'cloudera', :type => 'class' do
       let(:params) {{ :ensure => 'absent' }}
       it { should contain_class('cloudera::java').with_ensure('absent') }
       it { should contain_class('cloudera::cm').with_ensure('absent') }
-      it { should contain_class('cloudera::repo').with_ensure('absent') }
       it { should contain_class('cloudera::cm::repo').with_ensure('absent') }
-      it { should contain_class('cloudera::cdh').with_ensure('absent') }
     end
 
-    describe 'use_parcels => true' do
-      let(:params) {{ :use_parcels => true }}
+    describe 'use_parcels => false' do
+      let(:params) {{ :use_parcels => false }}
       it { should contain_class('cloudera::java').with_ensure('present') }
       it { should contain_class('cloudera::cm').with_ensure('present') }
-      it { should_not contain_class('cloudera::repo') }
+      it { should contain_class('cloudera::cdh::repo').with_ensure('present') }
       it { should contain_class('cloudera::cm::repo').with_ensure('present') }
-      it { should_not contain_class('cloudera::cdh') }
+      it { should contain_class('cloudera::cdh').with_ensure('present') }
+      it { should contain_class('cloudera::impala::repo').with_ensure('present') }
+      it { should contain_class('cloudera::impala').with_ensure('present') }
+      it { should contain_class('cloudera::search::repo').with_ensure('present') }
+      it { should contain_class('cloudera::search').with_ensure('present') }
     end
   end
 

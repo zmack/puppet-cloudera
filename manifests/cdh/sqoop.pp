@@ -14,5 +14,5 @@
 #
 
 class cloudera::cdh::sqoop {
-  include cloudera::cdh::sqoop::client
+  include '::cloudera::cdh::sqoop::client'
 }

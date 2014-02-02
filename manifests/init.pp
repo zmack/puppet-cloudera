@@ -63,6 +63,34 @@
 #   The version of Cloudera Impala to install.
 #   Default: 1
 #
+# [*cs_yumserver*]
+#   URI of the YUM server.
+#   Default: http://archive.cloudera.com
+#
+# [*cs_yumpath*]
+#   The path to add to the $cs_yumserver URI.
+#   Only set this if your platform is not supported or you know what you are
+#   doing.
+#   Default: auto-set, platform specific
+#
+# [*cs_version*]
+#   The version of Cloudera Search to install.
+#   Default: 1
+#
+# [*cg_yumserver*]
+#   URI of the YUM server.
+#   Default: http://archive.cloudera.com
+#
+# [*cg_yumpath*]
+#   The path to add to the $cg_yumserver URI.
+#   Only set this if your platform is not supported or you know what you are
+#   doing.
+#   Default: auto-set, platform specific
+#
+# [*cg_version*]
+#   The version of Cloudera Search to install.
+#   Default: 4
+#
 # [*cm_server_host*]
 #   Hostname of the Cloudera Manager server.
 #   Default: localhost
@@ -83,6 +111,10 @@
 #
 # [*use_parcels*]
 #   Whether to use parcel format software install and not RPM.
+#   Default: true
+#
+# [*use_gplextras*]
+#   Whether to install the GPL LZO compression libraries.
 #   Default: false
 #
 # [*proxy*]
@@ -147,11 +179,18 @@ class cloudera (
   $ci_yumserver     = $cloudera::params::ci_yumserver,
   $ci_yumpath       = $cloudera::params::ci_yumpath,
   $ci_version       = $cloudera::params::ci_version,
+  $cs_yumserver     = $cloudera::params::cs_yumserver,
+  $cs_yumpath       = $cloudera::params::cs_yumpath,
+  $cs_version       = $cloudera::params::cs_version,
+  $cg_yumserver     = $cloudera::params::cg_yumserver,
+  $cg_yumpath       = $cloudera::params::cg_yumpath,
+  $cg_version       = $cloudera::params::cg_version,
   $cm_server_host   = $cloudera::params::cm_server_host,
   $cm_server_port   = $cloudera::params::cm_server_port,
   $use_tls          = $cloudera::params::safe_cm_use_tls,
   $verify_cert_file = $cloudera::params::verify_cert_file,
   $use_parcels      = $cloudera::params::safe_use_parcels,
+  $use_gplextras    = $cloudera::params::safe_use_gplextras,
   $proxy            = $cloudera::params::proxy,
   $proxy_username   = $cloudera::params::proxy_username,
   $proxy_password   = $cloudera::params::proxy_password
@@ -161,6 +200,7 @@ class cloudera (
   validate_bool($service_enable)
   validate_bool($use_tls)
   validate_bool($use_parcels)
+  validate_bool($use_gplextras)
 
   anchor { 'cloudera::begin': }
   anchor { 'cloudera::end': }
@@ -196,14 +236,29 @@ class cloudera (
     Class['cloudera::cm'] ->
     Anchor['cloudera::end']
   } else {
-    class { 'cloudera::repo':
+    class { 'cloudera::cdh::repo':
       ensure         => $ensure,
       cdh_yumserver  => $cdh_yumserver,
-      ci_yumserver   => $ci_yumserver,
       cdh_yumpath    => $cdh_yumpath,
-      ci_yumpath     => $ci_yumpath,
       cdh_version    => $cdh_version,
+      proxy          => $proxy,
+      proxy_username => $proxy_username,
+      proxy_password => $proxy_password,
+    }
+    class { 'cloudera::impala::repo':
+      ensure         => $ensure,
+      ci_yumserver   => $ci_yumserver,
+      ci_yumpath     => $ci_yumpath,
       ci_version     => $ci_version,
+      proxy          => $proxy,
+      proxy_username => $proxy_username,
+      proxy_password => $proxy_password,
+    }
+    class { 'cloudera::search::repo':
+      ensure         => $ensure,
+      yumserver      => $cs_yumserver,
+      yumpath        => $cs_yumpath,
+      version        => $cs_version,
       proxy          => $proxy,
       proxy_username => $proxy_username,
       proxy_password => $proxy_password,
@@ -223,11 +278,46 @@ class cloudera (
       service_ensure => $service_ensure,
 #      service_enable => $service_enable,
     }
+    class { 'cloudera::impala':
+      ensure         => $ensure,
+      autoupgrade    => $autoupgrade,
+      service_ensure => $service_ensure,
+#      service_enable => $service_enable,
+    }
+    class { 'cloudera::search':
+      ensure         => $ensure,
+      autoupgrade    => $autoupgrade,
+      service_ensure => $service_ensure,
+#      service_enable => $service_enable,
+    }
+    if $use_gplextras {
+      class { 'cloudera::gplextras::repo':
+        ensure         => $ensure,
+        yumserver      => $cg_yumserver,
+        yumpath        => $cg_yumpath,
+        version        => $cg_version,
+        proxy          => $proxy,
+        proxy_username => $proxy_username,
+        proxy_password => $proxy_password,
+      }
+      class { 'cloudera::gplextras':
+        ensure      => $ensure,
+        autoupgrade => $autoupgrade,
+      }
+      Anchor['cloudera::begin'] ->
+      Class['cloudera::gplextras::repo'] ->
+      Class['cloudera::gplextras'] ->
+      Anchor['cloudera::end']
+    }
     Anchor['cloudera::begin'] ->
     Class['cloudera::cm::repo'] ->
-    Class['cloudera::repo'] ->
+    Class['cloudera::cdh::repo'] ->
+    Class['cloudera::impala::repo'] ->
+    Class['cloudera::search::repo'] ->
     Class['cloudera::java'] ->
     Class['cloudera::cdh'] ->
+    Class['cloudera::impala'] ->
+    Class['cloudera::search'] ->
     Class['cloudera::cm'] ->
     Anchor['cloudera::end']
   }
