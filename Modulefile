@@ -10,7 +10,7 @@ description 'This module manages the installation of Cloudera\'s Distribution, i
 Cloudera Manager. It follows the standards written in the Cloudera Manager Installation Guide Installation Path B
 - Installation Using Your Own Method. It also includes installing Cloudera Impala.'
 dependency 'puppetlabs/stdlib', '>=2.3.0'
-dependency 'puppetlabs/mysql', '>=2.x'
+dependency 'puppetlabs-mysql', '>=2.0.0 <3.0.0'
 dependency 'puppetlabs/postgresql', '>=2.1.0 <3.0.0'
 dependency 'nanliu/staging', '>=0.2.1'
 dependency 'stahnma/epel', '>=0.0.3'
