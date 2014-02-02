@@ -41,6 +41,11 @@ class cloudera::params {
     default => $::cloudera_cs_yumserver,
   }
 
+  $cg_yumserver = $::cloudera_cg_yumserver ? {
+    undef   => 'http://archive.cloudera.com',
+    default => $::cloudera_cg_yumserver,
+  }
+
   $cm_server_host = $::cloudera_cm_server_host ? {
     undef   => 'localhost',
     default => $::cloudera_cm_server_host,
@@ -155,6 +160,16 @@ class cloudera::params {
     $safe_use_parcels = $use_parcels
   }
 
+  $use_gplextras = $::cloudera_use_gplextras ? {
+    undef => false,
+    default => $::cloudera_use_gplextras,
+  }
+  if is_string($use_gplextras) {
+    $safe_use_gplextras = str2bool($use_gplextras)
+  } else {
+    $safe_use_gplextras = $use_gplextras
+  }
+
   if $::operatingsystemmajrelease { # facter 1.7+
     $majdistrelease = $::operatingsystemmajrelease
   } elsif $::lsbmajdistrelease {    # requires LSB to already be installed
@@ -169,6 +184,7 @@ class cloudera::params {
   $cm_version  = '4'
   $ci_version  = '1'
   $cs_version  = '1'
+  $cg_version  = '4'
 
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OEL', 'OracleLinux': {
@@ -176,6 +192,7 @@ class cloudera::params {
       $cm_yumpath = "/cm4/redhat/${majdistrelease}/${::architecture}/cm/"
       $ci_yumpath = "/impala/redhat/${majdistrelease}/${::architecture}/impala/"
       $cs_yumpath = "/search/redhat/${majdistrelease}/${::architecture}/search/"
+      $cg_yumpath = "/gplextras/redhat/${majdistrelease}/${::architecture}/gplextras/"
     }
     default: {
       fail("Module ${module_name} is not supported on ${::operatingsystem}")
