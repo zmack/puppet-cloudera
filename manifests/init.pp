@@ -113,6 +113,10 @@
 #   Whether to use parcel format software install and not RPM.
 #   Default: true
 #
+# [*use_gplextras*]
+#   Whether to install the GPL LZO compression libraries.
+#   Default: false
+#
 # [*proxy*]
 #   The URL to the proxy server for the YUM repositories.
 #   Default: absent
@@ -186,6 +190,7 @@ class cloudera (
   $use_tls          = $cloudera::params::safe_cm_use_tls,
   $verify_cert_file = $cloudera::params::verify_cert_file,
   $use_parcels      = $cloudera::params::safe_use_parcels,
+  $use_gplextras    = $cloudera::params::safe_use_gplextras,
   $proxy            = $cloudera::params::proxy,
   $proxy_username   = $cloudera::params::proxy_username,
   $proxy_password   = $cloudera::params::proxy_password
@@ -195,6 +200,7 @@ class cloudera (
   validate_bool($service_enable)
   validate_bool($use_tls)
   validate_bool($use_parcels)
+  validate_bool($use_gplextras)
 
   anchor { 'cloudera::begin': }
   anchor { 'cloudera::end': }
@@ -257,15 +263,6 @@ class cloudera (
       proxy_username => $proxy_username,
       proxy_password => $proxy_password,
     }
-    class { 'cloudera::gplextras::repo':
-      ensure         => $ensure,
-      yumserver      => $cg_yumserver,
-      yumpath        => $cg_yumpath,
-      version        => $cg_version,
-      proxy          => $proxy,
-      proxy_username => $proxy_username,
-      proxy_password => $proxy_password,
-    }
     class { 'cloudera::cm::repo':
       ensure         => $ensure,
       cm_yumserver   => $cm_yumserver,
@@ -293,21 +290,34 @@ class cloudera (
       service_ensure => $service_ensure,
 #      service_enable => $service_enable,
     }
-    class { 'cloudera::gplextras':
-      ensure      => $ensure,
-      autoupgrade => $autoupgrade,
+    if $use_gplextras {
+      class { 'cloudera::gplextras::repo':
+        ensure         => $ensure,
+        yumserver      => $cg_yumserver,
+        yumpath        => $cg_yumpath,
+        version        => $cg_version,
+        proxy          => $proxy,
+        proxy_username => $proxy_username,
+        proxy_password => $proxy_password,
+      }
+      class { 'cloudera::gplextras':
+        ensure      => $ensure,
+        autoupgrade => $autoupgrade,
+      }
+      Anchor['cloudera::begin'] ->
+      Class['cloudera::gplextras::repo'] ->
+      Class['cloudera::gplextras'] ->
+      Anchor['cloudera::end']
     }
     Anchor['cloudera::begin'] ->
     Class['cloudera::cm::repo'] ->
     Class['cloudera::cdh::repo'] ->
     Class['cloudera::impala::repo'] ->
     Class['cloudera::search::repo'] ->
-    Class['cloudera::gplextras::repo'] ->
     Class['cloudera::java'] ->
     Class['cloudera::cdh'] ->
     Class['cloudera::impala'] ->
     Class['cloudera::search'] ->
-    Class['cloudera::gplextras'] ->
     Class['cloudera::cm'] ->
     Anchor['cloudera::end']
   }

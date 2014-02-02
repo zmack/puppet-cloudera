@@ -215,6 +215,18 @@ file { "/etc/pki/tls/certs/${::fqdn}-cloudera_manager.crt": }
 file { "/etc/pki/tls/private/${::fqdn}-cloudera_manager.key": }
 ```
 
+### LZO Compression
+
+[LZO](http://www.oberhumer.com/opensource/lzo/) Compression libraries are available in the GPL Extras repository.  To deploy the software on a non-parcel system just add `use_gplextras => true` to the class declaration.  Additional configuration in Cloudera Manager will be required to [activate](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Installation-Guide/cmig_install_LZO_Compression.html) the functionality (ignore the mention of parcels in the link to the documentation).
+
+```puppet
+class { 'cloudera':
+  cm_server_host => 'smhost.example.com',
+  use_parcels    => false,
+  use_gplextras  => true,
+}
+```
+
 Notes
 -----
 

@@ -160,6 +160,16 @@ class cloudera::params {
     $safe_use_parcels = $use_parcels
   }
 
+  $use_gplextras = $::cloudera_use_gplextras ? {
+    undef => false,
+    default => $::cloudera_use_gplextras,
+  }
+  if is_string($use_gplextras) {
+    $safe_use_gplextras = str2bool($use_gplextras)
+  } else {
+    $safe_use_gplextras = $use_gplextras
+  }
+
   if $::operatingsystemmajrelease { # facter 1.7+
     $majdistrelease = $::operatingsystemmajrelease
   } elsif $::lsbmajdistrelease {    # requires LSB to already be installed
