@@ -84,9 +84,12 @@
 #
 # === Requires:
 #
-#   Package['mysql-connector-java']
-#   Package['oracle-connector-java']
-#   Package['postgresql-java']
+#   Class['::mysql::bindings::java']
+#   Class['::mysql::server']
+#   Class['::oraclerdbms::java']
+#   Class['::oraclerdbms::server']
+#   Class['::postgresql::java']
+#   Class['::postgresql::server']
 #   Package['jdk']
 #   java_ks
 #
@@ -164,15 +167,17 @@ class cloudera::cm::server (
   }
 
   if $db_type != 'embedded' {
-    $file_content = template('cloudera/db.properties.erb')
+    $file_content = template("${module_name}/db.properties.erb")
   }
 
   package { 'cloudera-manager-server':
-    ensure  => $package_ensure,
+    ensure => $package_ensure,
+    tag    => 'cloudera-manager',
   }
 
 #  package { 'cloudera-manager-daemons':
 #    ensure => $package_ensure,
+#    tag    => 'cloudera-manager',
 #  }
 
   file { '/etc/cloudera-scm-server/db.properties':
@@ -194,7 +199,8 @@ class cloudera::cm::server (
   case $db_type {
     'embedded': {
       package { 'cloudera-manager-server-db':
-        ensure  => $package_ensure,
+        ensure => $package_ensure,
+        tag    => 'cloudera-manager',
       }
 
       exec { 'cloudera-manager-server-db':
@@ -218,16 +224,17 @@ class cloudera::cm::server (
         $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${::fqdn}"
         $scm_prepare_database_require = Package['cloudera-manager-server']
       } else {
-        #require mysql::server
-        Class['mysql::server'] -> Exec['scm_prepare_database']
-        $scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['mysqld'], ]
+        #require '::mysql::server'
+        Class['::mysql::server'] -> Exec['scm_prepare_database']
+        $scm_prepare_database_require = [ Package['cloudera-manager-server'], Class['::mysql::server'], ]
       }
 
-      if ! defined(Class['mysql::java']) {
-        class { 'mysql::java': }
+      if ! defined(Class['::mysql::bindings::java']) {
+        include '::mysql::bindings'
+        include '::mysql::bindings::java'
       }
       realize Exec['scm_prepare_database']
-      Class['mysql::java'] -> Exec['scm_prepare_database']
+      Class['::mysql::bindings::java'] -> Exec['scm_prepare_database']
     }
     'oracle': {
       if ( $db_host != 'localhost' ) and ( $db_host != $::fqdn ) {
@@ -235,18 +242,19 @@ class cloudera::cm::server (
         $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${::fqdn}"
         $scm_prepare_database_require = Package['cloudera-manager-server']
       } else {
-        #require oraclerdbms::server
-        #Class['oraclerdbms::server'] -> Service['cloudera-scm-server']
+        #require '::oraclerdbms::server'
+        #Class['::oraclerdbms::server'] -> Service['cloudera-scm-server']
         #$scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['oracle'], ]
         $scm_prepare_database_require = Package['cloudera-manager-server']
       }
 
-      # TODO: find a Class['oraclerdbms::java']
-      #if ! defined(Class['oraclerdbms::java']) {
-      #  class { 'oraclerdbms::java': }
+      # TODO: find a Class['::oraclerdbms::java']
+      notice('$db_type oracle is not yet fully supported in Class["cloudera::sm::server"].')
+      #if ! defined(Class['::oraclerdbms::java']) {
+      #  include '::oraclerdbms::java'
       #}
       realize Exec['scm_prepare_database']
-      #Class['oraclerdbms::java'] -> Exec['scm_prepare_database']
+      #Class['::oraclerdbms::java'] -> Exec['scm_prepare_database']
     }
     'postgresql': {
       if ( $db_host != 'localhost' ) and ( $db_host != $::fqdn ) {
@@ -254,27 +262,37 @@ class cloudera::cm::server (
         $scmopts = "--host=${db_host} --port=${db_port} --scm-host=${::fqdn}"
         $scm_prepare_database_require = Package['cloudera-manager-server']
       } else {
-        #require postgresql::server
-        Class['postgresql::server'] -> Service['cloudera-scm-server']
-        $scm_prepare_database_require = [ Package['cloudera-manager-server'], Service['postgresqld'], ]
+        #require '::postgresql::server'
+        Class['::postgresql::server'] -> Service['cloudera-scm-server']
+        $scm_prepare_database_require = [ Package['cloudera-manager-server'], Class['::postgresql::server'], ]
       }
 
-      if ! defined(Class['postgresql::java']) {
-        class { 'postgresql::java': }
+      if ! defined(Class['::postgresql::java']) {
+        include '::postgresql::java'
       }
+      # TODO: Figure out postgresql auth to make Exec['scm_prepare_database'] work.
       realize Exec['scm_prepare_database']
-      Class['postgresql::java'] -> Exec['scm_prepare_database']
+      Class['::postgresql::java'] -> Exec['scm_prepare_database']
     }
     default: { }
   }
 
   @exec { 'scm_prepare_database':
-    command => "/usr/share/cmf/schema/scm_prepare_database.sh ${db_type} ${scmopts} --user=${db_user} --password=${db_pass} ${database_name} ${username} ${password} && touch /etc/cloudera-manager-server/.scm_prepare_database",
-    creates => '/etc/cloudera-manager-server/.scm_prepare_database',
+    command => "/usr/share/cmf/schema/scm_prepare_database.sh ${db_type} ${scmopts} --user=${db_user} --password=${db_pass} ${database_name} ${username} ${password} && touch /etc/cloudera-scm-server/.scm_prepare_database",
+    creates => '/etc/cloudera-scm-server/.scm_prepare_database',
     require => $scm_prepare_database_require,
+    before  => Service['cloudera-scm-server'],
   }
 
   if $use_tls {
+    file { '/etc/cloudera-scm-server/keystore':
+      ensure  => present,
+      mode    => '0640',
+      owner   => 'cloudera-scm',
+      group   => 'cloudera-scm',
+      require => Java_ks['cmca:/etc/cloudera-scm-server/keystore'],
+    }
+
     java_ks { 'cmca:/etc/cloudera-scm-server/keystore':
       ensure       => latest,
       certificate  => $server_ca_file,

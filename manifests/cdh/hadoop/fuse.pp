@@ -23,5 +23,6 @@
 class cloudera::cdh::hadoop::fuse {
   package { 'hadoop-hdfs-fuse':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 }

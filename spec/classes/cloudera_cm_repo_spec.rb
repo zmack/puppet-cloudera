@@ -10,10 +10,10 @@ describe 'cloudera::cm::repo', :type => 'class' do
       :operatingsystem => 'bar'
     }
     end
-    it 'should fail' do
+    it do
       expect {
-        should raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
-      }
+        should compile
+      }.to raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
     end
   end
 
@@ -26,6 +26,7 @@ describe 'cloudera::cm::repo', :type => 'class' do
       :architecture           => 'x86_64'
     }
     end
+    it { should compile.with_all_deps }
     it { should contain_yumrepo('cloudera-manager').with(
       :descr          => 'Cloudera Manager',
       :enabled        => '1',
@@ -37,6 +38,12 @@ describe 'cloudera::cm::repo', :type => 'class' do
       :proxy          => 'absent',
       :proxy_username => 'absent',
       :proxy_password => 'absent'
+    )}
+    it { should contain_file('/etc/yum.repos.d/cloudera-manager.repo').with(
+      :ensure => 'file',
+      :owner  => 'root',
+      :group  => 'root',
+      :mode   => '0644'
     )}
     it { should_not contain_yumrepo('cloudera-cdh4') }
     it { should_not contain_yumrepo('cloudera-impala') }
@@ -55,6 +62,7 @@ describe 'cloudera::cm::repo', :type => 'class' do
       }
       end
       it { should contain_yumrepo('cloudera-manager').with_enabled('0') }
+      it { should contain_file('/etc/yum.repos.d/cloudera-manager.repo').with_ensure('file') }
     end
 
     describe 'all other parameters' do
@@ -74,6 +82,7 @@ describe 'cloudera::cm::repo', :type => 'class' do
         :proxy_username => 'myUser',
         :proxy_password => 'myPass'
       )}
+      it { should contain_file('/etc/yum.repos.d/cloudera-manager.repo').with_ensure('file') }
     end
   end
 end

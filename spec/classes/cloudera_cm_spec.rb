@@ -10,10 +10,10 @@ describe 'cloudera::cm', :type => 'class' do
       :operatingsystem => 'bar'
     }
     end
-    it 'should fail' do
+    it do
       expect {
-        should raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
-      }
+        should compile
+      }.to raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
     end
   end
 
@@ -24,6 +24,7 @@ describe 'cloudera::cm', :type => 'class' do
       :fqdn            => 'myhost'
     }
     end
+    it { should compile.with_all_deps }
     it { should contain_package('cloudera-manager-agent').with_ensure('present') }
     it { should contain_package('cloudera-manager-daemons').with_ensure('present') }
     it { should contain_file('scm-config.ini').with(

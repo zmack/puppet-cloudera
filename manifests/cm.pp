@@ -100,16 +100,18 @@ class cloudera::cm (
 
   package { 'cloudera-manager-agent':
     ensure => $package_ensure,
+    tag    => 'cloudera-manager',
   }
 
   package { 'cloudera-manager-daemons':
     ensure => $package_ensure,
+    tag    => 'cloudera-manager',
   }
 
   file { 'scm-config.ini':
     ensure  => $file_ensure,
     path    => '/etc/cloudera-scm-agent/config.ini',
-    content => template('cloudera/scm-config.ini.erb'),
+    content => template("${module_name}/scm-config.ini.erb"),
     require => Package['cloudera-manager-agent'],
     notify  => Service['cloudera-scm-agent'],
   }

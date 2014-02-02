@@ -23,5 +23,6 @@
 class cloudera::cdh::hadoop::client {
   package { 'hadoop-client':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 }

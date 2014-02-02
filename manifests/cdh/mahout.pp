@@ -16,5 +16,6 @@
 class cloudera::cdh::mahout {
   package { 'mahout':
     ensure => present,
+    tag    => 'cloudera-cdh4',
   }
 }

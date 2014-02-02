@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'cloudera::cdh::impala', :type => 'class' do
+describe 'cloudera::cdh::hcatalog', :type => 'class' do
 
 #  context 'on a non-supported operatingsystem' do
 #    let :facts do {
@@ -24,7 +24,7 @@ describe 'cloudera::cdh::impala', :type => 'class' do
 #      :operatingsystem => 'CentOS'
 #    }
 #    end
-    it { should contain_package('impala').with_ensure('present') }
-    it { should contain_package('impala-shell').with_ensure('present') }
+    it { should contain_package('hcatalog').with_ensure('present') }
+    it { should contain_package('webhcat').with_ensure('present') }
   end
 end

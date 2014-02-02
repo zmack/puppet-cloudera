@@ -16,5 +16,6 @@
 class cloudera::cdh::oozie::client {
   package { 'oozie-client':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 }

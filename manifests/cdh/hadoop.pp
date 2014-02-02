@@ -26,26 +26,32 @@ class cloudera::cdh::hadoop {
 
   package { 'hadoop':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 
   package { 'hadoop-hdfs':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 
   package { 'hadoop-httpfs':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 
   package { 'hadoop-mapreduce':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 
   package { 'hadoop-yarn':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 
   package { 'hadoop-0.20-mapreduce':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 
   service { 'hadoop-httpfs':

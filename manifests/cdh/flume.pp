@@ -23,6 +23,7 @@
 class cloudera::cdh::flume {
   package { 'flume-ng':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 
   service { 'flume-ng':

@@ -16,5 +16,6 @@
 class cloudera::cdh::hbase {
   package { 'hbase':
     ensure => 'present',
+    tag    => 'cloudera-cdh4',
   }
 }
