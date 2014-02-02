@@ -48,4 +48,11 @@ class cloudera::search (
     ensure => 'present',
     tag    => 'cloudera-search',
   }
+
+  service { 'solr-server':
+#   ensure    => 'stopped',
+    enable    => false,
+    hasstatus => true,
+    require   => Package['solr-server'],
+  }
 }
