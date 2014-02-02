@@ -1,5 +1,5 @@
 name 'razorsedge-cloudera'
-version '0.9.1'
+version '0.9.2'
 
 author 'razorsedge'
 license 'Apache License, Version 2.0'
