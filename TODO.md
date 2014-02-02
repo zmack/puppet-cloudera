@@ -18,6 +18,8 @@
 
 * support TLS level 3
 * PostgreSQL must be configured to accept connections with md5 password authentication.  To do so, edit /var/lib/pgsql/data/pg_hba.conf (or similar) to include `host all all 127.0.0.1/32 md5` *above* a similar line that allows `ident` authentication.
+* cm_api support
+* parcels still require LZO OS libraries?
 
 ## Links
 

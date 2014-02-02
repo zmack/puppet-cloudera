@@ -25,5 +25,6 @@ describe 'cloudera::search', :type => 'class' do
     }
     end
     it { should contain_package('solr-server').with_ensure('present') }
+    it { should contain_service('solr-server').with_enable('false') }
   end
 end
