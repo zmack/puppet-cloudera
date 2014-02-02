@@ -24,9 +24,6 @@ describe 'cloudera::search', :type => 'class' do
       :operatingsystem => 'CentOS'
     }
     end
-    it { should contain_package('search').with_ensure('present') }
-    it { should contain_package('solr').with_ensure('present') }
-    it { should contain_package('solr-mapreduce').with_ensure('present') }
-    it { should contain_package('hbase-solr').with_ensure('present') }
+    it { should contain_package('solr-server').with_ensure('present') }
   end
 end

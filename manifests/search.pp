@@ -44,22 +44,7 @@ class cloudera::search (
   # Validate our booleans
   validate_bool($autoupgrade)
 
-  package { 'search':
-    ensure => 'present',
-    tag    => 'cloudera-search',
-  }
-
-  package { 'solr':
-    ensure => 'present',
-    tag    => 'cloudera-search',
-  }
-
-  package { 'solr-mapreduce':
-    ensure => 'present',
-    tag    => 'cloudera-search',
-  }
-
-  package { 'hbase-solr':
+  package { 'solr-server':
     ensure => 'present',
     tag    => 'cloudera-search',
   }
