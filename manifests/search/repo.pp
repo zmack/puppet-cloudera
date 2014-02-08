@@ -102,6 +102,27 @@ class cloudera::search::repo (
       Yumrepo['cloudera-search'] -> Package<|tag == 'cloudera-search'|>
       Yumrepo['cloudera-cdh4']   -> Package<|tag == 'cloudera-search'|>
     }
+    'SLES': {
+      zypprepo { 'cloudera-search':
+        descr       => 'Search',
+        enabled     => $enabled,
+        gpgcheck    => 1,
+        gpgkey      => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
+        baseurl     => "${yumserver}${yumpath}${version}/",
+        autorefresh => 1,
+        priority    => $cloudera::params::yum_priority,
+      }
+
+      file { '/etc/zypp/repos.d/cloudera-search.repo':
+        ensure => 'file',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+      }
+
+      Zypprepo['cloudera-search'] -> Package<|tag == 'cloudera-search'|>
+      Zypprepo['cloudera-cdh4']   -> Package<|tag == 'cloudera-search'|>
+    }
     default: { }
   }
 }

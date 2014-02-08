@@ -101,6 +101,26 @@ class cloudera::gplextras::repo (
 
       Yumrepo['cloudera-gplextras4'] -> Package<|tag == 'cloudera-gplextras'|>
     }
+    'SLES': {
+      zypprepo { 'cloudera-gplextras4':
+        descr       => 'Cloudera GPL Extras',
+        enabled     => $enabled,
+        gpgcheck    => 1,
+        gpgkey      => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
+        baseurl     => "${yumserver}${yumpath}${version}/",
+        autorefresh => 1,
+        priority    => $cloudera::params::yum_priority,
+      }
+
+      file { '/etc/zypp/repos.d/cloudera-gplextras4.repo':
+        ensure => 'file',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+      }
+
+      Zypprepo['cloudera-gplextras4'] -> Package<|tag == 'cloudera-gplextras'|>
+    }
     default: { }
   }
 }
