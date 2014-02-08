@@ -18,34 +18,61 @@ describe 'cloudera::impala::repo', :type => 'class' do
   end
 
   context 'on a supported operatingsystem, default parameters' do
-    let :facts do {
-      :osfamily               => 'RedHat',
-      :operatingsystem        => 'CentOS',
-      :operatingsystemrelease => '6.3',
-      :os_maj_version         => '6',
-      :architecture           => 'x86_64'
-    }
+    describe 'RedHat 6' do
+      let :facts do {
+        :osfamily               => 'RedHat',
+        :operatingsystem        => 'CentOS',
+        :operatingsystemrelease => '6.3',
+        :architecture           => 'x86_64'
+      }
+      end
+      it { should compile.with_all_deps }
+      it { should contain_yumrepo('cloudera-impala').with(
+        :descr          => 'Impala',
+        :enabled        => '1',
+        :gpgcheck       => '1',
+        :gpgkey         => 'http://archive.cloudera.com/impala/redhat/6/x86_64/impala/RPM-GPG-KEY-cloudera',
+        :baseurl        => 'http://archive.cloudera.com/impala/redhat/6/x86_64/impala/1/',
+        :priority       => '50',
+        :protect        => '0',
+        :proxy          => 'absent',
+        :proxy_username => 'absent',
+        :proxy_password => 'absent'
+      )}
+      it { should contain_file('/etc/yum.repos.d/cloudera-impala.repo').with(
+        :ensure => 'file',
+        :owner  => 'root',
+        :group  => 'root',
+        :mode   => '0644'
+      )}
+      it { should_not contain_yumrepo('cloudera-manager') }
     end
-    it { should compile.with_all_deps }
-    it { should contain_yumrepo('cloudera-impala').with(
-      :descr          => 'Impala',
-      :enabled        => '1',
-      :gpgcheck       => '1',
-      :gpgkey         => 'http://archive.cloudera.com/impala/redhat/6/x86_64/impala/RPM-GPG-KEY-cloudera',
-      :baseurl        => 'http://archive.cloudera.com/impala/redhat/6/x86_64/impala/1/',
-      :priority       => '50',
-      :protect        => '0',
-      :proxy          => 'absent',
-      :proxy_username => 'absent',
-      :proxy_password => 'absent'
-    )}
-    it { should contain_file('/etc/yum.repos.d/cloudera-impala.repo').with(
-      :ensure => 'file',
-      :owner  => 'root',
-      :group  => 'root',
-      :mode   => '0644'
-    )}
-    it { should_not contain_yumrepo('cloudera-manager') }
+
+    describe 'SLES 11' do
+      let :facts do {
+        :osfamily               => 'Suse',
+        :operatingsystem        => 'SLES',
+        :operatingsystemrelease => '11.1',
+        :architecture           => 'x86_64'
+      }
+      end
+      it { should compile.with_all_deps }
+      it { should contain_zypprepo('cloudera-impala').with(
+        :descr          => 'Impala',
+        :enabled        => '1',
+        :gpgcheck       => '1',
+        :gpgkey         => 'http://archive.cloudera.com/impala/sles/11/x86_64/impala/RPM-GPG-KEY-cloudera',
+        :baseurl        => 'http://archive.cloudera.com/impala/sles/11/x86_64/impala/1/',
+        :priority       => '50'
+      )}
+      it { should contain_file('/etc/zypp/repos.d/cloudera-impala.repo').with(
+        :ensure => 'file',
+        :owner  => 'root',
+        :group  => 'root',
+        :mode   => '0644'
+      )}
+      it { should_not contain_zypprepo('cloudera-manager') }
+    end
   end
 
   context 'on a supported operatingsystem, custom parameters' do

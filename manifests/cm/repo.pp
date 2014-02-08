@@ -121,8 +121,8 @@ class cloudera::cm::repo (
       }
 
       exec { 'cloudera-import-gpgkey':
-        command     => "/bin/rpm --import ${cm_yumserver}${cm_yumpath}RPM-GPG-KEY-cloudera",
-        #command     => '/usr/bin/zypper --quiet refresh --auto-agree-with-licenses --no-confirm --gpg-auto-import-keys',
+        path        => '/bin:/usr/bin:/sbin:/usr/sbin',
+        command     => "rpm --import ${cm_yumserver}${cm_yumpath}RPM-GPG-KEY-cloudera",
         refreshonly => true,
       }
 
