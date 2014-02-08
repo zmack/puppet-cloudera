@@ -194,6 +194,14 @@ class cloudera::params {
       $cs_yumpath = "/search/redhat/${majdistrelease}/${::architecture}/search/"
       $cg_yumpath = "/gplextras/redhat/${majdistrelease}/${::architecture}/gplextras/"
     }
+    'SLES': {
+      #$package_provider = 'zypper'
+      $cdh_yumpath = "/cdh4/sles/${majdistrelease}/${::architecture}/cdh/"
+      $cm_yumpath = "/cm4/sles/${majdistrelease}/${::architecture}/cm/"
+      $ci_yumpath = "/impala/sles/${majdistrelease}/${::architecture}/impala/"
+      $cs_yumpath = "/search/sles/${majdistrelease}/${::architecture}/search/"
+      $cg_yumpath = "/gplextras/sles/${majdistrelease}/${::architecture}/gplextras/"
+    }
     default: {
       fail("Module ${module_name} is not supported on ${::operatingsystem}")
     }

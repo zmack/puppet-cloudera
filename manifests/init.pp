@@ -202,6 +202,12 @@ class cloudera (
   validate_bool($use_parcels)
   validate_bool($use_gplextras)
 
+#  Package { provider => $cloudera::params::package_provider }
+#  case $::operatingsystem {
+#    'SLES': { Package { provider => 'zypper' } }
+#    default: { }
+#  }
+
   anchor { 'cloudera::begin': }
   anchor { 'cloudera::end': }
 

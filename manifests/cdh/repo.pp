@@ -101,6 +101,26 @@ class cloudera::cdh::repo (
 
       Yumrepo['cloudera-cdh4'] -> Package<|tag == 'cloudera-cdh4'|>
     }
+    'SLES': {
+      zypprepo { 'cloudera-cdh4':
+        descr       => 'Cloudera\'s Distribution for Hadoop, Version 4',
+        enabled     => $enabled,
+        gpgcheck    => 1,
+        gpgkey      => "${cdh_yumserver}${cdh_yumpath}RPM-GPG-KEY-cloudera",
+        baseurl     => "${cdh_yumserver}${cdh_yumpath}${cdh_version}/",
+        autorefresh => 1,
+        priority    => $cloudera::params::yum_priority,
+      }
+
+      file { '/etc/zypp/repos.d/cloudera-cdh4.repo':
+        ensure => 'file',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+      }
+
+      Zypprepo['cloudera-cdh4'] -> Package<|tag == 'cloudera-cdh4'|>
+    }
     default: { }
   }
 }

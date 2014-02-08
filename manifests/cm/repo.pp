@@ -101,6 +101,33 @@ class cloudera::cm::repo (
 
       Yumrepo['cloudera-manager'] -> Package<|tag == 'cloudera-manager'|>
     }
+    'SLES': {
+      zypprepo { 'cloudera-manager':
+        descr       => 'Cloudera Manager',
+        enabled     => $enabled,
+        gpgcheck    => 1,
+        gpgkey      => "${cm_yumserver}${cm_yumpath}RPM-GPG-KEY-cloudera",
+        baseurl     => "${cm_yumserver}${cm_yumpath}${cm_version}/",
+        priority    => $cloudera::params::yum_priority,
+        autorefresh => 1,
+        notify      => Exec['cloudera-import-gpgkey'],
+      }
+
+      file { '/etc/zypp/repos.d/cloudera-manager.repo':
+        ensure => 'file',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+      }
+
+      exec { 'cloudera-import-gpgkey':
+        path        => '/bin:/usr/bin:/sbin:/usr/sbin',
+        command     => "rpm --import ${cm_yumserver}${cm_yumpath}RPM-GPG-KEY-cloudera",
+        refreshonly => true,
+      }
+
+      Zypprepo['cloudera-manager'] -> Package<|tag == 'cloudera-manager'|>
+    }
     default: { }
   }
 }

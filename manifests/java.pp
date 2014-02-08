@@ -82,8 +82,8 @@ class cloudera::java (
   #  --slave /usr/lib/jvm/jre jre /usr/java/default/jre \
   #  --slave /usr/lib/jvm-exports/jre jre_exports /usr/java/default/jre/lib
   exec { 'java-alternatives':
-    command => 'alternatives --install /usr/bin/java java /usr/java/default/jre/bin/java 1600 --slave /usr/bin/keytool keytool /usr/java/default/bin/keytool --slave /usr/bin/rmiregistry rmiregistry /usr/java/default/bin/rmiregistry --slave /usr/lib/jvm/jre jre /usr/java/default/jre --slave /usr/lib/jvm-exports/jre jre_exports /usr/java/default/jre/lib',
-    unless  => 'alternatives --display java | grep -q /usr/java/default/jre/bin/java',
+    command => 'update-alternatives --install /usr/bin/java java /usr/java/default/jre/bin/java 1600 --slave /usr/bin/keytool keytool /usr/java/default/bin/keytool --slave /usr/bin/rmiregistry rmiregistry /usr/java/default/bin/rmiregistry --slave /usr/lib/jvm/jre jre /usr/java/default/jre --slave /usr/lib/jvm-exports/jre jre_exports /usr/java/default/jre/lib',
+    unless  => 'update-alternatives --display java | grep -q /usr/java/default/jre/bin/java',
     path    => '/bin:/sbin:/usr/bin:/usr/sbin',
     require => Package['jdk'],
     returns => [ 0, 2, ],

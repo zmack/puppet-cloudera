@@ -101,6 +101,26 @@ class cloudera::impala::repo (
 
       Yumrepo['cloudera-impala'] -> Package<|tag == 'cloudera-impala'|>
     }
+    'SLES': {
+      zypprepo { 'cloudera-impala':
+        descr       => 'Impala',
+        enabled     => $enabled,
+        gpgcheck    => 1,
+        gpgkey      => "${ci_yumserver}${ci_yumpath}RPM-GPG-KEY-cloudera",
+        baseurl     => "${ci_yumserver}${ci_yumpath}${ci_version}/",
+        autorefresh => 1,
+        priority    => $cloudera::params::yum_priority,
+      }
+
+      file { '/etc/zypp/repos.d/cloudera-impala.repo':
+        ensure => 'file',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+      }
+
+      Zypprepo['cloudera-impala'] -> Package<|tag == 'cloudera-impala'|>
+    }
     default: { }
   }
 }

@@ -29,16 +29,18 @@ Optional Actions (non-parcel):
 
 Software Support:
 
-* Cloudera Manager - tested with 4.1.2 and 4.8.0
-* CDH              - tested with 4.1.2 and 4.8.0
-* Cloudera Impala  - tested with 1.0 and 1.2.3
-* Cloudera Search  - tested with 1.1.0
+* Cloudera Manager    - tested with 4.1.2 and 4.8.0
+* CDH                 - tested with 4.1.2 and 4.5.0
+* Cloudera Impala     - tested with 1.0 and 1.2.3
+* Cloudera Search     - tested with 1.1.0
 * Cloudera GPL Extras - tested with 4.3.0
 
 OS Support:
 
-* RedHat family - tested on CentOS 6.3
-* SuSE family   - presently unsupported (patches welcome)
+Cloudera official [supported operating systems](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Installation-Guide/cmig_cm_requirements.html).
+
+* RedHat family - tested on CentOS 6.4
+* SuSE family   - tested on SLES 11SP1
 * Debian family - presently unsupported (patches welcome)
 
 Class documentation is available via puppetdoc.
@@ -235,21 +237,16 @@ Notes
 * Based on the [Cloudera Manager 4.1 Installation Guide](https://ccp.cloudera.com/download/attachments/22151983/CM-4.1-enterprise-install-guide.pdf?version=3&modificationDate=1358553325305)
 * TLS certificates must be in PEM format and are not deployed by this module.
 * When using parcels, the CDH software is not deployed by Puppet.  Puppet will only install the Cloudera Manager server/agent.  You must then configure Cloudera Manager to deploy the parcels.
+* When installing packages and not parcels on SLES, SP2 is required as the hadoop-2.0.0+1518-1.cdh4.5.0.p0.24.sles11.x86_64 package requires netcat-openbsd which is not avalable on SLES 11SP1.
 
 Issues
 ------
 
 * Need external module support for the Oracle Instant Client JDBC.
+* When using an external PostgreSQL server that is on the same host as the CM server, PostgreSQL must be configured to accept connections with md5 password authentication.
 
 TODO
 ----
-
-* Add HDFS FUSE mounting support.
-* Support pig-udf installation.
-* Document hive-server installation.
-* Document hive-metastore installation.
-* Document sqoop-metastore installation.
-* Document whirr installation.
 
 See TODO.md for more items.
 
