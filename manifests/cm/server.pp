@@ -203,8 +203,10 @@ class cloudera::cm::server (
         tag    => 'cloudera-manager',
       }
 
+      # TODO: Deprecated.  Just start the service.
       exec { 'cloudera-manager-server-db':
-        command => '/sbin/service cloudera-scm-server-db initdb',
+        command => 'service cloudera-scm-server-db initdb',
+        path    => '/bin:/usr/bin:/sbin:/usr/sbin',
         creates => '/etc/cloudera-scm-server/db.mgmt.properties',
         require => Package['cloudera-manager-server-db'],
       }

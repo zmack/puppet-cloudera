@@ -37,7 +37,8 @@ describe 'cloudera::cm::server', :type => 'class' do
     )}
     it { should contain_package('cloudera-manager-server-db').with_ensure('present') }
     it { should contain_exec('cloudera-manager-server-db').with(
-      :command => '/sbin/service cloudera-scm-server-db initdb',
+      :command => 'service cloudera-scm-server-db initdb',
+      :path    => '/bin:/usr/bin:/sbin:/usr/sbin',
       :creates => '/etc/cloudera-scm-server/db.mgmt.properties'
     )}
     it { should contain_service('cloudera-scm-server-db').with(
