@@ -61,6 +61,7 @@ class cloudera::cdh::repo (
   $cdh_yumserver  = $cloudera::params::cdh_yumserver,
   $cdh_yumpath    = $cloudera::params::cdh_yumpath,
   $cdh_version    = $cloudera::params::cdh_version,
+  $aptkey         = $cloudera::params::cdh_aptkey,
   $proxy          = $cloudera::params::proxy,
   $proxy_username = $cloudera::params::proxy_username,
   $proxy_password = $cloudera::params::proxy_password
@@ -120,6 +121,20 @@ class cloudera::cdh::repo (
       }
 
       Zypprepo['cloudera-cdh4'] -> Package<|tag == 'cloudera-cdh4'|>
+    }
+    'Debian', 'Ubuntu': {
+      include '::apt'
+
+      apt::source { 'cloudera-cdh4':
+        location     => "${cdh_yumserver}${cdh_yumpath}",
+        release      => "${::lsbdistcodename}-cdh${cdh_version}",
+        repos        => 'contrib',
+        key          => $aptkey,
+        key_source   => "${cdh_yumserver}${cdh_yumpath}archive.key",
+#        architecture => $::architecture,
+      }
+
+      Apt::Source['cloudera-cdh4'] -> Package<|tag == 'cloudera-cdh4'|>
     }
     default: { }
   }

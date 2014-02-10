@@ -202,6 +202,25 @@ class cloudera::params {
       $cs_yumpath = "/search/sles/${majdistrelease}/${::architecture}/search/"
       $cg_yumpath = "/gplextras/sles/${majdistrelease}/${::architecture}/gplextras/"
     }
+    'Debian': {
+      $cdh_yumpath = "/cdh4/debian/${::lsbdistcodename}/${::architecture}/cdh/"
+      $cm_yumpath = "/cm4/debian/${::lsbdistcodename}/${::architecture}/cm/"
+      $ci_yumpath = "/impala/debian/${::lsbdistcodename}/${::architecture}/impala/"
+      $cs_yumpath = "/search/debian/${::lsbdistcodename}/${::architecture}/search/"
+      $cg_yumpath = "/gplextras/debian/${::lsbdistcodename}/${::architecture}/gplextras/"
+      $cdh_aptkey = false
+      $cm_aptkey = '327574EE02A818DD'
+      $ci_aptkey = false
+      $cs_aptkey = false
+      $cg_aptkey = false
+    }
+    'Ubuntu': {
+      $cdh_yumpath = "/cdh4/ubuntu/${::lsbdistcodename}/${::architecture}/cdh/"
+      $cm_yumpath = "/cm4/ubuntu/${::lsbdistcodename}/${::architecture}/cm/"
+      $ci_yumpath = "/impala/ubuntu/${::lsbdistcodename}/${::architecture}/impala/"
+      $cs_yumpath = "/search/ubuntu/${::lsbdistcodename}/${::architecture}/search/"
+      $cg_yumpath = "/gplextras/ubuntu/${::lsbdistcodename}/${::architecture}/gplextras/"
+    }
     default: {
       fail("Module ${module_name} is not supported on ${::operatingsystem}")
     }

@@ -61,6 +61,7 @@ class cloudera::gplextras::repo (
   $yumserver      = $cloudera::params::cg_yumserver,
   $yumpath        = $cloudera::params::cg_yumpath,
   $version        = $cloudera::params::cg_version,
+  $aptkey         = $cloudera::params::cg_aptkey,
   $proxy          = $cloudera::params::proxy,
   $proxy_username = $cloudera::params::proxy_username,
   $proxy_password = $cloudera::params::proxy_password
@@ -120,6 +121,20 @@ class cloudera::gplextras::repo (
       }
 
       Zypprepo['cloudera-gplextras4'] -> Package<|tag == 'cloudera-gplextras'|>
+    }
+    'Debian', 'Ubuntu': {
+      include '::apt'
+
+      apt::source { 'cloudera-gplextras4':
+        location     => "${yumserver}${yumpath}",
+        release      => "${::lsbdistcodename}-gplextras${version}",
+        repos        => 'contrib',
+        key          => $aptkey,
+        key_source   => "${yumserver}${yumpath}archive.key",
+#        architecture => $::architecture,
+      }
+
+      Apt::Source['cloudera-gplextras4'] -> Package<|tag == 'cloudera-gplextras'|>
     }
     default: { }
   }

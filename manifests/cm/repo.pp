@@ -61,6 +61,7 @@ class cloudera::cm::repo (
   $cm_yumserver   = $cloudera::params::cm_yumserver,
   $cm_yumpath     = $cloudera::params::cm_yumpath,
   $cm_version     = $cloudera::params::cm_version,
+  $aptkey         = $cloudera::params::cm_aptkey,
   $proxy          = $cloudera::params::proxy,
   $proxy_username = $cloudera::params::proxy_username,
   $proxy_password = $cloudera::params::proxy_password
@@ -127,6 +128,20 @@ class cloudera::cm::repo (
       }
 
       Zypprepo['cloudera-manager'] -> Package<|tag == 'cloudera-manager'|>
+    }
+    'Debian', 'Ubuntu': {
+      include '::apt'
+
+      apt::source { 'cloudera-manager':
+        location     => "${cm_yumserver}${cm_yumpath}",
+        release      => "${::lsbdistcodename}-cm${cm_version}",
+        repos        => 'contrib',
+        key          => $aptkey,
+        key_source   => "${cm_yumserver}${cm_yumpath}archive.key",
+#        architecture => $::architecture,
+      }
+
+      Apt::Source['cloudera-manager'] -> Package<|tag == 'cloudera-manager'|>
     }
     default: { }
   }

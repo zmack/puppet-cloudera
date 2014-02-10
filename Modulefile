@@ -16,6 +16,7 @@ dependency 'nanliu/staging', '>=0.2.1'
 dependency 'stahnma/epel', '>=0.0.3'
 dependency 'puppetlabs/java_ks', '>=1.0.0'
 dependency 'darin/zypprepo', '>=1.0.0 <2.0.0'
+dependency 'puppetlabs/apt', '>=1.4.0'
 
 # Generate the changelog file
 #system("git-log-to-changelog > CHANGELOG")
