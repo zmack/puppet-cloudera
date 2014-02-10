@@ -188,6 +188,7 @@ class cloudera::params {
 
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OEL', 'OracleLinux': {
+      $java_package_name = 'jdk'
       $cdh_yumpath = "/cdh4/redhat/${majdistrelease}/${::architecture}/cdh/"
       $cm_yumpath = "/cm4/redhat/${majdistrelease}/${::architecture}/cm/"
       $ci_yumpath = "/impala/redhat/${majdistrelease}/${::architecture}/impala/"
@@ -195,6 +196,7 @@ class cloudera::params {
       $cg_yumpath = "/gplextras/redhat/${majdistrelease}/${::architecture}/gplextras/"
     }
     'SLES': {
+      $java_package_name = 'jdk'
       #$package_provider = 'zypper'
       $cdh_yumpath = "/cdh4/sles/${majdistrelease}/${::architecture}/cdh/"
       $cm_yumpath = "/cm4/sles/${majdistrelease}/${::architecture}/cm/"
@@ -203,6 +205,7 @@ class cloudera::params {
       $cg_yumpath = "/gplextras/sles/${majdistrelease}/${::architecture}/gplextras/"
     }
     'Debian': {
+      $java_package_name = 'oracle-j2sdk1.6'
       $cdh_yumpath = "/cdh4/debian/${::lsbdistcodename}/${::architecture}/cdh/"
       $cm_yumpath = "/cm4/debian/${::lsbdistcodename}/${::architecture}/cm/"
       $ci_yumpath = "/impala/debian/${::lsbdistcodename}/${::architecture}/impala/"
@@ -215,6 +218,7 @@ class cloudera::params {
       $cg_aptkey = false
     }
     'Ubuntu': {
+      $java_package_name = 'oracle-j2sdk1.6'
       $cdh_yumpath = "/cdh4/ubuntu/${::lsbdistcodename}/${::architecture}/cdh/"
       $cm_yumpath = "/cm4/ubuntu/${::lsbdistcodename}/${::architecture}/cm/"
       $ci_yumpath = "/impala/ubuntu/${::lsbdistcodename}/${::architecture}/impala/"

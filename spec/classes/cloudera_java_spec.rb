@@ -18,24 +18,40 @@ describe 'cloudera::java', :type => 'class' do
   end
 
   context 'on a supported operatingsystem, default parameters' do
-    let :facts do {
-      :osfamily        => 'RedHat',
-      :operatingsystem => 'CentOS'
-    }
+    describe 'RedHat' do
+      let :facts do {
+        :osfamily        => 'RedHat',
+        :operatingsystem => 'CentOS'
+      }
+      end
+      it { should compile.with_all_deps }
+      it { should contain_package('jdk').with_ensure('present').with_name('jdk') }
+      it { should contain_file('java-profile.d').with(
+        :ensure => 'present',
+        :path   => '/etc/profile.d/java.sh',
+        :mode   => '0755',
+        :owner  => 'root',
+        :group  => 'root'
+      )}
+      it { should contain_exec('java-alternatives').with(
+        :command => 'update-alternatives --install /usr/bin/java java /usr/java/default/jre/bin/java 1600 --slave /usr/bin/keytool keytool /usr/java/default/bin/keytool --slave /usr/bin/rmiregistry rmiregistry /usr/java/default/bin/rmiregistry --slave /usr/lib/jvm/jre jre /usr/java/default/jre --slave /usr/lib/jvm-exports/jre jre_exports /usr/java/default/jre/lib',
+        :unless  => 'update-alternatives --display java | grep -q /usr/java/default/jre/bin/java',
+        :path    => '/bin:/usr/bin:/sbin:/usr/sbin',
+        :require => 'Package[jdk]'
+      )}
     end
-    it { should compile.with_all_deps }
-    it { should contain_package('jdk').with_ensure('present') }
-    it { should contain_file('java-profile.d').with(
-      :ensure => 'present',
-      :path   => '/etc/profile.d/java.sh',
-      :mode   => '0755',
-      :owner  => 'root',
-      :group  => 'root'
-    )}
-    it { should contain_exec('java-alternatives').with(
-      :command => 'update-alternatives --install /usr/bin/java java /usr/java/default/jre/bin/java 1600 --slave /usr/bin/keytool keytool /usr/java/default/bin/keytool --slave /usr/bin/rmiregistry rmiregistry /usr/java/default/bin/rmiregistry --slave /usr/lib/jvm/jre jre /usr/java/default/jre --slave /usr/lib/jvm-exports/jre jre_exports /usr/java/default/jre/lib',
-      :unless  => 'update-alternatives --display java | grep -q /usr/java/default/jre/bin/java'
-    )}
+
+    describe 'Debian' do
+      let :facts do {
+        :osfamily        => 'Debian',
+        :operatingsystem => 'Debian'
+      }
+      end
+      it { should compile.with_all_deps }
+      it { should contain_package('jdk').with_ensure('present').with_name('oracle-j2sdk1.6') }
+      it { should_not contain_file('java-profile.d') }
+      it { should_not contain_exec('java-alternatives') }
+    end
   end
 
   context 'on a supported operatingsystem, custom parameters' do
