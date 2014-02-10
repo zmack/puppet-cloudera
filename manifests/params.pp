@@ -224,6 +224,11 @@ class cloudera::params {
       $ci_yumpath = "/impala/ubuntu/${::lsbdistcodename}/${::architecture}/impala/"
       $cs_yumpath = "/search/ubuntu/${::lsbdistcodename}/${::architecture}/search/"
       $cg_yumpath = "/gplextras/ubuntu/${::lsbdistcodename}/${::architecture}/gplextras/"
+      $cdh_aptkey = false
+      $cm_aptkey = '327574EE02A818DD'
+      $ci_aptkey = false
+      $cs_aptkey = false
+      $cg_aptkey = false
     }
     default: {
       fail("Module ${module_name} is not supported on ${::operatingsystem}")
