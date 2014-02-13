@@ -81,6 +81,28 @@ describe 'cloudera::cm::repo', :type => 'class' do
         :refreshonly => 'true'
       )}
     end
+
+    describe 'Debian 6' do
+      let :facts do {
+        :osfamily               => 'Debian',
+        :operatingsystem        => 'Debian',
+        :operatingsystemrelease => '6.0.7',
+        :architecture           => 'amd64',
+        :lsbdistcodename        => 'squeeze'
+      }
+      end
+      it { should compile.with_all_deps }
+      it { should contain_class('apt') }
+      it { should contain_apt__source('cloudera-manager').with(
+        :location   => 'http://archive.cloudera.com/cm4/debian/squeeze/amd64/cm/',
+        :release    => 'squeeze-cm4',
+        :repos      => 'contrib',
+        :key        => '327574EE02A818DD',
+        :key_source => 'http://archive.cloudera.com/cm4/debian/squeeze/amd64/cm/archive.key'
+      )}
+      it { should_not contain_apt__source('cloudera-cdh4') }
+      it { should_not contain_apt__source('cloudera-impala') }
+    end
   end
 
   context 'on a supported operatingsystem, custom parameters' do

@@ -36,8 +36,9 @@
 # Copyright (C) 2013 Mike Arnold, unless otherwise noted.
 #
 class cloudera::java (
-  $ensure      = $cloudera::params::ensure,
-  $autoupgrade = $cloudera::params::safe_autoupgrade
+  $ensure       = $cloudera::params::ensure,
+  $package_name = $cloudera::params::java_package_name,
+  $autoupgrade  = $cloudera::params::safe_autoupgrade
 ) inherits cloudera::params {
   # Validate our booleans
   validate_bool($autoupgrade)
@@ -63,29 +64,35 @@ class cloudera::java (
 
   package { 'jdk':
     ensure => $package_ensure,
+    name   => $package_name,
     tag    => 'cloudera-manager',
   }
 
-  file { 'java-profile.d':
-    ensure  => $file_ensure,
-    path    => '/etc/profile.d/java.sh',
-    source  => "puppet:///modules/${module_name}/java.sh",
-    mode    => '0755',
-    owner   => 'root',
-    group   => 'root',
-  }
+  case $::operatingsystem {
+    'CentOS', 'RedHat', 'OEL', 'OracleLinux', 'SLES': {
+      file { 'java-profile.d':
+        ensure  => $file_ensure,
+        path    => '/etc/profile.d/java.sh',
+        source  => "puppet:///modules/${module_name}/java.sh",
+        mode    => '0755',
+        owner   => 'root',
+        group   => 'root',
+      }
 
-  # http://biowiki.org/CentosAlternatives
-  # alternatives --install /usr/bin/java java /usr/java/default/jre/bin/java 1600 \
-  #  --slave /usr/bin/keytool keytool /usr/java/default/bin/keytool \
-  #  --slave /usr/bin/rmiregistry rmiregistry /usr/java/default/bin/rmiregistry \
-  #  --slave /usr/lib/jvm/jre jre /usr/java/default/jre \
-  #  --slave /usr/lib/jvm-exports/jre jre_exports /usr/java/default/jre/lib
-  exec { 'java-alternatives':
-    command => 'update-alternatives --install /usr/bin/java java /usr/java/default/jre/bin/java 1600 --slave /usr/bin/keytool keytool /usr/java/default/bin/keytool --slave /usr/bin/rmiregistry rmiregistry /usr/java/default/bin/rmiregistry --slave /usr/lib/jvm/jre jre /usr/java/default/jre --slave /usr/lib/jvm-exports/jre jre_exports /usr/java/default/jre/lib',
-    unless  => 'update-alternatives --display java | grep -q /usr/java/default/jre/bin/java',
-    path    => '/bin:/sbin:/usr/bin:/usr/sbin',
-    require => Package['jdk'],
-    returns => [ 0, 2, ],
+      # http://biowiki.org/CentosAlternatives
+      # alternatives --install /usr/bin/java java /usr/java/default/jre/bin/java 1600 \
+      #  --slave /usr/bin/keytool keytool /usr/java/default/bin/keytool \
+      #  --slave /usr/bin/rmiregistry rmiregistry /usr/java/default/bin/rmiregistry \
+      #  --slave /usr/lib/jvm/jre jre /usr/java/default/jre \
+      #  --slave /usr/lib/jvm-exports/jre jre_exports /usr/java/default/jre/lib
+      exec { 'java-alternatives':
+        command => 'update-alternatives --install /usr/bin/java java /usr/java/default/jre/bin/java 1600 --slave /usr/bin/keytool keytool /usr/java/default/bin/keytool --slave /usr/bin/rmiregistry rmiregistry /usr/java/default/bin/rmiregistry --slave /usr/lib/jvm/jre jre /usr/java/default/jre --slave /usr/lib/jvm-exports/jre jre_exports /usr/java/default/jre/lib',
+        unless  => 'update-alternatives --display java | grep -q /usr/java/default/jre/bin/java',
+        path    => '/bin:/usr/bin:/sbin:/usr/sbin',
+        require => Package['jdk'],
+        returns => [ 0, 2, ],
+      }
+    }
+    default: { }
   }
 }

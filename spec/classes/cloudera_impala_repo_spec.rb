@@ -73,6 +73,27 @@ describe 'cloudera::impala::repo', :type => 'class' do
       )}
       it { should_not contain_zypprepo('cloudera-manager') }
     end
+
+    describe 'Debian 6' do
+      let :facts do {
+        :osfamily               => 'Debian',
+        :operatingsystem        => 'Debian',
+        :operatingsystemrelease => '6.0.7',
+        :architecture           => 'amd64',
+        :lsbdistcodename        => 'squeeze'
+      }
+      end
+      it { should compile.with_all_deps }
+      it { should contain_class('apt') }
+      it { should contain_apt__source('cloudera-impala').with(
+        :location   => 'http://archive.cloudera.com/impala/debian/squeeze/amd64/impala/',
+        :release    => 'squeeze-impala1',
+        :repos      => 'contrib',
+        :key        => 'false',
+        :key_source => 'http://archive.cloudera.com/impala/debian/squeeze/amd64/impala/archive.key'
+      )}
+      it { should_not contain_apt__source('cloudera-manager') }
+    end
   end
 
   context 'on a supported operatingsystem, custom parameters' do

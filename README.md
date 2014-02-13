@@ -41,7 +41,7 @@ Cloudera official [supported operating systems](http://www.cloudera.com/content/
 
 * RedHat family - tested on CentOS 6.4
 * SuSE family   - tested on SLES 11SP1
-* Debian family - presently unsupported (patches welcome)
+* Debian family - tested on Debian 6.0.7, Ubuntu 10.04.4 LTS, and Ubuntu 12.04.2 LTS
 
 Class documentation is available via puppetdoc.
 

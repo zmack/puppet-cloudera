@@ -71,6 +71,26 @@ describe 'cloudera::gplextras::repo', :type => 'class' do
         :mode   => '0644'
       )}
     end
+
+    describe 'Debian 6' do
+      let :facts do {
+        :osfamily               => 'Debian',
+        :operatingsystem        => 'Debian',
+        :operatingsystemrelease => '6.0.7',
+        :architecture           => 'amd64',
+        :lsbdistcodename        => 'squeeze'
+      }
+      end
+      it { should compile.with_all_deps }
+      it { should contain_class('apt') }
+      it { should contain_apt__source('cloudera-gplextras4').with(
+        :location   => 'http://archive.cloudera.com/gplextras/debian/squeeze/amd64/gplextras/',
+        :release    => 'squeeze-gplextras4',
+        :repos      => 'contrib',
+        :key        => 'false',
+        :key_source => 'http://archive.cloudera.com/gplextras/debian/squeeze/amd64/gplextras/archive.key'
+      )}
+    end
   end
 
   context 'on a supported operatingsystem, custom parameters' do

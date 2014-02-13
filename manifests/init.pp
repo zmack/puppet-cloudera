@@ -214,6 +214,8 @@ class cloudera (
   class { 'cloudera::java':
     ensure      => $ensure,
     autoupgrade => $autoupgrade,
+    require     => Anchor['cloudera::begin'],
+    before      => Anchor['cloudera::end'],
   }
   class { 'cloudera::cm':
     ensure           => $ensure,
@@ -224,6 +226,8 @@ class cloudera (
     server_port      => $cm_server_port,
     use_tls          => $use_tls,
     verify_cert_file => $verify_cert_file,
+    require          => Anchor['cloudera::begin'],
+    before           => Anchor['cloudera::end'],
   }
   # Skip installing the CDH RPMs if we are going to use parcels.
   if $use_parcels {
@@ -235,12 +239,14 @@ class cloudera (
       proxy          => $proxy,
       proxy_username => $proxy_username,
       proxy_password => $proxy_password,
+      require        => Anchor['cloudera::begin'],
+      before         => Anchor['cloudera::end'],
     }
-    Anchor['cloudera::begin'] ->
-    Class['cloudera::cm::repo'] ->
-    Class['cloudera::java'] ->
-    Class['cloudera::cm'] ->
-    Anchor['cloudera::end']
+#    Anchor['cloudera::begin'] ->
+#    Class['cloudera::cm::repo'] ->
+#    Class['cloudera::java'] ->
+#    Class['cloudera::cm'] ->
+#    Anchor['cloudera::end']
   } else {
     class { 'cloudera::cdh::repo':
       ensure         => $ensure,
@@ -250,6 +256,8 @@ class cloudera (
       proxy          => $proxy,
       proxy_username => $proxy_username,
       proxy_password => $proxy_password,
+      require        => Anchor['cloudera::begin'],
+      before         => Anchor['cloudera::end'],
     }
     class { 'cloudera::impala::repo':
       ensure         => $ensure,
@@ -259,6 +267,8 @@ class cloudera (
       proxy          => $proxy,
       proxy_username => $proxy_username,
       proxy_password => $proxy_password,
+      require        => Anchor['cloudera::begin'],
+      before         => Anchor['cloudera::end'],
     }
     class { 'cloudera::search::repo':
       ensure         => $ensure,
@@ -268,6 +278,8 @@ class cloudera (
       proxy          => $proxy,
       proxy_username => $proxy_username,
       proxy_password => $proxy_password,
+      require        => Anchor['cloudera::begin'],
+      before         => Anchor['cloudera::end'],
     }
     class { 'cloudera::cm::repo':
       ensure         => $ensure,
@@ -277,24 +289,32 @@ class cloudera (
       proxy          => $proxy,
       proxy_username => $proxy_username,
       proxy_password => $proxy_password,
+      require        => Anchor['cloudera::begin'],
+      before         => Anchor['cloudera::end'],
     }
     class { 'cloudera::cdh':
       ensure         => $ensure,
       autoupgrade    => $autoupgrade,
       service_ensure => $service_ensure,
 #      service_enable => $service_enable,
+      require        => Anchor['cloudera::begin'],
+      before         => Anchor['cloudera::end'],
     }
     class { 'cloudera::impala':
       ensure         => $ensure,
       autoupgrade    => $autoupgrade,
       service_ensure => $service_ensure,
 #      service_enable => $service_enable,
+      require        => Anchor['cloudera::begin'],
+      before         => Anchor['cloudera::end'],
     }
     class { 'cloudera::search':
       ensure         => $ensure,
       autoupgrade    => $autoupgrade,
       service_ensure => $service_ensure,
 #      service_enable => $service_enable,
+      require        => Anchor['cloudera::begin'],
+      before         => Anchor['cloudera::end'],
     }
     if $use_gplextras {
       class { 'cloudera::gplextras::repo':
@@ -305,26 +325,30 @@ class cloudera (
         proxy          => $proxy,
         proxy_username => $proxy_username,
         proxy_password => $proxy_password,
+        require        => Anchor['cloudera::begin'],
+        before         => Anchor['cloudera::end'],
       }
       class { 'cloudera::gplextras':
         ensure      => $ensure,
         autoupgrade => $autoupgrade,
+        require     => Anchor['cloudera::begin'],
+        before      => Anchor['cloudera::end'],
       }
-      Anchor['cloudera::begin'] ->
-      Class['cloudera::gplextras::repo'] ->
-      Class['cloudera::gplextras'] ->
-      Anchor['cloudera::end']
+#      Anchor['cloudera::begin'] ->
+#      Class['cloudera::gplextras::repo'] ->
+#      Class['cloudera::gplextras'] ->
+#      Anchor['cloudera::end']
     }
-    Anchor['cloudera::begin'] ->
-    Class['cloudera::cm::repo'] ->
-    Class['cloudera::cdh::repo'] ->
-    Class['cloudera::impala::repo'] ->
-    Class['cloudera::search::repo'] ->
-    Class['cloudera::java'] ->
-    Class['cloudera::cdh'] ->
-    Class['cloudera::impala'] ->
-    Class['cloudera::search'] ->
-    Class['cloudera::cm'] ->
-    Anchor['cloudera::end']
+#    Anchor['cloudera::begin'] ->
+#    Class['cloudera::cm::repo'] ->
+#    Class['cloudera::cdh::repo'] ->
+#    Class['cloudera::impala::repo'] ->
+#    Class['cloudera::search::repo'] ->
+#    Class['cloudera::java'] ->
+#    Class['cloudera::cdh'] ->
+#    Class['cloudera::impala'] ->
+#    Class['cloudera::search'] ->
+#    Class['cloudera::cm'] ->
+#    Anchor['cloudera::end']
   }
 }

@@ -61,6 +61,7 @@ class cloudera::impala::repo (
   $ci_yumserver   = $cloudera::params::ci_yumserver,
   $ci_yumpath     = $cloudera::params::ci_yumpath,
   $ci_version     = $cloudera::params::ci_version,
+  $aptkey         = $cloudera::params::ci_aptkey,
   $proxy          = $cloudera::params::proxy,
   $proxy_username = $cloudera::params::proxy_username,
   $proxy_password = $cloudera::params::proxy_password
@@ -120,6 +121,20 @@ class cloudera::impala::repo (
       }
 
       Zypprepo['cloudera-impala'] -> Package<|tag == 'cloudera-impala'|>
+    }
+    'Debian', 'Ubuntu': {
+      include '::apt'
+
+      apt::source { 'cloudera-impala':
+        location     => "${ci_yumserver}${ci_yumpath}",
+        release      => "${::lsbdistcodename}-impala${ci_version}",
+        repos        => 'contrib',
+        key          => $aptkey,
+        key_source   => "${ci_yumserver}${ci_yumpath}archive.key",
+#        architecture => $::architecture,
+      }
+
+      Apt::Source['cloudera-impala'] -> Package<|tag == 'cloudera-impala'|>
     }
     default: { }
   }

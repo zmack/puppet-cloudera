@@ -19,11 +19,16 @@ class cloudera::cdh::sqoop::metastore {
     tag    => 'cloudera-cdh4',
   }
 
-  service { 'sqoop-metastore':
-    ensure     => running,
-    enable     => true,
-    hasstatus  => true,
-    hasrestart => true,
-    require    => Package['sqoop-metastore'],
+  case $::operatingsystem {
+    'CentOS', 'RedHat', 'OEL', 'OracleLinux', 'SLES', 'Debian': {
+      service { 'sqoop-metastore':
+        ensure     => running,
+        enable     => true,
+        hasstatus  => true,
+        hasrestart => true,
+        require    => Package['sqoop-metastore'],
+      }
+    }
+    default: { }
   }
 }
