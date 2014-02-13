@@ -22,10 +22,15 @@ class cloudera::cdh::hue {
     tag    => 'cloudera-cdh4',
   }
 
-  service { 'hue':
-#   ensure    => 'stopped',
-    enable    => false,
-    hasstatus => true,
-    require   => Package['hue'],
+  case $::operatingsystem {
+    'CentOS', 'RedHat', 'OEL', 'OracleLinux', 'SLES', 'Debian': {
+      service { 'hue':
+#       ensure    => 'stopped',
+        enable    => false,
+        hasstatus => true,
+        require   => Package['hue'],
+      }
+    }
+    default: { }
   }
 }

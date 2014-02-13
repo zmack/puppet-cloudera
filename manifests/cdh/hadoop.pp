@@ -37,6 +37,7 @@ class cloudera::cdh::hadoop {
   package { 'hadoop-httpfs':
     ensure => 'present',
     tag    => 'cloudera-cdh4',
+    notify => Exec['service hadoop-httpfs stop'],
   }
 
   package { 'hadoop-mapreduce':
@@ -52,6 +53,11 @@ class cloudera::cdh::hadoop {
   package { 'hadoop-0.20-mapreduce':
     ensure => 'present',
     tag    => 'cloudera-cdh4',
+  }
+
+  exec { 'service hadoop-httpfs stop':
+    path        => '/bin:/usr/bin:/sbin:/usr/sbin',
+    refreshonly => true,
   }
 
   service { 'hadoop-httpfs':

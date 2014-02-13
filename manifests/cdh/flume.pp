@@ -26,11 +26,16 @@ class cloudera::cdh::flume {
     tag    => 'cloudera-cdh4',
   }
 
-  service { 'flume-ng':
-#    ensure     => 'running',
-    enable     => false,
-    hasstatus  => false,
-    hasrestart => true,
-    require    => Package['flume-ng'],
+  case $::operatingsystem {
+    'CentOS', 'RedHat', 'OEL', 'OracleLinux', 'SLES', 'Debian': {
+      service { 'flume-ng':
+#        ensure     => 'running',
+        enable     => false,
+        hasstatus  => false,
+        hasrestart => true,
+        require    => Package['flume-ng'],
+      }
+    }
+    default: { }
   }
 }
