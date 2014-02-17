@@ -147,7 +147,9 @@
 #
 # === Requires:
 #
-# Nothing.
+# Package['jdk'] which is provided by Class['cloudera::java'].  If parameter
+# "$install_java => false", then an external Puppet module will have to install
+# the Sun/Oracle JDK and provide a Package['jdk'] resource.
 #
 # === Sample Usage:
 #
@@ -251,7 +253,8 @@ class cloudera (
     server_port      => $cm_server_port,
     use_tls          => $use_tls,
     verify_cert_file => $verify_cert_file,
-    require          => Anchor['cloudera::begin'],
+    require          => [ Anchor['cloudera::begin'], Package['jdk'], ],
+#    require          => Anchor['cloudera::begin'],
     before           => Anchor['cloudera::end'],
   }
   # Skip installing the CDH RPMs if we are going to use parcels.
