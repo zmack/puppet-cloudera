@@ -170,6 +170,26 @@ class cloudera::params {
     $safe_use_gplextras = $use_gplextras
   }
 
+  $install_java = $::cloudera_install_java ? {
+    undef => true,
+    default => $::cloudera_install_java,
+  }
+  if is_string($install_java) {
+    $safe_install_java = str2bool($install_java)
+  } else {
+    $safe_install_java = $install_java
+  }
+
+  $install_jce = $::cloudera_install_jce ? {
+    undef => false,
+    default => $::cloudera_install_jce,
+  }
+  if is_string($install_jce) {
+    $safe_install_jce = str2bool($install_jce)
+  } else {
+    $safe_install_jce = $install_jce
+  }
+
   if $::operatingsystemmajrelease { # facter 1.7+
     $majdistrelease = $::operatingsystemmajrelease
   } elsif $::lsbmajdistrelease {    # requires LSB to already be installed

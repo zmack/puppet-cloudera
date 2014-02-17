@@ -26,9 +26,10 @@ describe 'cloudera', :type => 'class' do
     end
     it { should compile.with_all_deps }
     it { should contain_class('cloudera::java').with_ensure('present') }
+    it { should_not contain_class('cloudera::java::jce') }
+    it { should contain_class('cloudera::cm::repo').with_ensure('present') }
     it { should contain_class('cloudera::cm').with_ensure('present') }
     it { should_not contain_class('cloudera::cdh::repo') }
-    it { should contain_class('cloudera::cm::repo').with_ensure('present') }
     it { should_not contain_class('cloudera::cdh') }
   end
 
@@ -57,6 +58,18 @@ describe 'cloudera', :type => 'class' do
       it { should contain_class('cloudera::impala').with_ensure('present') }
       it { should contain_class('cloudera::search::repo').with_ensure('present') }
       it { should contain_class('cloudera::search').with_ensure('present') }
+    end
+
+    describe 'install_java => false' do
+      let(:params) {{ :install_java => false }}
+      it { should_not contain_class('cloudera::java') }
+      it { should_not contain_class('cloudera::java::jce') }
+    end
+
+    describe 'install_jce => true' do
+      let(:params) {{ :install_jce => true }}
+      it { should contain_class('cloudera::java').with_ensure('present') }
+      it { should contain_class('cloudera::java::jce').with_ensure('present') }
     end
   end
 

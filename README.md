@@ -195,8 +195,8 @@ There are some settings inside CM that can only be configured manually.  See the
 class { 'cloudera':
   server_host => 'smhost.example.com',
   use_tls     => true,
-} ->
-class { 'cloudera::java::jce': }
+  install_jce => true,
+}
 file { '/etc/pki/tls/certs/cloudera_manager.crt': }
 ```
 
@@ -205,8 +205,8 @@ file { '/etc/pki/tls/certs/cloudera_manager.crt': }
 class { 'cloudera':
   server_host => 'smhost.example.com',
   use_tls     => true,
+  install_jce => true,
 } ->
-class { 'cloudera::java::jce': } ->
 class { 'cloudera::cm::server':
   use_tls      => true,
   server_keypw => 'myPassWord',
