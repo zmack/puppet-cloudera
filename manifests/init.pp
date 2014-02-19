@@ -260,20 +260,19 @@ class cloudera (
     require          => $cloudera_cm_require,
     before           => Anchor['cloudera::end'],
   }
+  class { 'cloudera::cm::repo':
+    ensure         => $ensure,
+    yumserver      => $cm_yumserver,
+    yumpath        => $cm_yumpath,
+    version        => $cm_version,
+    proxy          => $proxy,
+    proxy_username => $proxy_username,
+    proxy_password => $proxy_password,
+    require        => Anchor['cloudera::begin'],
+    before         => Anchor['cloudera::end'],
+  }
   # Skip installing the CDH RPMs if we are going to use parcels.
-  if $use_parcels {
-    class { 'cloudera::cm::repo':
-      ensure         => $ensure,
-      yumserver      => $cm_yumserver,
-      yumpath        => $cm_yumpath,
-      version        => $cm_version,
-      proxy          => $proxy,
-      proxy_username => $proxy_username,
-      proxy_password => $proxy_password,
-      require        => Anchor['cloudera::begin'],
-      before         => Anchor['cloudera::end'],
-    }
-  } else {
+  if ! $use_parcels {
     class { 'cloudera::cdh::repo':
       ensure         => $ensure,
       yumserver      => $cdh_yumserver,
@@ -301,17 +300,6 @@ class cloudera (
       yumserver      => $cs_yumserver,
       yumpath        => $cs_yumpath,
       version        => $cs_version,
-      proxy          => $proxy,
-      proxy_username => $proxy_username,
-      proxy_password => $proxy_password,
-      require        => Anchor['cloudera::begin'],
-      before         => Anchor['cloudera::end'],
-    }
-    class { 'cloudera::cm::repo':
-      ensure         => $ensure,
-      yumserver      => $cm_yumserver,
-      yumpath        => $cm_yumpath,
-      version        => $cm_version,
       proxy          => $proxy,
       proxy_username => $proxy_username,
       proxy_password => $proxy_password,
