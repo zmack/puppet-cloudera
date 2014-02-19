@@ -12,7 +12,7 @@ This module manages the installation of [Cloudera Manager](http://www.cloudera.c
 Actions:
 
 * Installs the Cloudera software repository for CM.
-* Installs Oracle JDK 6.
+* Installs Oracle Java Development Kit (JDK) 6.
 * Installs CM 4 agent.
 * Configures the CM agent to talk to a CM server.
 * Starts the CM agent.
@@ -64,11 +64,11 @@ This class handles installing the Cloudera Manager software repository.
 
 ### Class['cloudera::java']
 
-This class handles installing the Oracle JDK from the Cloudera Manager repository.
+This class handles installing the Oracle Java Development Kit (JDK) from the Cloudera Manager repository.
 
 ### Class['cloudera::java::jce']
 
-This class handles installing the Oracle Java Cryptography Extension (JCE) unlimited strength jurisdiction policy files.  Manual setup is requied in order to download the required software from Oracle.  See the files/README_JCE.md file for details.
+This class handles installing the Oracle Java Cryptography Extension (JCE) unlimited strength jurisdiction policy files.  Set the parameter `install_jce => true` in `Class['cloudera']`.  Manual setup is requied in order to download the required software from Oracle.  See the files/README_JCE.md file for details.
 
 ### Class['cloudera::cm']
 
@@ -195,8 +195,8 @@ There are some settings inside CM that can only be configured manually.  See the
 class { 'cloudera':
   server_host => 'smhost.example.com',
   use_tls     => true,
-} ->
-class { 'cloudera::java::jce': }
+  install_jce => true,
+}
 file { '/etc/pki/tls/certs/cloudera_manager.crt': }
 ```
 
@@ -205,8 +205,8 @@ file { '/etc/pki/tls/certs/cloudera_manager.crt': }
 class { 'cloudera':
   server_host => 'smhost.example.com',
   use_tls     => true,
+  install_jce => true,
 } ->
-class { 'cloudera::java::jce': } ->
 class { 'cloudera::cm::server':
   use_tls      => true,
   server_keypw => 'myPassWord',

@@ -117,6 +117,18 @@
 #   Whether to install the GPL LZO compression libraries.
 #   Default: false
 #
+# [*install_java*]
+#   Whether to install the Cloudera supplied Oracle Java Development Kit.  If
+#   this is set to false, then an Oracle JDK will have to be installed prior to
+#   applying this module.
+#   Default: true
+#
+# [*install_jce*]
+#   Whether to install the Oracle Java Cryptography Extension unlimited
+#   strength jurisdiction policy files.  This requires manual download of the
+#   zip file.  See files/README_JCE.md for download instructions.
+#   Default: false
+#
 # [*proxy*]
 #   The URL to the proxy server for the YUM repositories.
 #   Default: absent
@@ -135,7 +147,9 @@
 #
 # === Requires:
 #
-# Nothing.
+# Package['jdk'] which is provided by Class['cloudera::java'].  If parameter
+# "$install_java => false", then an external Puppet module will have to install
+# the Sun/Oracle JDK and provide a Package['jdk'] resource.
 #
 # === Sample Usage:
 #
@@ -191,6 +205,8 @@ class cloudera (
   $verify_cert_file = $cloudera::params::verify_cert_file,
   $use_parcels      = $cloudera::params::safe_use_parcels,
   $use_gplextras    = $cloudera::params::safe_use_gplextras,
+  $install_java     = $cloudera::params::safe_install_java,
+  $install_jce      = $cloudera::params::safe_install_jce,
   $proxy            = $cloudera::params::proxy,
   $proxy_username   = $cloudera::params::proxy_username,
   $proxy_password   = $cloudera::params::proxy_password
@@ -201,6 +217,8 @@ class cloudera (
   validate_bool($use_tls)
   validate_bool($use_parcels)
   validate_bool($use_gplextras)
+  validate_bool($install_java)
+  validate_bool($install_jce)
 
 #  Package { provider => $cloudera::params::package_provider }
 #  case $::operatingsystem {
@@ -211,12 +229,31 @@ class cloudera (
   anchor { 'cloudera::begin': }
   anchor { 'cloudera::end': }
 
-  class { 'cloudera::java':
-    ensure      => $ensure,
-    autoupgrade => $autoupgrade,
-    require     => Anchor['cloudera::begin'],
-    before      => Anchor['cloudera::end'],
+  if $install_java {
+    Class['cloudera::cm::repo'] -> Class['cloudera::java']
+    class { 'cloudera::java':
+      ensure      => $ensure,
+      autoupgrade => $autoupgrade,
+      require     => Anchor['cloudera::begin'],
+      before      => Anchor['cloudera::end'],
+    }
+    if $install_jce {
+      class { 'cloudera::java::jce':
+        ensure  => $ensure,
+        require => [ Anchor['cloudera::begin'], Class['cloudera::java'], ],
+        before  => Anchor['cloudera::end'],
+      }
+    }
+    $cloudera_cm_require = [ Anchor['cloudera::begin'], Class[cloudera::java], ]
+  } else {
+    $cloudera_cm_require = Anchor['cloudera::begin']
   }
+#  Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-manager'|>
+#  Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-gplextras'|>
+#  Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-search'|>
+#  Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-cdh4'|>
+#  Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-impala'|>
+
   class { 'cloudera::cm':
     ensure           => $ensure,
     autoupgrade      => $autoupgrade,
@@ -226,7 +263,7 @@ class cloudera (
     server_port      => $cm_server_port,
     use_tls          => $use_tls,
     verify_cert_file => $verify_cert_file,
-    require          => Anchor['cloudera::begin'],
+    require          => $cloudera_cm_require,
     before           => Anchor['cloudera::end'],
   }
   # Skip installing the CDH RPMs if we are going to use parcels.
