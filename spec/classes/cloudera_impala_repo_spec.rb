@@ -114,9 +114,9 @@ describe 'cloudera::impala::repo', :type => 'class' do
 
     describe 'all other parameters' do
       let :params do {
-        :ci_yumserver   => 'http://localhost',
-        :ci_yumpath     => '/somepath/2/',
-        :ci_version     => '777',
+        :yumserver      => 'http://localhost',
+        :yumpath        => '/somepath/2/',
+        :version        => '777',
         :proxy          => 'http://proxy:3128/',
         :proxy_username => 'myUser',
         :proxy_password => 'myPass'
