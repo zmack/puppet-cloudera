@@ -220,12 +220,6 @@ class cloudera (
   validate_bool($install_java)
   validate_bool($install_jce)
 
-#  Package { provider => $cloudera::params::package_provider }
-#  case $::operatingsystem {
-#    'SLES': { Package { provider => 'zypper' } }
-#    default: { }
-#  }
-
   anchor { 'cloudera::begin': }
   anchor { 'cloudera::end': }
 
@@ -279,11 +273,6 @@ class cloudera (
       require        => Anchor['cloudera::begin'],
       before         => Anchor['cloudera::end'],
     }
-#    Anchor['cloudera::begin'] ->
-#    Class['cloudera::cm::repo'] ->
-#    Class['cloudera::java'] ->
-#    Class['cloudera::cm'] ->
-#    Anchor['cloudera::end']
   } else {
     class { 'cloudera::cdh::repo':
       ensure         => $ensure,
@@ -371,21 +360,6 @@ class cloudera (
         require     => Anchor['cloudera::begin'],
         before      => Anchor['cloudera::end'],
       }
-#      Anchor['cloudera::begin'] ->
-#      Class['cloudera::gplextras::repo'] ->
-#      Class['cloudera::gplextras'] ->
-#      Anchor['cloudera::end']
     }
-#    Anchor['cloudera::begin'] ->
-#    Class['cloudera::cm::repo'] ->
-#    Class['cloudera::cdh::repo'] ->
-#    Class['cloudera::impala::repo'] ->
-#    Class['cloudera::search::repo'] ->
-#    Class['cloudera::java'] ->
-#    Class['cloudera::cdh'] ->
-#    Class['cloudera::impala'] ->
-#    Class['cloudera::search'] ->
-#    Class['cloudera::cm'] ->
-#    Anchor['cloudera::end']
   }
 }
