@@ -230,6 +230,7 @@ class cloudera (
   anchor { 'cloudera::end': }
 
   if $install_java {
+    Class['cloudera::cm::repo'] -> Class['cloudera::java']
     class { 'cloudera::java':
       ensure      => $ensure,
       autoupgrade => $autoupgrade,
@@ -243,7 +244,16 @@ class cloudera (
         before  => Anchor['cloudera::end'],
       }
     }
+    $cloudera_cm_require = [ Anchor['cloudera::begin'], Class[cloudera::java], ]
+  } else {
+    $cloudera_cm_require = Anchor['cloudera::begin']
   }
+#  Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-manager'|>
+#  Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-gplextras'|>
+#  Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-search'|>
+#  Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-cdh4'|>
+#  Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-impala'|>
+
   class { 'cloudera::cm':
     ensure           => $ensure,
     autoupgrade      => $autoupgrade,
@@ -253,8 +263,7 @@ class cloudera (
     server_port      => $cm_server_port,
     use_tls          => $use_tls,
     verify_cert_file => $verify_cert_file,
-    require          => [ Anchor['cloudera::begin'], Package['jdk'], ],
-#    require          => Anchor['cloudera::begin'],
+    require          => $cloudera_cm_require,
     before           => Anchor['cloudera::end'],
   }
   # Skip installing the CDH RPMs if we are going to use parcels.

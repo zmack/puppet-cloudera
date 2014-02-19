@@ -43,6 +43,8 @@ class cloudera::java (
   # Validate our booleans
   validate_bool($autoupgrade)
 
+  tag 'jdk', 'oracle'
+
   case $ensure {
     /(present)/: {
       if $autoupgrade == true {
@@ -68,7 +70,7 @@ class cloudera::java (
   package { 'jdk':
     ensure  => $package_ensure,
     name    => $package_name,
-    tag     => 'cloudera-manager',
+    tag     => [ 'cloudera-manager', 'jdk', 'oracle', ],
     require => Anchor['cloudera::java::begin'],
     before  => Anchor['cloudera::java::end'],
   }
