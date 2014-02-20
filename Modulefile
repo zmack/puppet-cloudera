@@ -1,5 +1,5 @@
 name 'razorsedge-cloudera'
-version '0.9.2'
+version '1.0.0'
 author 'razorsedge'
 license 'Apache License, Version 2.0'
 project_page 'https://github.com/razorsedge/puppet-cloudera'
