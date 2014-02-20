@@ -131,7 +131,7 @@ class cloudera::cdh::repo (
         repos        => 'contrib',
         key          => $aptkey,
         key_source   => "${yumserver}${yumpath}archive.key",
-#        architecture => $::architecture,
+        architecture => $cloudera::params::architecture,
       }
 
       Apt::Source['cloudera-cdh4'] -> Package<|tag == 'cloudera-cdh4'|>

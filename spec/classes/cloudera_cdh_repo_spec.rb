@@ -88,11 +88,12 @@ describe 'cloudera::cdh::repo', :type => 'class' do
       it { should compile.with_all_deps }
       it { should contain_class('apt') }
       it { should contain_apt__source('cloudera-cdh4').with(
-        :location   => 'http://archive.cloudera.com/cdh4/debian/squeeze/amd64/cdh/',
-        :release    => 'squeeze-cdh4',
-        :repos      => 'contrib',
-        :key        => 'false',
-        :key_source => 'http://archive.cloudera.com/cdh4/debian/squeeze/amd64/cdh/archive.key'
+        :location     => 'http://archive.cloudera.com/cdh4/debian/squeeze/amd64/cdh/',
+        :release      => 'squeeze-cdh4',
+        :repos        => 'contrib',
+        :key          => 'false',
+        :key_source   => 'http://archive.cloudera.com/cdh4/debian/squeeze/amd64/cdh/archive.key',
+        :architecture => nil
       )}
       it { should_not contain_apt__source('cloudera-impala') }
       it { should_not contain_apt__source('cloudera-manager') }

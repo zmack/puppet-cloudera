@@ -84,11 +84,12 @@ describe 'cloudera::search::repo', :type => 'class' do
       it { should compile.with_all_deps }
       it { should contain_class('apt') }
       it { should contain_apt__source('cloudera-search').with(
-        :location   => 'http://archive.cloudera.com/search/debian/squeeze/amd64/search/',
-        :release    => 'squeeze-search1',
-        :repos      => 'contrib',
-        :key        => 'false',
-        :key_source => 'http://archive.cloudera.com/search/debian/squeeze/amd64/search/archive.key'
+        :location     => 'http://archive.cloudera.com/search/debian/squeeze/amd64/search/',
+        :release      => 'squeeze-search1',
+        :repos        => 'contrib',
+        :key          => 'false',
+        :key_source   => 'http://archive.cloudera.com/search/debian/squeeze/amd64/search/archive.key',
+        :architecture => nil
       )}
     end
   end

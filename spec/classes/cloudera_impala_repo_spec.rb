@@ -86,11 +86,12 @@ describe 'cloudera::impala::repo', :type => 'class' do
       it { should compile.with_all_deps }
       it { should contain_class('apt') }
       it { should contain_apt__source('cloudera-impala').with(
-        :location   => 'http://archive.cloudera.com/impala/debian/squeeze/amd64/impala/',
-        :release    => 'squeeze-impala1',
-        :repos      => 'contrib',
-        :key        => 'false',
-        :key_source => 'http://archive.cloudera.com/impala/debian/squeeze/amd64/impala/archive.key'
+        :location     => 'http://archive.cloudera.com/impala/debian/squeeze/amd64/impala/',
+        :release      => 'squeeze-impala1',
+        :repos        => 'contrib',
+        :key          => 'false',
+        :key_source   => 'http://archive.cloudera.com/impala/debian/squeeze/amd64/impala/archive.key',
+        :architecture => nil
       )}
       it { should_not contain_apt__source('cloudera-manager') }
     end

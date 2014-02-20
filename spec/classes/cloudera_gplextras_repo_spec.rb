@@ -84,11 +84,12 @@ describe 'cloudera::gplextras::repo', :type => 'class' do
       it { should compile.with_all_deps }
       it { should contain_class('apt') }
       it { should contain_apt__source('cloudera-gplextras4').with(
-        :location   => 'http://archive.cloudera.com/gplextras/debian/squeeze/amd64/gplextras/',
-        :release    => 'squeeze-gplextras4',
-        :repos      => 'contrib',
-        :key        => 'false',
-        :key_source => 'http://archive.cloudera.com/gplextras/debian/squeeze/amd64/gplextras/archive.key'
+        :location     => 'http://archive.cloudera.com/gplextras/debian/squeeze/amd64/gplextras/',
+        :release      => 'squeeze-gplextras4',
+        :repos        => 'contrib',
+        :key          => 'false',
+        :key_source   => 'http://archive.cloudera.com/gplextras/debian/squeeze/amd64/gplextras/archive.key',
+        :architecture => nil
       )}
     end
   end

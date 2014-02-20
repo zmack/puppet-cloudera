@@ -94,11 +94,35 @@ describe 'cloudera::cm::repo', :type => 'class' do
       it { should compile.with_all_deps }
       it { should contain_class('apt') }
       it { should contain_apt__source('cloudera-manager').with(
-        :location   => 'http://archive.cloudera.com/cm4/debian/squeeze/amd64/cm/',
-        :release    => 'squeeze-cm4',
-        :repos      => 'contrib',
-        :key        => '327574EE02A818DD',
-        :key_source => 'http://archive.cloudera.com/cm4/debian/squeeze/amd64/cm/archive.key'
+        :location     => 'http://archive.cloudera.com/cm4/debian/squeeze/amd64/cm/',
+        :release      => 'squeeze-cm4',
+        :repos        => 'contrib',
+        :key          => '327574EE02A818DD',
+        :key_source   => 'http://archive.cloudera.com/cm4/debian/squeeze/amd64/cm/archive.key',
+        :architecture => nil
+      )}
+      it { should_not contain_apt__source('cloudera-cdh4') }
+      it { should_not contain_apt__source('cloudera-impala') }
+    end
+
+    describe 'Ubuntu 12.04.2' do
+      let :facts do {
+        :osfamily               => 'Debian',
+        :operatingsystem        => 'Ubuntu',
+        :operatingsystemrelease => '12.04.2',
+        :architecture           => 'amd64',
+        :lsbdistcodename        => 'precise'
+      }
+      end
+      it { should compile.with_all_deps }
+      it { should contain_class('apt') }
+      it { should contain_apt__source('cloudera-manager').with(
+        :location     => 'http://archive.cloudera.com/cm4/ubuntu/precise/amd64/cm/',
+        :release      => 'precise-cm4',
+        :repos        => 'contrib',
+        :key          => '327574EE02A818DD',
+        :key_source   => 'http://archive.cloudera.com/cm4/ubuntu/precise/amd64/cm/archive.key',
+        :architecture => 'amd64'
       )}
       it { should_not contain_apt__source('cloudera-cdh4') }
       it { should_not contain_apt__source('cloudera-impala') }

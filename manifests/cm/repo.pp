@@ -138,7 +138,7 @@ class cloudera::cm::repo (
         repos        => 'contrib',
         key          => $aptkey,
         key_source   => "${yumserver}${yumpath}archive.key",
-#        architecture => $::architecture,
+        architecture => $cloudera::params::architecture,
       }
 
       Apt::Source['cloudera-manager'] -> Package<|tag == 'cloudera-manager'|>

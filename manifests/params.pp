@@ -236,6 +236,7 @@ class cloudera::params {
       $ci_aptkey = false
       $cs_aptkey = false
       $cg_aptkey = false
+      $architecture = undef
     }
     'Ubuntu': {
       $java_package_name = 'oracle-j2sdk1.6'
@@ -249,6 +250,10 @@ class cloudera::params {
       $ci_aptkey = false
       $cs_aptkey = false
       $cg_aptkey = false
+      case $::lsbdistcodename {
+        'lucid': { $architecture = undef }
+        default: { $architecture = $::architecture }
+      }
     }
     default: {
       fail("Module ${module_name} is not supported on ${::operatingsystem}")
