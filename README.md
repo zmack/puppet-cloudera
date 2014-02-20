@@ -25,7 +25,7 @@ Optional Actions (non-parcel):
 * Installs most components of CDH 4.
 * Installs Impala 1.
 * Installs Search 1.
-* Installs GPL Extras (LZO) 4.
+* Optionally installs GPL Extras (LZO) 4.
 
 Software Support:
 
@@ -238,6 +238,7 @@ Notes
 * TLS certificates must be in PEM format and are not deployed by this module.
 * When using parcels, the CDH software is not deployed by Puppet.  Puppet will only install the Cloudera Manager server/agent.  You must then configure Cloudera Manager to deploy the parcels.
 * When installing packages and not parcels on SLES, SP2 is required as the hadoop-2.0.0+1518-1.cdh4.5.0.p0.24.sles11.x86_64 package requires netcat-openbsd which is not avalable on SLES 11SP1.
+* Osfamily RedHat 5 requires the EPEL YUM repository when installing LZO support.
 
 Issues
 ------
@@ -289,10 +290,10 @@ would become this:
 
 ```puppet
 class { 'cloudera::cdh::repo':
-  cdh_version => '4.1',
+  version => '4.1',
 }
 class { 'cloudera::impala::repo':
-  ci_version => '4.1',
+  version => '4.1',
 }
 ```
 
