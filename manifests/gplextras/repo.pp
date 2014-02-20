@@ -61,6 +61,7 @@ class cloudera::gplextras::repo (
   $yumserver      = $cloudera::params::cg_yumserver,
   $yumpath        = $cloudera::params::cg_yumpath,
   $version        = $cloudera::params::cg_version,
+  $aptkey         = $cloudera::params::cg_aptkey,
   $proxy          = $cloudera::params::proxy,
   $proxy_username = $cloudera::params::proxy_username,
   $proxy_password = $cloudera::params::proxy_password
@@ -100,6 +101,40 @@ class cloudera::gplextras::repo (
       }
 
       Yumrepo['cloudera-gplextras4'] -> Package<|tag == 'cloudera-gplextras'|>
+    }
+    'SLES': {
+      zypprepo { 'cloudera-gplextras4':
+        descr       => 'Cloudera GPL Extras',
+        enabled     => $enabled,
+        gpgcheck    => 1,
+        gpgkey      => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
+        baseurl     => "${yumserver}${yumpath}${version}/",
+        autorefresh => 1,
+        priority    => $cloudera::params::yum_priority,
+      }
+
+      file { '/etc/zypp/repos.d/cloudera-gplextras4.repo':
+        ensure => 'file',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+      }
+
+      Zypprepo['cloudera-gplextras4'] -> Package<|tag == 'cloudera-gplextras'|>
+    }
+    'Debian', 'Ubuntu': {
+      include '::apt'
+
+      apt::source { 'cloudera-gplextras4':
+        location     => "${yumserver}${yumpath}",
+        release      => "${::lsbdistcodename}-gplextras${version}",
+        repos        => 'contrib',
+        key          => $aptkey,
+        key_source   => "${yumserver}${yumpath}archive.key",
+        architecture => $cloudera::params::architecture,
+      }
+
+      Apt::Source['cloudera-gplextras4'] -> Package<|tag == 'cloudera-gplextras'|>
     }
     default: { }
   }

@@ -170,6 +170,26 @@ class cloudera::params {
     $safe_use_gplextras = $use_gplextras
   }
 
+  $install_java = $::cloudera_install_java ? {
+    undef => true,
+    default => $::cloudera_install_java,
+  }
+  if is_string($install_java) {
+    $safe_install_java = str2bool($install_java)
+  } else {
+    $safe_install_java = $install_java
+  }
+
+  $install_jce = $::cloudera_install_jce ? {
+    undef => false,
+    default => $::cloudera_install_jce,
+  }
+  if is_string($install_jce) {
+    $safe_install_jce = str2bool($install_jce)
+  } else {
+    $safe_install_jce = $install_jce
+  }
+
   if $::operatingsystemmajrelease { # facter 1.7+
     $majdistrelease = $::operatingsystemmajrelease
   } elsif $::lsbmajdistrelease {    # requires LSB to already be installed
@@ -188,11 +208,52 @@ class cloudera::params {
 
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OEL', 'OracleLinux': {
+      $java_package_name = 'jdk'
       $cdh_yumpath = "/cdh4/redhat/${majdistrelease}/${::architecture}/cdh/"
       $cm_yumpath = "/cm4/redhat/${majdistrelease}/${::architecture}/cm/"
       $ci_yumpath = "/impala/redhat/${majdistrelease}/${::architecture}/impala/"
       $cs_yumpath = "/search/redhat/${majdistrelease}/${::architecture}/search/"
       $cg_yumpath = "/gplextras/redhat/${majdistrelease}/${::architecture}/gplextras/"
+    }
+    'SLES': {
+      $java_package_name = 'jdk'
+      #$package_provider = 'zypper'
+      $cdh_yumpath = "/cdh4/sles/${majdistrelease}/${::architecture}/cdh/"
+      $cm_yumpath = "/cm4/sles/${majdistrelease}/${::architecture}/cm/"
+      $ci_yumpath = "/impala/sles/${majdistrelease}/${::architecture}/impala/"
+      $cs_yumpath = "/search/sles/${majdistrelease}/${::architecture}/search/"
+      $cg_yumpath = "/gplextras/sles/${majdistrelease}/${::architecture}/gplextras/"
+    }
+    'Debian': {
+      $java_package_name = 'oracle-j2sdk1.6'
+      $cdh_yumpath = "/cdh4/debian/${::lsbdistcodename}/${::architecture}/cdh/"
+      $cm_yumpath = "/cm4/debian/${::lsbdistcodename}/${::architecture}/cm/"
+      $ci_yumpath = "/impala/debian/${::lsbdistcodename}/${::architecture}/impala/"
+      $cs_yumpath = "/search/debian/${::lsbdistcodename}/${::architecture}/search/"
+      $cg_yumpath = "/gplextras/debian/${::lsbdistcodename}/${::architecture}/gplextras/"
+      $cdh_aptkey = false
+      $cm_aptkey = '327574EE02A818DD'
+      $ci_aptkey = false
+      $cs_aptkey = false
+      $cg_aptkey = false
+      $architecture = undef
+    }
+    'Ubuntu': {
+      $java_package_name = 'oracle-j2sdk1.6'
+      $cdh_yumpath = "/cdh4/ubuntu/${::lsbdistcodename}/${::architecture}/cdh/"
+      $cm_yumpath = "/cm4/ubuntu/${::lsbdistcodename}/${::architecture}/cm/"
+      $ci_yumpath = "/impala/ubuntu/${::lsbdistcodename}/${::architecture}/impala/"
+      $cs_yumpath = "/search/ubuntu/${::lsbdistcodename}/${::architecture}/search/"
+      $cg_yumpath = "/gplextras/ubuntu/${::lsbdistcodename}/${::architecture}/gplextras/"
+      $cdh_aptkey = false
+      $cm_aptkey = '327574EE02A818DD'
+      $ci_aptkey = false
+      $cs_aptkey = false
+      $cg_aptkey = false
+      case $::lsbdistcodename {
+        'lucid': { $architecture = undef }
+        default: { $architecture = $::architecture }
+      }
     }
     default: {
       fail("Module ${module_name} is not supported on ${::operatingsystem}")

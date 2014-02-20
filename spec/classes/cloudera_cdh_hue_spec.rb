@@ -18,13 +18,24 @@ describe 'cloudera::cdh::hue', :type => 'class' do
 #  end
 
   context 'on a supported operatingsystem, default parameters' do
-#    let(:params) {{}}
-#    let :facts do {
-#      :osfamily        => 'RedHat',
-#      :operatingsystem => 'CentOS'
-#    }
-#    end
-    it { should contain_package('hue').with_ensure('present') }
-    it { should contain_service('hue').with_enable('false') }
+    context 'CentOS' do
+#      let(:params) {{}}
+      let :facts do {
+        :osfamily        => 'RedHat',
+        :operatingsystem => 'CentOS'
+      }
+      end
+      it { should contain_package('hue').with_ensure('present') }
+      it { should contain_service('hue').with_enable('false') }
+    end
+
+    context 'Ubuntu' do
+      let :facts do {
+        :osfamily        => 'Debian',
+        :operatingsystem => 'Ubuntu'
+      }
+      end
+      it { should_not contain_service('hue') }
+    end
   end
 end

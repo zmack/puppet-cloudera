@@ -12,7 +12,7 @@ This module manages the installation of [Cloudera Manager](http://www.cloudera.c
 Actions:
 
 * Installs the Cloudera software repository for CM.
-* Installs Oracle JDK 6.
+* Installs Oracle Java Development Kit (JDK) 6.
 * Installs CM 4 agent.
 * Configures the CM agent to talk to a CM server.
 * Starts the CM agent.
@@ -25,21 +25,23 @@ Optional Actions (non-parcel):
 * Installs most components of CDH 4.
 * Installs Impala 1.
 * Installs Search 1.
-* Installs GPL Extras (LZO) 4.
+* Optionally installs GPL Extras (LZO) 4.
 
 Software Support:
 
-* Cloudera Manager - tested with 4.1.2 and 4.8.0
-* CDH              - tested with 4.1.2 and 4.8.0
-* Cloudera Impala  - tested with 1.0 and 1.2.3
-* Cloudera Search  - tested with 1.1.0
+* Cloudera Manager    - tested with 4.1.2 and 4.8.0
+* CDH                 - tested with 4.1.2 and 4.5.0
+* Cloudera Impala     - tested with 1.0 and 1.2.3
+* Cloudera Search     - tested with 1.1.0
 * Cloudera GPL Extras - tested with 4.3.0
 
 OS Support:
 
-* RedHat family - tested on CentOS 6.3
-* SuSE family   - presently unsupported (patches welcome)
-* Debian family - presently unsupported (patches welcome)
+Cloudera official [supported operating systems](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Installation-Guide/cmig_cm_requirements.html).
+
+* RedHat family - tested on CentOS 6.4
+* SuSE family   - tested on SLES 11SP1
+* Debian family - tested on Debian 6.0.7, Ubuntu 10.04.4 LTS, and Ubuntu 12.04.2 LTS
 
 Class documentation is available via puppetdoc.
 
@@ -62,11 +64,11 @@ This class handles installing the Cloudera Manager software repository.
 
 ### Class['cloudera::java']
 
-This class handles installing the Oracle JDK from the Cloudera Manager repository.
+This class handles installing the Oracle Java Development Kit (JDK) from the Cloudera Manager repository.
 
 ### Class['cloudera::java::jce']
 
-This class handles installing the Oracle Java Cryptography Extension (JCE) unlimited strength jurisdiction policy files.  Manual setup is requied in order to download the required software from Oracle.  See the files/README_JCE.md file for details.
+This class handles installing the Oracle Java Cryptography Extension (JCE) unlimited strength jurisdiction policy files.  Set the parameter `install_jce => true` in `Class['cloudera']`.  Manual setup is requied in order to download the required software from Oracle.  See the files/README_JCE.md file for details.
 
 ### Class['cloudera::cm']
 
@@ -193,8 +195,8 @@ There are some settings inside CM that can only be configured manually.  See the
 class { 'cloudera':
   server_host => 'smhost.example.com',
   use_tls     => true,
-} ->
-class { 'cloudera::java::jce': }
+  install_jce => true,
+}
 file { '/etc/pki/tls/certs/cloudera_manager.crt': }
 ```
 
@@ -203,8 +205,8 @@ file { '/etc/pki/tls/certs/cloudera_manager.crt': }
 class { 'cloudera':
   server_host => 'smhost.example.com',
   use_tls     => true,
+  install_jce => true,
 } ->
-class { 'cloudera::java::jce': } ->
 class { 'cloudera::cm::server':
   use_tls      => true,
   server_keypw => 'myPassWord',
@@ -235,21 +237,17 @@ Notes
 * Based on the [Cloudera Manager 4.1 Installation Guide](https://ccp.cloudera.com/download/attachments/22151983/CM-4.1-enterprise-install-guide.pdf?version=3&modificationDate=1358553325305)
 * TLS certificates must be in PEM format and are not deployed by this module.
 * When using parcels, the CDH software is not deployed by Puppet.  Puppet will only install the Cloudera Manager server/agent.  You must then configure Cloudera Manager to deploy the parcels.
+* When installing packages and not parcels on SLES, SP2 is required as the hadoop-2.0.0+1518-1.cdh4.5.0.p0.24.sles11.x86_64 package requires netcat-openbsd which is not avalable on SLES 11SP1.
+* Osfamily RedHat 5 requires the EPEL YUM repository when installing LZO support.
 
 Issues
 ------
 
 * Need external module support for the Oracle Instant Client JDBC.
+* When using an external PostgreSQL server that is on the same host as the CM server, PostgreSQL must be configured to accept connections with md5 password authentication.
 
 TODO
 ----
-
-* Add HDFS FUSE mounting support.
-* Support pig-udf installation.
-* Document hive-server installation.
-* Document hive-metastore installation.
-* Document sqoop-metastore installation.
-* Document whirr installation.
 
 See TODO.md for more items.
 
@@ -292,10 +290,10 @@ would become this:
 
 ```puppet
 class { 'cloudera::cdh::repo':
-  cdh_version => '4.1',
+  version => '4.1',
 }
 class { 'cloudera::impala::repo':
-  ci_version => '4.1',
+  version => '4.1',
 }
 ```
 

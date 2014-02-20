@@ -8,17 +8,17 @@
 #   Ensure if present or absent.
 #   Default: present
 #
-# [*cdh_yumserver*]
+# [*yumserver*]
 #   URI of the YUM server.
 #   Default: http://archive.cloudera.com
 #
-# [*cdh_yumpath*]
-#   The path to add to the $cdh_yumserver URI.
+# [*yumpath*]
+#   The path to add to the $yumserver URI.
 #   Only set this if your platform is not supported or you know what you are
 #   doing.
 #   Default: auto-set, platform specific
 #
-# [*cdh_version*]
+# [*version*]
 #   The version of Cloudera's Distribution, including Apache Hadoop to install.
 #   Default: 4
 #
@@ -45,7 +45,7 @@
 # === Sample Usage:
 #
 #   class { 'cloudera::cdh::repo':
-#     cdh_version => '4.1',
+#     version => '4.1',
 #   }
 #
 # === Authors:
@@ -58,9 +58,10 @@
 #
 class cloudera::cdh::repo (
   $ensure         = $cloudera::params::ensure,
-  $cdh_yumserver  = $cloudera::params::cdh_yumserver,
-  $cdh_yumpath    = $cloudera::params::cdh_yumpath,
-  $cdh_version    = $cloudera::params::cdh_version,
+  $yumserver      = $cloudera::params::cdh_yumserver,
+  $yumpath        = $cloudera::params::cdh_yumpath,
+  $version        = $cloudera::params::cdh_version,
+  $aptkey         = $cloudera::params::cdh_aptkey,
   $proxy          = $cloudera::params::proxy,
   $proxy_username = $cloudera::params::proxy_username,
   $proxy_password = $cloudera::params::proxy_password
@@ -83,8 +84,8 @@ class cloudera::cdh::repo (
         descr          => 'Cloudera\'s Distribution for Hadoop, Version 4',
         enabled        => $enabled,
         gpgcheck       => 1,
-        gpgkey         => "${cdh_yumserver}${cdh_yumpath}RPM-GPG-KEY-cloudera",
-        baseurl        => "${cdh_yumserver}${cdh_yumpath}${cdh_version}/",
+        gpgkey         => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
+        baseurl        => "${yumserver}${yumpath}${version}/",
         priority       => $cloudera::params::yum_priority,
         protect        => $cloudera::params::yum_protect,
         proxy          => $proxy,
@@ -100,6 +101,40 @@ class cloudera::cdh::repo (
       }
 
       Yumrepo['cloudera-cdh4'] -> Package<|tag == 'cloudera-cdh4'|>
+    }
+    'SLES': {
+      zypprepo { 'cloudera-cdh4':
+        descr       => 'Cloudera\'s Distribution for Hadoop, Version 4',
+        enabled     => $enabled,
+        gpgcheck    => 1,
+        gpgkey      => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
+        baseurl     => "${yumserver}${yumpath}${version}/",
+        autorefresh => 1,
+        priority    => $cloudera::params::yum_priority,
+      }
+
+      file { '/etc/zypp/repos.d/cloudera-cdh4.repo':
+        ensure => 'file',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+      }
+
+      Zypprepo['cloudera-cdh4'] -> Package<|tag == 'cloudera-cdh4'|>
+    }
+    'Debian', 'Ubuntu': {
+      include '::apt'
+
+      apt::source { 'cloudera-cdh4':
+        location     => "${yumserver}${yumpath}",
+        release      => "${::lsbdistcodename}-cdh${version}",
+        repos        => 'contrib',
+        key          => $aptkey,
+        key_source   => "${yumserver}${yumpath}archive.key",
+        architecture => $cloudera::params::architecture,
+      }
+
+      Apt::Source['cloudera-cdh4'] -> Package<|tag == 'cloudera-cdh4'|>
     }
     default: { }
   }

@@ -114,17 +114,17 @@
 # Copyright (C) 2013 Mike Arnold, unless otherwise noted.
 #
 class cloudera::cm::server (
-  $ensure         = $cloudera::params::ensure,
-  $autoupgrade    = $cloudera::params::safe_autoupgrade,
-  $service_ensure = $cloudera::params::service_ensure,
-  $database_name  = 'scm',
-  $username       = 'scm',
-  $password       = 'scm',
-  $db_host        = 'localhost',
-  $db_port        = '3306',
-  $db_user        = 'root',
-  $db_pass        = '',
-  $db_type        = 'embedded',
+  $ensure            = $cloudera::params::ensure,
+  $autoupgrade       = $cloudera::params::safe_autoupgrade,
+  $service_ensure    = $cloudera::params::service_ensure,
+  $database_name     = 'scm',
+  $username          = 'scm',
+  $password          = 'scm',
+  $db_host           = 'localhost',
+  $db_port           = '3306',
+  $db_user           = 'root',
+  $db_pass           = '',
+  $db_type           = 'embedded',
   $use_tls           = $cloudera::params::safe_cm_use_tls,
   $server_ca_file    = $cloudera::params::server_ca_file,
   $server_cert_file  = $cloudera::params::server_cert_file,
@@ -175,11 +175,6 @@ class cloudera::cm::server (
     tag    => 'cloudera-manager',
   }
 
-#  package { 'cloudera-manager-daemons':
-#    ensure => $package_ensure,
-#    tag    => 'cloudera-manager',
-#  }
-
   file { '/etc/cloudera-scm-server/db.properties':
     ensure  => $file_ensure,
     path    => '/etc/cloudera-scm-server/db.properties',
@@ -203,8 +198,10 @@ class cloudera::cm::server (
         tag    => 'cloudera-manager',
       }
 
+      # TODO: Deprecated.  Just start the service.
       exec { 'cloudera-manager-server-db':
-        command => '/sbin/service cloudera-scm-server-db initdb',
+        command => 'service cloudera-scm-server-db initdb',
+        path    => '/bin:/usr/bin:/sbin:/usr/sbin',
         creates => '/etc/cloudera-scm-server/db.mgmt.properties',
         require => Package['cloudera-manager-server-db'],
       }

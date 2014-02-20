@@ -18,33 +18,80 @@ describe 'cloudera::search::repo', :type => 'class' do
   end
 
   context 'on a supported operatingsystem, default parameters' do
-    let :facts do {
-      :osfamily               => 'RedHat',
-      :operatingsystem        => 'CentOS',
-      :operatingsystemrelease => '6.3',
-      :os_maj_version         => '6',
-      :architecture           => 'x86_64'
-    }
+    describe 'RedHat 6' do
+      let :facts do {
+        :osfamily               => 'RedHat',
+        :operatingsystem        => 'CentOS',
+        :operatingsystemrelease => '6.3',
+        :architecture           => 'x86_64'
+      }
+      end
+      it { should compile.with_all_deps }
+      it { should contain_yumrepo('cloudera-search').with(
+        :descr          => 'Search',
+        :enabled        => '1',
+        :gpgcheck       => '1',
+        :gpgkey         => 'http://archive.cloudera.com/search/redhat/6/x86_64/search/RPM-GPG-KEY-cloudera',
+        :baseurl        => 'http://archive.cloudera.com/search/redhat/6/x86_64/search/1/',
+        :priority       => '50',
+        :protect        => '0',
+        :proxy          => 'absent',
+        :proxy_username => 'absent',
+        :proxy_password => 'absent'
+      )}
+      it { should contain_file('/etc/yum.repos.d/cloudera-search.repo').with(
+        :ensure => 'file',
+        :owner  => 'root',
+        :group  => 'root',
+        :mode   => '0644'
+      )}
     end
-    it { should compile.with_all_deps }
-    it { should contain_yumrepo('cloudera-search').with(
-      :descr          => 'Search',
-      :enabled        => '1',
-      :gpgcheck       => '1',
-      :gpgkey         => 'http://archive.cloudera.com/search/redhat/6/x86_64/search/RPM-GPG-KEY-cloudera',
-      :baseurl        => 'http://archive.cloudera.com/search/redhat/6/x86_64/search/1/',
-      :priority       => '50',
-      :protect        => '0',
-      :proxy          => 'absent',
-      :proxy_username => 'absent',
-      :proxy_password => 'absent'
-    )}
-    it { should contain_file('/etc/yum.repos.d/cloudera-search.repo').with(
-      :ensure => 'file',
-      :owner  => 'root',
-      :group  => 'root',
-      :mode   => '0644'
-    )}
+
+    describe 'SLES 11' do
+      let :facts do {
+        :osfamily               => 'Suse',
+        :operatingsystem        => 'SLES',
+        :operatingsystemrelease => '11.1',
+        :architecture           => 'x86_64'
+      }
+      end
+      it { should compile.with_all_deps }
+      it { should contain_zypprepo('cloudera-search').with(
+        :descr          => 'Search',
+        :enabled        => '1',
+        :gpgcheck       => '1',
+        :gpgkey         => 'http://archive.cloudera.com/search/sles/11/x86_64/search/RPM-GPG-KEY-cloudera',
+        :baseurl        => 'http://archive.cloudera.com/search/sles/11/x86_64/search/1/',
+        :priority       => '50'
+      )}
+      it { should contain_file('/etc/zypp/repos.d/cloudera-search.repo').with(
+        :ensure => 'file',
+        :owner  => 'root',
+        :group  => 'root',
+        :mode   => '0644'
+      )}
+    end
+
+    describe 'Debian 6' do
+      let :facts do {
+        :osfamily               => 'Debian',
+        :operatingsystem        => 'Debian',
+        :operatingsystemrelease => '6.0.7',
+        :architecture           => 'amd64',
+        :lsbdistcodename        => 'squeeze'
+      }
+      end
+      it { should compile.with_all_deps }
+      it { should contain_class('apt') }
+      it { should contain_apt__source('cloudera-search').with(
+        :location     => 'http://archive.cloudera.com/search/debian/squeeze/amd64/search/',
+        :release      => 'squeeze-search1',
+        :repos        => 'contrib',
+        :key          => 'false',
+        :key_source   => 'http://archive.cloudera.com/search/debian/squeeze/amd64/search/archive.key',
+        :architecture => nil
+      )}
+    end
   end
 
   context 'on a supported operatingsystem, custom parameters' do

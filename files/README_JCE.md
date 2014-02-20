@@ -1,7 +1,8 @@
 Go to Oracle's [Java download page](http://www.oracle.com/technetwork/java/javase/downloads/index.html) and download the Java Cryptography Extension (JCE) unlimited strength jurisdiction policy files 6 zipfile to this directory.
 
     cd /etc/puppet/modules/cloudera/files
-    curl -f --retry 10 http://download.oracle.com/otn-pub/java/jce_policy/6/jce_policy-6.zip -o jce_policy-6.zip
+    #curl -f --retry 10 http://download.oracle.com/otn-pub/java/jce_policy/6/jce_policy-6.zip -o jce_policy-6.zip
+    wget -c --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com" http://download.oracle.com/otn-pub/java/jce_policy/6/jce_policy-6.zip -O jce_policy-6.zip
     unzip jce_policy-6.zip
 
 You should have the following structure:
