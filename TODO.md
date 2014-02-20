@@ -5,21 +5,27 @@
 * update dependencies (mysql/postgresql)
 * separate install impala (manifests/impala/bla.pp)
 * separate install search (manifests/search/bla.pp)
-* refactor ::repo to autoinclude in cdh/impala/search
-* support SLES/Debian/Ubuntu?
+* support SLES/Debian/Ubuntu
 * clean out commented code
 
 ## For 2.0.0 release:
 
 * support CM5 / CDH5 / Oracle JDK 7
+* refactor ::repo to autoinclude in cdh/impala/search
 * remove CDH (RPM) support?
 
 ## Other:
 
-* support TLS level 3
+* Support TLS level 3.
 * PostgreSQL must be configured to accept connections with md5 password authentication.  To do so, edit /var/lib/pgsql/data/pg_hba.conf (or similar) to include `host all all 127.0.0.1/32 md5` *above* a similar line that allows `ident` authentication.
-* cm_api support
-* parcels still require LZO OS libraries?
+* cm_api support.
+* Do parcels still require LZO OS libraries?
+* Add HDFS FUSE mounting support.
+* Support pig-udf installation.
+* Document hive-server installation.
+* Document hive-metastore installation.
+* Document sqoop-metastore installation.
+* Document whirr installation.
 
 ## Links
 

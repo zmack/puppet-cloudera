@@ -61,6 +61,7 @@ class cloudera::search::repo (
   $yumserver      = $cloudera::params::cs_yumserver,
   $yumpath        = $cloudera::params::cs_yumpath,
   $version        = $cloudera::params::cs_version,
+  $aptkey         = $cloudera::params::cs_aptkey,
   $proxy          = $cloudera::params::proxy,
   $proxy_username = $cloudera::params::proxy_username,
   $proxy_password = $cloudera::params::proxy_password
@@ -101,6 +102,42 @@ class cloudera::search::repo (
 
       Yumrepo['cloudera-search'] -> Package<|tag == 'cloudera-search'|>
       Yumrepo['cloudera-cdh4']   -> Package<|tag == 'cloudera-search'|>
+    }
+    'SLES': {
+      zypprepo { 'cloudera-search':
+        descr       => 'Search',
+        enabled     => $enabled,
+        gpgcheck    => 1,
+        gpgkey      => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
+        baseurl     => "${yumserver}${yumpath}${version}/",
+        autorefresh => 1,
+        priority    => $cloudera::params::yum_priority,
+      }
+
+      file { '/etc/zypp/repos.d/cloudera-search.repo':
+        ensure => 'file',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+      }
+
+      Zypprepo['cloudera-search'] -> Package<|tag == 'cloudera-search'|>
+      Zypprepo['cloudera-cdh4']   -> Package<|tag == 'cloudera-search'|>
+    }
+    'Debian', 'Ubuntu': {
+      include '::apt'
+
+      apt::source { 'cloudera-search':
+        location     => "${yumserver}${yumpath}",
+        release      => "${::lsbdistcodename}-search${version}",
+        repos        => 'contrib',
+        key          => $aptkey,
+        key_source   => "${yumserver}${yumpath}archive.key",
+        architecture => $cloudera::params::architecture,
+      }
+
+      Apt::Source['cloudera-search'] -> Package<|tag == 'cloudera-search'|>
+      Apt::Source['cloudera-cdh4']   -> Package<|tag == 'cloudera-search'|>
     }
     default: { }
   }

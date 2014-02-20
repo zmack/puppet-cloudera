@@ -43,6 +43,10 @@ class cloudera::gplextras (
   # Validate our booleans
   validate_bool($autoupgrade)
 
+  if ($::operatingsystem in [ 'CentOS', 'RedHat', 'OEL', 'OracleLinux' ]) and ($cloudera::params::majdistrelease == 5) {
+    require '::epel'
+  }
+
   package { 'hadoop-lzo-cdh4':
     ensure => 'present',
     tag    => 'cloudera-gplextras',

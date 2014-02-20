@@ -18,18 +18,29 @@ describe 'cloudera::cdh::sqoop::metastore', :type => 'class' do
 #  end
 
   context 'on a supported operatingsystem, default parameters' do
-    let(:params) {{}}
-    let :facts do {
-      :osfamily        => 'RedHat',
-      :operatingsystem => 'CentOS'
-    }
+    context 'CentOS' do
+#      let(:params) {{}}
+      let :facts do {
+        :osfamily        => 'RedHat',
+        :operatingsystem => 'CentOS'
+      }
+      end
+      it { should contain_package('sqoop-metastore').with_ensure('present') }
+      it { should contain_service('sqoop-metastore').with(
+        :ensure     => 'running',
+        :enable     => true,
+        :hasrestart => true,
+        :hasstatus  => true
+      )}
     end
-    it { should contain_package('sqoop-metastore').with_ensure('present') }
-    it { should contain_service('sqoop-metastore').with(
-      :ensure     => 'running',
-      :enable     => true,
-      :hasrestart => true,
-      :hasstatus  => true
-    )}
+
+    context 'Ubuntu' do
+      let :facts do {
+        :osfamily        => 'Debian',
+        :operatingsystem => 'Ubuntu'
+      }
+      end
+      it { should_not contain_service('sqoop-metastore') }
+    end
   end
 end

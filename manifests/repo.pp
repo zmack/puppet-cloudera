@@ -93,18 +93,18 @@ class cloudera::repo (
 
   class { 'cloudera::cdh::repo':
     ensure         => $ensure,
-    cdh_yumserver  => $cdh_yumserver,
-    cdh_yumpath    => $cdh_yumpath,
-    cdh_version    => $cdh_version,
+    yumserver      => $cdh_yumserver,
+    yumpath        => $cdh_yumpath,
+    version        => $cdh_version,
     proxy          => $proxy,
     proxy_username => $proxy_username,
     proxy_password => $proxy_password,
   }
   class { 'cloudera::impala::repo':
     ensure         => $ensure,
-    ci_yumserver   => $ci_yumserver,
-    ci_yumpath     => $ci_yumpath,
-    ci_version     => $ci_version,
+    yumserver      => $ci_yumserver,
+    yumpath        => $ci_yumpath,
+    version        => $ci_version,
     proxy          => $proxy,
     proxy_username => $proxy_username,
     proxy_password => $proxy_password,

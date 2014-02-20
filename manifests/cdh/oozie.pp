@@ -34,10 +34,4 @@ class cloudera::cdh::oozie {
     enable  => false,
     require => Package['oozie'],
   }
-
-#  Anchor['cloudera::cdh::oozie::begin'] ->
-#  Class['cloudera::cdh::oozie::client'] ->
-#  Package['oozie'] ->
-#  Service['oozie'] ->
-#  Anchor['cloudera::cdh::oozie::end']
 }

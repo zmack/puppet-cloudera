@@ -27,10 +27,11 @@ describe 'cloudera::cdh::hadoop', :type => 'class' do
     it { should contain_class('cloudera::cdh::hadoop::client') }
     it { should contain_package('hadoop').with_ensure('present') }
     it { should contain_package('hadoop-hdfs').with_ensure('present') }
-    it { should contain_package('hadoop-httpfs').with_ensure('present') }
+    it { should contain_package('hadoop-httpfs').with_ensure('present').with_notify('Exec[service hadoop-httpfs stop]') }
     it { should contain_package('hadoop-mapreduce').with_ensure('present') }
     it { should contain_package('hadoop-yarn').with_ensure('present') }
     it { should contain_package('hadoop-0.20-mapreduce').with_ensure('present') }
     it { should contain_service('hadoop-httpfs').with_enable('false') }
+    it { should contain_exec('service hadoop-httpfs stop').with_refreshonly('true') }
   end
 end

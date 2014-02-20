@@ -1,6 +1,5 @@
 name 'razorsedge-cloudera'
-version '0.9.2'
-
+version '1.0.0'
 author 'razorsedge'
 license 'Apache License, Version 2.0'
 project_page 'https://github.com/razorsedge/puppet-cloudera'
@@ -15,7 +14,5 @@ dependency 'puppetlabs/postgresql', '>=2.1.0 <3.0.0'
 dependency 'nanliu/staging', '>=0.2.1'
 dependency 'stahnma/epel', '>=0.0.3'
 dependency 'puppetlabs/java_ks', '>=1.0.0'
-
-# Generate the changelog file
-#system("git-log-to-changelog > CHANGELOG")
-#$? == 0 or fail "changelog generation #{$?}!"
+dependency 'darin/zypprepo', '>=1.0.0 <2.0.0'
+dependency 'puppetlabs/apt', '>=1.4.1'

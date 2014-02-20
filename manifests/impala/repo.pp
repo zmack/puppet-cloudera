@@ -8,17 +8,17 @@
 #   Ensure if present or absent.
 #   Default: present
 #
-# [*ci_yumserver*]
+# [*yumserver*]
 #   URI of the YUM server.
 #   Default: http://archive.cloudera.com
 #
-# [*ci_yumpath*]
-#   The path to add to the $ci_yumserver URI.
+# [*yumpath*]
+#   The path to add to the $yumserver URI.
 #   Only set this if your platform is not supported or you know what you are
 #   doing.
 #   Default: auto-set, platform specific
 #
-# [*ci_version*]
+# [*version*]
 #   The version of Cloudera Impala to install.
 #   Default: 1
 #
@@ -45,7 +45,7 @@
 # === Sample Usage:
 #
 #   class { 'cloudera::impala::repo':
-#     ci_version => '4.1',
+#     version => '4.1',
 #   }
 #
 # === Authors:
@@ -58,9 +58,10 @@
 #
 class cloudera::impala::repo (
   $ensure         = $cloudera::params::ensure,
-  $ci_yumserver   = $cloudera::params::ci_yumserver,
-  $ci_yumpath     = $cloudera::params::ci_yumpath,
-  $ci_version     = $cloudera::params::ci_version,
+  $yumserver      = $cloudera::params::ci_yumserver,
+  $yumpath        = $cloudera::params::ci_yumpath,
+  $version        = $cloudera::params::ci_version,
+  $aptkey         = $cloudera::params::ci_aptkey,
   $proxy          = $cloudera::params::proxy,
   $proxy_username = $cloudera::params::proxy_username,
   $proxy_password = $cloudera::params::proxy_password
@@ -83,8 +84,8 @@ class cloudera::impala::repo (
         descr          => 'Impala',
         enabled        => $enabled,
         gpgcheck       => 1,
-        gpgkey         => "${ci_yumserver}${ci_yumpath}RPM-GPG-KEY-cloudera",
-        baseurl        => "${ci_yumserver}${ci_yumpath}${ci_version}/",
+        gpgkey         => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
+        baseurl        => "${yumserver}${yumpath}${version}/",
         priority       => $cloudera::params::yum_priority,
         protect        => $cloudera::params::yum_protect,
         proxy          => $proxy,
@@ -100,6 +101,40 @@ class cloudera::impala::repo (
       }
 
       Yumrepo['cloudera-impala'] -> Package<|tag == 'cloudera-impala'|>
+    }
+    'SLES': {
+      zypprepo { 'cloudera-impala':
+        descr       => 'Impala',
+        enabled     => $enabled,
+        gpgcheck    => 1,
+        gpgkey      => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
+        baseurl     => "${yumserver}${yumpath}${version}/",
+        autorefresh => 1,
+        priority    => $cloudera::params::yum_priority,
+      }
+
+      file { '/etc/zypp/repos.d/cloudera-impala.repo':
+        ensure => 'file',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+      }
+
+      Zypprepo['cloudera-impala'] -> Package<|tag == 'cloudera-impala'|>
+    }
+    'Debian', 'Ubuntu': {
+      include '::apt'
+
+      apt::source { 'cloudera-impala':
+        location     => "${yumserver}${yumpath}",
+        release      => "${::lsbdistcodename}-impala${version}",
+        repos        => 'contrib',
+        key          => $aptkey,
+        key_source   => "${yumserver}${yumpath}archive.key",
+        architecture => $cloudera::params::architecture,
+      }
+
+      Apt::Source['cloudera-impala'] -> Package<|tag == 'cloudera-impala'|>
     }
     default: { }
   }

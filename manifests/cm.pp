@@ -121,6 +121,6 @@ class cloudera::cm (
     enable     => $service_enable,
     hasrestart => true,
     hasstatus  => true,
-    require    => Package['cloudera-manager-agent'],
+    require    => [ Package['cloudera-manager-agent'], Package['cloudera-manager-daemons'], ],
   }
 }
