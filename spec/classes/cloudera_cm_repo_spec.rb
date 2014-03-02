@@ -88,6 +88,7 @@ describe 'cloudera::cm::repo', :type => 'class' do
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '6.0.7',
         :architecture           => 'amd64',
+        :lsbdistid              => 'Debian',
         :lsbdistcodename        => 'squeeze'
       }
       end
@@ -111,6 +112,7 @@ describe 'cloudera::cm::repo', :type => 'class' do
         :operatingsystem        => 'Ubuntu',
         :operatingsystemrelease => '12.04.2',
         :architecture           => 'amd64',
+        :lsbdistid              => 'Ubuntu',
         :lsbdistcodename        => 'precise'
       }
       end

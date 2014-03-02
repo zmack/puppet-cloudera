@@ -82,6 +82,7 @@ describe 'cloudera::cdh::repo', :type => 'class' do
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '6.0.7',
         :architecture           => 'amd64',
+        :lsbdistid              => 'Debian',
         :lsbdistcodename        => 'squeeze'
       }
       end
