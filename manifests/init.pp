@@ -238,7 +238,7 @@ class cloudera (
         before  => Anchor['cloudera::end'],
       }
     }
-    $cloudera_cm_require = [ Anchor['cloudera::begin'], Class[cloudera::java], ]
+    $cloudera_cm_require = [ Anchor['cloudera::begin'], Class['cloudera::java'], ]
   } else {
     $cloudera_cm_require = Anchor['cloudera::begin']
   }
