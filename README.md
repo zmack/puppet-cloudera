@@ -39,7 +39,7 @@ OS Support:
 
 Cloudera official [supported operating systems](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Installation-Guide/cmig_cm_requirements.html).
 
-* RedHat family - tested on CentOS 6.4
+* RedHat family - tested on CentOS 5.9, CentOS 6.4
 * SuSE family   - tested on SLES 11SP1
 * Debian family - tested on Debian 6.0.7, Ubuntu 10.04.4 LTS, and Ubuntu 12.04.2 LTS
 
