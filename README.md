@@ -1,5 +1,5 @@
-Puppet Cloudera Manager and CDH4 Module
-=======================================
+Puppet Cloudera Manager Module
+==============================
 
 master branch: [![Build Status](https://secure.travis-ci.org/razorsedge/puppet-cloudera.png?branch=master)](http://travis-ci.org/razorsedge/puppet-cloudera)
 develop branch: [![Build Status](https://secure.travis-ci.org/razorsedge/puppet-cloudera.png?branch=develop)](http://travis-ci.org/razorsedge/puppet-cloudera)
@@ -13,7 +13,7 @@ Actions:
 
 * Installs the Cloudera software repository for CM.
 * Installs Oracle Java Development Kit (JDK) 6.
-* Installs CM 4 agent.
+* Installs CM 5 agent.
 * Configures the CM agent to talk to a CM server.
 * Starts the CM agent.
 * Separately installs the CM server and database connectivity (by default to the embedded database server).
@@ -29,7 +29,7 @@ Optional Actions (non-parcel):
 
 Software Support:
 
-* Cloudera Manager    - tested with 4.1.2 and 4.8.0
+* Cloudera Manager    - tested with 4.1.2, 4.8.0, and 5.0
 * CDH                 - tested with 4.1.2 and 4.5.0
 * Cloudera Impala     - tested with 1.0 and 1.2.3
 * Cloudera Search     - tested with 1.1.0
@@ -41,7 +41,7 @@ Cloudera official [supported operating systems](http://www.cloudera.com/content/
 
 * RedHat family - tested on CentOS 5.9, CentOS 6.4
 * SuSE family   - tested on SLES 11SP1
-* Debian family - tested on Debian 6.0.7, Ubuntu 10.04.4 LTS, and Ubuntu 12.04.2 LTS
+* Debian family - tested on Debian 6.0.7, Debian 7.0, Ubuntu 10.04.4 LTS, and Ubuntu 12.04.2 LTS
 
 Class documentation is available via puppetdoc.
 

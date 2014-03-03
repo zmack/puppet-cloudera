@@ -201,7 +201,7 @@ class cloudera::params {
   }
 
   $cdh_version = '4'
-  $cm_version  = '4'
+  $cm_version  = '5'
   $ci_version  = '1'
   $cs_version  = '1'
   $cg_version  = '4'
@@ -214,6 +214,10 @@ class cloudera::params {
       $ci_yumpath = "/impala/redhat/${majdistrelease}/${::architecture}/impala/"
       $cs_yumpath = "/search/redhat/${majdistrelease}/${::architecture}/search/"
       $cg_yumpath = "/gplextras/redhat/${majdistrelease}/${::architecture}/gplextras/"
+      $java5_package_name = 'oracle-j2sdk1.7'
+      $cm5_yumpath = "/cm5/redhat/${majdistrelease}/${::architecture}/cm/"
+      $cdh5_yumpath = "/cdh5/redhat/${majdistrelease}/${::architecture}/cdh/"
+      $cg5_yumpath = "/gplextras5/redhat/${majdistrelease}/${::architecture}/gplextras/"
     }
     'SLES': {
       $java_package_name = 'jdk'
@@ -223,6 +227,10 @@ class cloudera::params {
       $ci_yumpath = "/impala/sles/${majdistrelease}/${::architecture}/impala/"
       $cs_yumpath = "/search/sles/${majdistrelease}/${::architecture}/search/"
       $cg_yumpath = "/gplextras/sles/${majdistrelease}/${::architecture}/gplextras/"
+      $java5_package_name = 'oracle-j2sdk1.7'
+      $cm5_yumpath = "/cm5/sles/${majdistrelease}/${::architecture}/cm/"
+      $cdh5_yumpath = "/cdh5/sles/${majdistrelease}/${::architecture}/cdh/"
+      $cg5_yumpath = "/gplextras5/sles/${majdistrelease}/${::architecture}/gplextras/"
     }
     'Debian': {
       $java_package_name = 'oracle-j2sdk1.6'
@@ -231,6 +239,10 @@ class cloudera::params {
       $ci_yumpath = "/impala/debian/${::lsbdistcodename}/${::architecture}/impala/"
       $cs_yumpath = "/search/debian/${::lsbdistcodename}/${::architecture}/search/"
       $cg_yumpath = "/gplextras/debian/${::lsbdistcodename}/${::architecture}/gplextras/"
+      $java5_package_name = 'oracle-j2sdk1.7'
+      $cm5_yumpath = "/cm5/debian/${::lsbdistcodename}/${::architecture}/cm/"
+      $cdh5_yumpath = "/cdh5/debian/${::lsbdistcodename}/${::architecture}/cdh/"
+      $cg5_yumpath = "/gplextras5/debian/${::lsbdistcodename}/${::architecture}/gplextras/"
       $cdh_aptkey = false
       $cm_aptkey = '327574EE02A818DD'
       $ci_aptkey = false
@@ -245,6 +257,10 @@ class cloudera::params {
       $ci_yumpath = "/impala/ubuntu/${::lsbdistcodename}/${::architecture}/impala/"
       $cs_yumpath = "/search/ubuntu/${::lsbdistcodename}/${::architecture}/search/"
       $cg_yumpath = "/gplextras/ubuntu/${::lsbdistcodename}/${::architecture}/gplextras/"
+      $java5_package_name = 'oracle-j2sdk1.7'
+      $cm5_yumpath = "/cm5/ubuntu/${::lsbdistcodename}/${::architecture}/cm/"
+      $cdh5_yumpath = "/cdh5/ubuntu/${::lsbdistcodename}/${::architecture}/cdh/"
+      $cg5_yumpath = "/gplextras5/ubuntu/${::lsbdistcodename}/${::architecture}/gplextras/"
       $cdh_aptkey = false
       $cm_aptkey = '327574EE02A818DD'
       $ci_aptkey = false

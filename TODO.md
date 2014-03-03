@@ -26,6 +26,7 @@
 * Document hive-metastore installation.
 * Document sqoop-metastore installation.
 * Document whirr installation.
+* Set kernel vm.swappiness to 0.
 
 ## Links
 

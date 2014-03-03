@@ -47,7 +47,13 @@
 #
 # [*cm_version*]
 #   The version of Cloudera Manager to install.
-#   Default: 4
+#   Default: 5
+#
+# [*cm5_yumpath*]
+#   The path to add to the $cm_yumserver URI.
+#   Only set this if your platform is not supported or you know what you are
+#   doing.
+#   Default: auto-set, platform specific
 #
 # [*ci_yumserver*]
 #   URI of the YUM server.
@@ -190,6 +196,7 @@ class cloudera (
   $cm_yumserver     = $cloudera::params::cm_yumserver,
   $cm_yumpath       = $cloudera::params::cm_yumpath,
   $cm_version       = $cloudera::params::cm_version,
+  $cm5_yumpath      = $cloudera::params::cm5_yumpath,
   $ci_yumserver     = $cloudera::params::ci_yumserver,
   $ci_yumpath       = $cloudera::params::ci_yumpath,
   $ci_version       = $cloudera::params::ci_version,
@@ -223,131 +230,184 @@ class cloudera (
   anchor { 'cloudera::begin': }
   anchor { 'cloudera::end': }
 
-  if $install_java {
-    Class['cloudera::cm::repo'] -> Class['cloudera::java']
-    class { 'cloudera::java':
-      ensure      => $ensure,
-      autoupgrade => $autoupgrade,
-      require     => Anchor['cloudera::begin'],
-      before      => Anchor['cloudera::end'],
-    }
-    if $install_jce {
-      class { 'cloudera::java::jce':
-        ensure  => $ensure,
-        require => [ Anchor['cloudera::begin'], Class['cloudera::java'], ],
-        before  => Anchor['cloudera::end'],
+  if $cm_version =~ /^5/ {
+    if $install_java {
+      Class['cloudera::cm5::repo'] -> Class['cloudera::java5']
+      class { 'cloudera::java5':
+        ensure      => $ensure,
+        autoupgrade => $autoupgrade,
+        require     => Anchor['cloudera::begin'],
+        before      => Anchor['cloudera::end'],
       }
+      if $install_jce {
+        class { 'cloudera::java5::jce':
+          ensure  => $ensure,
+          require => [ Anchor['cloudera::begin'], Class['cloudera::java5'], ],
+          before  => Anchor['cloudera::end'],
+        }
+      }
+      $cloudera_cm_require = [ Anchor['cloudera::begin'], Class['cloudera::java5'], ]
+    } else {
+      $cloudera_cm_require = Anchor['cloudera::begin']
     }
-    $cloudera_cm_require = [ Anchor['cloudera::begin'], Class['cloudera::java'], ]
-  } else {
-    $cloudera_cm_require = Anchor['cloudera::begin']
-  }
-#  Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-manager'|>
-#  Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-gplextras'|>
-#  Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-search'|>
-#  Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-cdh4'|>
-#  Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-impala'|>
+#    Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-manager'|>
+#    Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-gplextras'|>
+#    Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-search'|>
+#    Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-cdh4'|>
+#    Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-impala'|>
 
-  class { 'cloudera::cm':
-    ensure           => $ensure,
-    autoupgrade      => $autoupgrade,
-    service_ensure   => $service_ensure,
-#    service_enable   => $service_enable,
-    server_host      => $cm_server_host,
-    server_port      => $cm_server_port,
-    use_tls          => $use_tls,
-    verify_cert_file => $verify_cert_file,
-    require          => $cloudera_cm_require,
-    before           => Anchor['cloudera::end'],
-  }
-  class { 'cloudera::cm::repo':
-    ensure         => $ensure,
-    yumserver      => $cm_yumserver,
-    yumpath        => $cm_yumpath,
-    version        => $cm_version,
-    proxy          => $proxy,
-    proxy_username => $proxy_username,
-    proxy_password => $proxy_password,
-    require        => Anchor['cloudera::begin'],
-    before         => Anchor['cloudera::end'],
-  }
-  # Skip installing the CDH RPMs if we are going to use parcels.
-  if ! $use_parcels {
-    class { 'cloudera::cdh::repo':
+    class { 'cloudera::cm5':
+      ensure           => $ensure,
+      autoupgrade      => $autoupgrade,
+      service_ensure   => $service_ensure,
+#      service_enable   => $service_enable,
+      server_host      => $cm_server_host,
+      server_port      => $cm_server_port,
+      use_tls          => $use_tls,
+      verify_cert_file => $verify_cert_file,
+      require          => $cloudera_cm_require,
+      before           => Anchor['cloudera::end'],
+    }
+    class { 'cloudera::cm5::repo':
       ensure         => $ensure,
-      yumserver      => $cdh_yumserver,
-      yumpath        => $cdh_yumpath,
-      version        => $cdh_version,
+      yumserver      => $cm_yumserver,
+      yumpath        => $cm5_yumpath,
+      version        => $cm_version,
       proxy          => $proxy,
       proxy_username => $proxy_username,
       proxy_password => $proxy_password,
       require        => Anchor['cloudera::begin'],
       before         => Anchor['cloudera::end'],
     }
-    class { 'cloudera::impala::repo':
+  } elsif $cm_version =~ /^4/ {
+    if $install_java {
+      Class['cloudera::cm::repo'] -> Class['cloudera::java']
+      class { 'cloudera::java':
+        ensure      => $ensure,
+        autoupgrade => $autoupgrade,
+        require     => Anchor['cloudera::begin'],
+        before      => Anchor['cloudera::end'],
+      }
+      if $install_jce {
+        class { 'cloudera::java::jce':
+          ensure  => $ensure,
+          require => [ Anchor['cloudera::begin'], Class['cloudera::java'], ],
+          before  => Anchor['cloudera::end'],
+        }
+      }
+      $cloudera_cm_require = [ Anchor['cloudera::begin'], Class['cloudera::java'], ]
+    } else {
+      $cloudera_cm_require = Anchor['cloudera::begin']
+    }
+#    Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-manager'|>
+#    Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-gplextras'|>
+#    Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-search'|>
+#    Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-cdh4'|>
+#    Package<|tag == 'jdk' and (tag == 'sun' or tag == 'oracle')|> -> Package<|tag == 'cloudera-impala'|>
+
+    class { 'cloudera::cm':
+      ensure           => $ensure,
+      autoupgrade      => $autoupgrade,
+      service_ensure   => $service_ensure,
+#      service_enable   => $service_enable,
+      server_host      => $cm_server_host,
+      server_port      => $cm_server_port,
+      use_tls          => $use_tls,
+      verify_cert_file => $verify_cert_file,
+      require          => $cloudera_cm_require,
+      before           => Anchor['cloudera::end'],
+    }
+    class { 'cloudera::cm::repo':
       ensure         => $ensure,
-      yumserver      => $ci_yumserver,
-      yumpath        => $ci_yumpath,
-      version        => $ci_version,
+      yumserver      => $cm_yumserver,
+      yumpath        => $cm_yumpath,
+      version        => $cm_version,
       proxy          => $proxy,
       proxy_username => $proxy_username,
       proxy_password => $proxy_password,
       require        => Anchor['cloudera::begin'],
       before         => Anchor['cloudera::end'],
     }
-    class { 'cloudera::search::repo':
-      ensure         => $ensure,
-      yumserver      => $cs_yumserver,
-      yumpath        => $cs_yumpath,
-      version        => $cs_version,
-      proxy          => $proxy,
-      proxy_username => $proxy_username,
-      proxy_password => $proxy_password,
-      require        => Anchor['cloudera::begin'],
-      before         => Anchor['cloudera::end'],
-    }
-    class { 'cloudera::cdh':
-      ensure         => $ensure,
-      autoupgrade    => $autoupgrade,
-      service_ensure => $service_ensure,
-#      service_enable => $service_enable,
-      require        => Anchor['cloudera::begin'],
-      before         => Anchor['cloudera::end'],
-    }
-    class { 'cloudera::impala':
-      ensure         => $ensure,
-      autoupgrade    => $autoupgrade,
-      service_ensure => $service_ensure,
-#      service_enable => $service_enable,
-      require        => Anchor['cloudera::begin'],
-      before         => Anchor['cloudera::end'],
-    }
-    class { 'cloudera::search':
-      ensure         => $ensure,
-      autoupgrade    => $autoupgrade,
-      service_ensure => $service_ensure,
-#      service_enable => $service_enable,
-      require        => Anchor['cloudera::begin'],
-      before         => Anchor['cloudera::end'],
-    }
-    if $use_gplextras {
-      class { 'cloudera::gplextras::repo':
+    # Skip installing the CDH RPMs if we are going to use parcels.
+    if ! $use_parcels {
+      class { 'cloudera::cdh::repo':
         ensure         => $ensure,
-        yumserver      => $cg_yumserver,
-        yumpath        => $cg_yumpath,
-        version        => $cg_version,
+        yumserver      => $cdh_yumserver,
+        yumpath        => $cdh_yumpath,
+        version        => $cdh_version,
         proxy          => $proxy,
         proxy_username => $proxy_username,
         proxy_password => $proxy_password,
         require        => Anchor['cloudera::begin'],
         before         => Anchor['cloudera::end'],
       }
-      class { 'cloudera::gplextras':
-        ensure      => $ensure,
-        autoupgrade => $autoupgrade,
-        require     => Anchor['cloudera::begin'],
-        before      => Anchor['cloudera::end'],
+      class { 'cloudera::impala::repo':
+        ensure         => $ensure,
+        yumserver      => $ci_yumserver,
+        yumpath        => $ci_yumpath,
+        version        => $ci_version,
+        proxy          => $proxy,
+        proxy_username => $proxy_username,
+        proxy_password => $proxy_password,
+        require        => Anchor['cloudera::begin'],
+        before         => Anchor['cloudera::end'],
+      }
+      class { 'cloudera::search::repo':
+        ensure         => $ensure,
+        yumserver      => $cs_yumserver,
+        yumpath        => $cs_yumpath,
+        version        => $cs_version,
+        proxy          => $proxy,
+        proxy_username => $proxy_username,
+        proxy_password => $proxy_password,
+        require        => Anchor['cloudera::begin'],
+        before         => Anchor['cloudera::end'],
+      }
+      class { 'cloudera::cdh':
+        ensure         => $ensure,
+        autoupgrade    => $autoupgrade,
+        service_ensure => $service_ensure,
+#        service_enable => $service_enable,
+        require        => Anchor['cloudera::begin'],
+        before         => Anchor['cloudera::end'],
+      }
+      class { 'cloudera::impala':
+        ensure         => $ensure,
+        autoupgrade    => $autoupgrade,
+        service_ensure => $service_ensure,
+#        service_enable => $service_enable,
+        require        => Anchor['cloudera::begin'],
+        before         => Anchor['cloudera::end'],
+      }
+      class { 'cloudera::search':
+        ensure         => $ensure,
+        autoupgrade    => $autoupgrade,
+        service_ensure => $service_ensure,
+#        service_enable => $service_enable,
+        require        => Anchor['cloudera::begin'],
+        before         => Anchor['cloudera::end'],
+      }
+      if $use_gplextras {
+        class { 'cloudera::gplextras::repo':
+          ensure         => $ensure,
+          yumserver      => $cg_yumserver,
+          yumpath        => $cg_yumpath,
+          version        => $cg_version,
+          proxy          => $proxy,
+          proxy_username => $proxy_username,
+          proxy_password => $proxy_password,
+          require        => Anchor['cloudera::begin'],
+          before         => Anchor['cloudera::end'],
+        }
+        class { 'cloudera::gplextras':
+          ensure      => $ensure,
+          autoupgrade => $autoupgrade,
+          require     => Anchor['cloudera::begin'],
+          before      => Anchor['cloudera::end'],
+        }
       }
     }
+  } else {
+    fail('Parameter $cm_version must start with either 4 or 5.')
   }
 }
