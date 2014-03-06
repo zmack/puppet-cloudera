@@ -193,6 +193,7 @@ class cloudera (
   $cdh_yumserver    = $cloudera::params::cdh_yumserver,
   $cdh_yumpath      = $cloudera::params::cdh_yumpath,
   $cdh_version      = $cloudera::params::cdh_version,
+  $cdh5_yumpath     = $cloudera::params::cdh5_yumpath,
   $cm_yumserver     = $cloudera::params::cm_yumserver,
   $cm_yumpath       = $cloudera::params::cm_yumpath,
   $cm_version       = $cloudera::params::cm_version,
@@ -206,6 +207,7 @@ class cloudera (
   $cg_yumserver     = $cloudera::params::cg_yumserver,
   $cg_yumpath       = $cloudera::params::cg_yumpath,
   $cg_version       = $cloudera::params::cg_version,
+  $cg5_yumpath      = $cloudera::params::cg5_yumpath,
   $cm_server_host   = $cloudera::params::cm_server_host,
   $cm_server_port   = $cloudera::params::cm_server_port,
   $use_tls          = $cloudera::params::safe_cm_use_tls,
@@ -278,6 +280,128 @@ class cloudera (
       proxy_password => $proxy_password,
       require        => Anchor['cloudera::begin'],
       before         => Anchor['cloudera::end'],
+    }
+    # Skip installing the CDH RPMs if we are going to use parcels.
+    if ! $use_parcels {
+      if $cdh_version =~ /^5/ {
+        class { 'cloudera::cdh5::repo':
+          ensure         => $ensure,
+          yumserver      => $cdh_yumserver,
+          yumpath        => $cdh5_yumpath,
+          version        => $cdh_version,
+          proxy          => $proxy,
+          proxy_username => $proxy_username,
+          proxy_password => $proxy_password,
+          require        => Anchor['cloudera::begin'],
+          before         => Anchor['cloudera::end'],
+        }
+        class { 'cloudera::cdh5':
+          ensure         => $ensure,
+          autoupgrade    => $autoupgrade,
+          service_ensure => $service_ensure,
+#          service_enable => $service_enable,
+          require        => Anchor['cloudera::begin'],
+          before         => Anchor['cloudera::end'],
+        }
+        if $use_gplextras {
+          class { 'cloudera::gplextras5::repo':
+            ensure         => $ensure,
+            yumserver      => $cg_yumserver,
+            yumpath        => $cg5_yumpath,
+            version        => $cg_version,
+            proxy          => $proxy,
+            proxy_username => $proxy_username,
+            proxy_password => $proxy_password,
+            require        => Anchor['cloudera::begin'],
+            before         => Anchor['cloudera::end'],
+          }
+          class { 'cloudera::gplextras5':
+            ensure      => $ensure,
+            autoupgrade => $autoupgrade,
+            require     => Anchor['cloudera::begin'],
+            before      => Anchor['cloudera::end'],
+          }
+        }
+      } elsif $cdh_version =~ /^4/ {
+        class { 'cloudera::cdh::repo':
+          ensure         => $ensure,
+          yumserver      => $cdh_yumserver,
+          yumpath        => $cdh_yumpath,
+          version        => $cdh_version,
+          proxy          => $proxy,
+          proxy_username => $proxy_username,
+          proxy_password => $proxy_password,
+          require        => Anchor['cloudera::begin'],
+          before         => Anchor['cloudera::end'],
+        }
+        class { 'cloudera::impala::repo':
+          ensure         => $ensure,
+          yumserver      => $ci_yumserver,
+          yumpath        => $ci_yumpath,
+          version        => $ci_version,
+          proxy          => $proxy,
+          proxy_username => $proxy_username,
+          proxy_password => $proxy_password,
+          require        => Anchor['cloudera::begin'],
+          before         => Anchor['cloudera::end'],
+        }
+        class { 'cloudera::search::repo':
+          ensure         => $ensure,
+          yumserver      => $cs_yumserver,
+          yumpath        => $cs_yumpath,
+          version        => $cs_version,
+          proxy          => $proxy,
+          proxy_username => $proxy_username,
+          proxy_password => $proxy_password,
+          require        => Anchor['cloudera::begin'],
+          before         => Anchor['cloudera::end'],
+        }
+        class { 'cloudera::cdh':
+          ensure         => $ensure,
+          autoupgrade    => $autoupgrade,
+          service_ensure => $service_ensure,
+#          service_enable => $service_enable,
+          require        => Anchor['cloudera::begin'],
+          before         => Anchor['cloudera::end'],
+        }
+        class { 'cloudera::impala':
+          ensure         => $ensure,
+          autoupgrade    => $autoupgrade,
+          service_ensure => $service_ensure,
+#          service_enable => $service_enable,
+          require        => Anchor['cloudera::begin'],
+          before         => Anchor['cloudera::end'],
+        }
+        class { 'cloudera::search':
+          ensure         => $ensure,
+          autoupgrade    => $autoupgrade,
+          service_ensure => $service_ensure,
+#          service_enable => $service_enable,
+          require        => Anchor['cloudera::begin'],
+          before         => Anchor['cloudera::end'],
+        }
+        if $use_gplextras {
+          class { 'cloudera::gplextras::repo':
+            ensure         => $ensure,
+            yumserver      => $cg_yumserver,
+            yumpath        => $cg_yumpath,
+            version        => $cg_version,
+            proxy          => $proxy,
+            proxy_username => $proxy_username,
+            proxy_password => $proxy_password,
+            require        => Anchor['cloudera::begin'],
+            before         => Anchor['cloudera::end'],
+          }
+          class { 'cloudera::gplextras':
+            ensure      => $ensure,
+            autoupgrade => $autoupgrade,
+            require     => Anchor['cloudera::begin'],
+            before      => Anchor['cloudera::end'],
+          }
+        }
+      } else {
+        fail('Parameter $cdh_version must start with either 4 or 5.')
+      }
     }
   } elsif $cm_version =~ /^4/ {
     if $install_java {

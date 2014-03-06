@@ -239,6 +239,7 @@ Notes
 * When using parcels, the CDH software is not deployed by Puppet.  Puppet will only install the Cloudera Manager server/agent.  You must then configure Cloudera Manager to deploy the parcels.
 * When installing packages and not parcels on SLES, SP2 is required as the hadoop-2.0.0+1518-1.cdh4.5.0.p0.24.sles11.x86_64 package requires netcat-openbsd which is not avalable on SLES 11SP1.
 * Osfamily RedHat 5 requires the EPEL YUM repository when installing LZO support.
+* This module does not support upgrading from CDH4 to CDH5 packages, including Impala, Search, and GPL Extras.
 
 Issues
 ------

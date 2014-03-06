@@ -200,11 +200,11 @@ class cloudera::params {
     $majdistrelease = regsubst($::operatingsystemrelease,'^(\d+)\.(\d+)','\1')
   }
 
-  $cdh_version = '4'
+  $cdh_version = '5'
   $cm_version  = '5'
   $ci_version  = '1'
   $cs_version  = '1'
-  $cg_version  = '4'
+  $cg_version  = '5'
 
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OEL', 'OracleLinux': {
