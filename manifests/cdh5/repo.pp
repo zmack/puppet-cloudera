@@ -20,7 +20,7 @@
 #
 # [*version*]
 #   The version of Cloudera's Distribution, including Apache Hadoop to install.
-#   Default: 4
+#   Default: 5
 #
 # [*proxy*]
 #   The URL to the proxy server for the YUM repositories.
@@ -81,7 +81,7 @@ class cloudera::cdh5::repo (
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OEL', 'OracleLinux': {
       yumrepo { 'cloudera-cdh5':
-        descr          => 'Cloudera\'s Distribution for Hadoop, Version 4',
+        descr          => 'Cloudera\'s Distribution for Hadoop, Version 5',
         enabled        => $enabled,
         gpgcheck       => 1,
         gpgkey         => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
@@ -104,7 +104,7 @@ class cloudera::cdh5::repo (
     }
     'SLES': {
       zypprepo { 'cloudera-cdh5':
-        descr       => 'Cloudera\'s Distribution for Hadoop, Version 4',
+        descr       => 'Cloudera\'s Distribution for Hadoop, Version 5',
         enabled     => $enabled,
         gpgcheck    => 1,
         gpgkey      => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",

@@ -59,7 +59,7 @@
 class cloudera::gplextras5::repo (
   $ensure         = $cloudera::params::ensure,
   $yumserver      = $cloudera::params::cg_yumserver,
-  $yumpath        = $cloudera::params::cg_yumpath,
+  $yumpath        = $cloudera::params::cg5_yumpath,
   $version        = $cloudera::params::cg_version,
   $aptkey         = $cloudera::params::cg_aptkey,
   $proxy          = $cloudera::params::proxy,

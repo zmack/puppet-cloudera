@@ -20,7 +20,7 @@
 #
 # [*version*]
 #   The version of Cloudera Manager to install.
-#   Default: 4
+#   Default: 5
 #
 # [*proxy*]
 #   The URL to the proxy server for the YUM repositories.
@@ -58,7 +58,7 @@
 #
 class cloudera::cm5::repo (
   $ensure         = $cloudera::params::ensure,
-  $yumserver      = $cloudera::params::cm5_yumserver,
+  $yumserver      = $cloudera::params::cm_yumserver,
   $yumpath        = $cloudera::params::cm5_yumpath,
   $version        = $cloudera::params::cm_version,
   $aptkey         = $cloudera::params::cm_aptkey,
