@@ -111,4 +111,8 @@ class cloudera::cdh5 (
 #    ensure      => $ensure,
 #    autoupgrade => $autoupgrade,
   }
+#  class { 'cloudera::cdh5::search':
+##    ensure      => $ensure,
+##    autoupgrade => $autoupgrade,
+#  }
 }
