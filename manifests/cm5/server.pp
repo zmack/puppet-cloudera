@@ -211,6 +211,7 @@ class cloudera::cm5::server (
         enable     => $service_enable,
         hasrestart => true,
         hasstatus  => true,
+        require    => Package['cloudera-manager-server-db'],
         before     => Service['cloudera-scm-server'],
       }
     }
