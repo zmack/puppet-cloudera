@@ -22,11 +22,20 @@
 #
 class cloudera::cdh5::hcatalog {
   package { 'hcatalog':
-    ensure => 'present',
+    ensure => 'absent',
     tag    => 'cloudera-cdh5',
   }
 
   package { 'webhcat':
+    ensure => 'absent',
+    tag    => 'cloudera-cdh5',
+  }
+  package { 'hive-hcatalog':
+    ensure => 'present',
+    tag    => 'cloudera-cdh5',
+  }
+
+  package { 'hive-webhcat':
     ensure => 'present',
     tag    => 'cloudera-cdh5',
   }

@@ -24,7 +24,9 @@ describe 'cloudera::cdh5::hcatalog', :type => 'class' do
 #      :operatingsystem => 'CentOS'
 #    }
 #    end
-    it { should contain_package('hcatalog').with_ensure('present') }
-    it { should contain_package('webhcat').with_ensure('present') }
+    it { should contain_package('hcatalog').with_ensure('absent') }
+    it { should contain_package('webhcat').with_ensure('absent') }
+    it { should contain_package('hive-hcatalog').with_ensure('present') }
+    it { should contain_package('hive-webhcat').with_ensure('present') }
   end
 end
