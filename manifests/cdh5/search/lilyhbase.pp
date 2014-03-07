@@ -23,11 +23,11 @@
 class cloudera::cdh5::search::lilyhbase {
   package { 'hbase-solr':
     ensure => 'present',
-    tag    => 'cloudera-search',
+    tag    => 'cloudera-cdh5',
   }
 
   package { 'hbase-solr-doc':
     ensure => 'present',
-    tag    => 'cloudera-search',
+    tag    => 'cloudera-cdh5',
   }
 }

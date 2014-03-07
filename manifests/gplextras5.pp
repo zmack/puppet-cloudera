@@ -45,16 +45,16 @@ class cloudera::gplextras5 (
 
   package { 'hadoop-lzo':
     ensure => 'present',
-    tag    => 'cloudera-gplextras',
+    tag    => 'cloudera-gplextras5',
   }
 
   package { 'hadoop-lzo-mr1':
     ensure => 'present',
-    tag    => 'cloudera-gplextras',
+    tag    => 'cloudera-gplextras5',
   }
 
   package { 'impala-lzo':
     ensure => 'present',
-    tag    => 'cloudera-gplextras',
+    tag    => 'cloudera-gplextras5',
   }
 }

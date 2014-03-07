@@ -46,11 +46,11 @@ class cloudera::cdh5::impala (
 
   package { 'impala':
     ensure => 'present',
-    tag    => 'cloudera-impala',
+    tag    => 'cloudera-cdh5',
   }
 
   package { 'impala-shell':
     ensure => 'present',
-    tag    => 'cloudera-impala',
+    tag    => 'cloudera-cdh5',
   }
 }

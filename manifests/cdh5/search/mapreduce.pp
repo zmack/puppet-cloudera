@@ -23,6 +23,6 @@
 class cloudera::cdh5::search::mapreduce {
   package { 'solr-mapreduce':
     ensure => 'present',
-    tag    => 'cloudera-search',
+    tag    => 'cloudera-cdh5',
   }
 }

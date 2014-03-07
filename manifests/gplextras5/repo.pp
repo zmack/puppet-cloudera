@@ -100,7 +100,7 @@ class cloudera::gplextras5::repo (
         mode   => '0644',
       }
 
-      Yumrepo['cloudera-gplextras5'] -> Package<|tag == 'cloudera-gplextras'|>
+      Yumrepo['cloudera-gplextras5'] -> Package<|tag == 'cloudera-gplextras5'|>
     }
     'SLES': {
       zypprepo { 'cloudera-gplextras5':
@@ -120,7 +120,7 @@ class cloudera::gplextras5::repo (
         mode   => '0644',
       }
 
-      Zypprepo['cloudera-gplextras5'] -> Package<|tag == 'cloudera-gplextras'|>
+      Zypprepo['cloudera-gplextras5'] -> Package<|tag == 'cloudera-gplextras5'|>
     }
     'Debian', 'Ubuntu': {
       include '::apt'
@@ -134,7 +134,7 @@ class cloudera::gplextras5::repo (
         architecture => $cloudera::params::architecture,
       }
 
-      Apt::Source['cloudera-gplextras5'] -> Package<|tag == 'cloudera-gplextras'|>
+      Apt::Source['cloudera-gplextras5'] -> Package<|tag == 'cloudera-gplextras5'|>
     }
     default: { }
   }

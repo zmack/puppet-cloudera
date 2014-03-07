@@ -46,7 +46,7 @@ class cloudera::cdh5::search (
 
   package { 'solr-server':
     ensure => 'present',
-    tag    => 'cloudera-search',
+    tag    => 'cloudera-cdh5',
   }
 
   service { 'solr-server':
