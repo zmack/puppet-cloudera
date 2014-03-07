@@ -25,6 +25,6 @@ describe 'cloudera::cdh5::search::lilyhbase', :type => 'class' do
 #    }
 #    end
     it { should contain_package('hbase-solr').with_ensure('present') }
-    it { should contain_package('hbase-solr-doc').with_ensure('present') }
+#    it { should contain_package('hbase-solr-doc').with_ensure('present') }
   end
 end

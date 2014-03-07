@@ -26,8 +26,8 @@ class cloudera::cdh5::search::lilyhbase {
     tag    => 'cloudera-cdh5',
   }
 
-  package { 'hbase-solr-doc':
-    ensure => 'present',
-    tag    => 'cloudera-cdh5',
-  }
+#  package { 'hbase-solr-doc':
+#    ensure => 'present',
+#    tag    => 'cloudera-cdh5',
+#  }
 }
