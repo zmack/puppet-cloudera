@@ -18,4 +18,9 @@ class cloudera::cdh5::pig {
     ensure => 'present',
     tag    => 'cloudera-cdh5',
   }
+
+  package { 'pig-udf-datafu':
+    ensure => 'present',
+    tag    => 'cloudera-cdh5',
+  }
 }

@@ -25,5 +25,6 @@ describe 'cloudera::cdh5::pig', :type => 'class' do
 #    }
 #    end
     it { should contain_package('pig').with_ensure('present') }
+    it { should contain_package('pig-udf-datafu').with_ensure('present') }
   end
 end
