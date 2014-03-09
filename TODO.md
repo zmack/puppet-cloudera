@@ -12,6 +12,7 @@
 
 * support CM5 / CDH5 / Oracle JDK 7
 * refactor ::repo to autoinclude in cdh/impala/search
+* integrate cloudera::cm::server into init.pp
 * remove CDH (RPM) support?
 
 ## Other:
@@ -26,7 +27,8 @@
 * Document hive-metastore installation.
 * Document sqoop-metastore installation.
 * Document whirr installation.
-* Set kernel vm.swappiness to 0.
+* Set [kernel vm.swappiness](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH5/latest/CDH5-Installation-Guide/cdh5ig_topic_11_6.html) to 0.
+* Sqoop: [Installing the JDBC Drivers](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH5/latest/CDH5-Installation-Guide/cdh5ig_topic_13_7.html)
 
 ## Links
 
