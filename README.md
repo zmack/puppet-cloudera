@@ -7,12 +7,13 @@ develop branch: [![Build Status](https://secure.travis-ci.org/razorsedge/puppet-
 Introduction
 ------------
 
-This module manages the installation of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html).  It follows the standards written in the [Cloudera Manager Installation Guide](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/Cloudera-Manager-Installation-Guide.html) [Installation Path B - Installation Using Your Own Method](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_B.html).  By default, this module assumes that [parcels](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) will be used to deploy CDH, Impala, and Search.  If parcels are not desired, this module can also manage the installation of [Cloudera's Distribution of Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html) including Impala, Sentry, Search, Spark, HBase, and [LZO compression](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html).
+This module manages the installation of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html).  It follows the standards written in the [Cloudera Manager Installation Guide](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/Cloudera-Manager-Installation-Guide.html) [Installation Path B - Installation Using Your Own Method](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_B.html).  By default, this module assumes that [parcels](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) will be used to deploy [Cloudera's Distribution of Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html) and related software.  If parcels are not desired, this module can also manage the installation of CDH including HDFS & MapReduce, Impala, Sentry, Search, Spark, HBase, and [LZO compression](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html).
 
 Actions:
 
 * Installs the Cloudera software repository for CM.
-* Installs Oracle Java Development Kit (JDK) 6.
+* Installs Oracle Java Development Kit (JDK) 7.
+* Optionally installs the Oracle Java Cryptography Extensions.
 * Installs CM 5 agent.
 * Configures the CM agent to talk to a CM server.
 * Starts the CM agent.
@@ -21,16 +22,14 @@ Actions:
 
 Optional Actions (non-parcel):
 
-* Installs the Cloudera software repositories for CDH, Impala, and Search.
-* Installs most components of CDH 5.
-* Installs Impala 1.
-* Installs Search 1.
+* Installs the Cloudera software repository for CDH.
+* Installs most components of CDH 5 including HBase, Impala, Search, and Spark.
 * Optionally installs GPL Extras (LZO) 5.
 
 Software Support:
 
 * Cloudera Manager    - tested with 4.1.2, 4.8.0, and 5.0.0beta2
-* CDH                 - tested with 4.1.2 and 4.5.0, 5.0.0
+* CDH                 - tested with 4.1.2 and 4.5.0, 5.0.0beta2
 * Cloudera Impala     - tested with 1.0 and 1.2.3
 * Cloudera Search     - tested with 1.1.0
 * Cloudera GPL Extras - tested with 4.3.0 and 5.0.0
