@@ -106,8 +106,7 @@
 #   Default: 7182
 #
 # [*use_tls*]
-#   Whether to enable TLS on the Cloudera Manager agent. TLS needs to be enabled
-#   on the server prior to setting this to true.
+#   Whether to enable TLS on the Cloudera Manager server and agent.
 #   Default: false
 #
 # [*verify_cert_file*]
@@ -134,6 +133,66 @@
 #   strength jurisdiction policy files.  This requires manual download of the
 #   zip file.  See files/README_JCE.md for download instructions.
 #   Default: false
+#
+# [*install_cmserver*]
+#   Whether to install the Cloudera Manager Server.  This should only be set to
+#   true on one host in your environment.
+#   Default: false
+#
+# [*database_name*]
+#   Name of the database to use for Cloudera Manager.
+#   Default: scm
+#
+# [*username*]
+#   Name of the user to use to connect to *database_name*.
+#   Default: scm
+#
+# [*password*]
+#   Password to use to connect to *database_name*.
+#   Default: scm
+#
+# [*db_host*]
+#   Host to connect to for *database_name*.
+#   Default: localhost
+#
+# [*db_port*]
+#   Port on *db_host* to connect to for *database_name*.
+#   Default: 3306
+#
+# [*db_user*]
+#   Administrative database user on *db_host*.
+#   Default: root
+#
+# [*db_pass*]
+#   Administrative database user *db_user* password.
+#   Default:
+#
+# [*db_type*]
+#   Which type of database to use for Cloudera Manager.  Valid options are
+#   embedded, mysql, oracle, or postgresql.
+#   Default: embedded
+#
+# [*server_ca_file*]
+#   The file holding the PEM public key of the Cloudera Manager server
+#   certificate authority.
+#   Default: /etc/pki/tls/certs/cloudera_manager-ca.crt
+#
+# [*server_cert_file*]
+#   The file holding the PEM public key of the Cloudera Manager server.
+#   Default: /etc/pki/tls/certs/${::fqdn}-cloudera_manager.crt
+#
+# [*server_key_file*]
+#   The file holding the PEM private key of the Cloudera Manager server.
+#   Default: /etc/pki/tls/private/${::fqdn}-cloudera_manager.key
+#
+# [*server_chain_file*]
+#   The file holding the PEM public key(s) of the Cloudera Manager server
+#   intermediary certificate authority.
+#   Default: none
+#
+# [*server_keypw*]
+#   The password used to protect the keystore.
+#   Default: none
 #
 # [*proxy*]
 #   The URL to the proxy server for the YUM repositories.
@@ -216,6 +275,20 @@ class cloudera (
   $use_gplextras    = $cloudera::params::safe_use_gplextras,
   $install_java     = $cloudera::params::safe_install_java,
   $install_jce      = $cloudera::params::safe_install_jce,
+  $install_cmserver  = $cloudera::params::safe_install_cmserver,
+  $database_name     = $cloudera::params::database_name,
+  $username          = $cloudera::params::username,
+  $password          = $cloudera::params::password,
+  $db_host           = $cloudera::params::db_host,
+  $db_port           = $cloudera::params::db_port,
+  $db_user           = $cloudera::params::db_user,
+  $db_pass           = $cloudera::params::db_pass,
+  $db_type           = $cloudera::params::db_type,
+  $server_ca_file    = $cloudera::params::server_ca_file,
+  $server_cert_file  = $cloudera::params::server_cert_file,
+  $server_key_file   = $cloudera::params::server_key_file,
+  $server_chain_file = $cloudera::params::server_chain_file,
+  $server_keypw      = $cloudera::params::server_keypw,
   $proxy            = $cloudera::params::proxy,
   $proxy_username   = $cloudera::params::proxy_username,
   $proxy_password   = $cloudera::params::proxy_password
@@ -228,6 +301,7 @@ class cloudera (
   validate_bool($use_gplextras)
   validate_bool($install_java)
   validate_bool($install_jce)
+  validate_bool($install_cmserver)
 
   anchor { 'cloudera::begin': }
   anchor { 'cloudera::end': }
@@ -280,6 +354,29 @@ class cloudera (
       proxy_password => $proxy_password,
       require        => Anchor['cloudera::begin'],
       before         => Anchor['cloudera::end'],
+    }
+    if $install_cmserver {
+      class { 'cloudera::cm5::server':
+        ensure            => $ensure,
+        autoupgrade       => $autoupgrade,
+        service_ensure    => $service_ensure,
+        database_name     => $database_name,
+        username          => $username,
+        password          => $password,
+        db_host           => $db_host,
+        db_port           => $db_port,
+        db_user           => $db_user,
+        db_pass           => $db_pass,
+        db_type           => $db_type,
+        use_tls           => $use_tls,
+        server_ca_file    => $server_ca_file,
+        server_cert_file  => $server_cert_file,
+        server_key_file   => $server_key_file,
+        server_chain_file => $server_chain_file,
+        server_keypw      => $server_keypw,
+        require           => $cloudera_cm_require,
+        before            => Anchor['cloudera::end'],
+      }
     }
     # Skip installing the CDH RPMs if we are going to use parcels.
     if ! $use_parcels {
@@ -451,6 +548,29 @@ class cloudera (
       proxy_password => $proxy_password,
       require        => Anchor['cloudera::begin'],
       before         => Anchor['cloudera::end'],
+    }
+    if $install_cmserver {
+      class { 'cloudera::cm::server':
+        ensure            => $ensure,
+        autoupgrade       => $autoupgrade,
+        service_ensure    => $service_ensure,
+        database_name     => $database_name,
+        username          => $username,
+        password          => $password,
+        db_host           => $db_host,
+        db_port           => $db_port,
+        db_user           => $db_user,
+        db_pass           => $db_pass,
+        db_type           => $db_type,
+        use_tls           => $use_tls,
+        server_ca_file    => $server_ca_file,
+        server_cert_file  => $server_cert_file,
+        server_key_file   => $server_key_file,
+        server_chain_file => $server_chain_file,
+        server_keypw      => $server_keypw,
+        require           => $cloudera_cm_require,
+        before            => Anchor['cloudera::end'],
+      }
     }
     # Skip installing the CDH RPMs if we are going to use parcels.
     if ! $use_parcels {

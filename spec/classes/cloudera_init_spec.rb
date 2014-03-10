@@ -31,6 +31,7 @@ describe 'cloudera', :type => 'class' do
     it { should contain_class('cloudera::cm5').with_ensure('present') }
     it { should_not contain_class('cloudera::cdh5::repo') }
     it { should_not contain_class('cloudera::cdh5') }
+    it { should_not contain_class('cloudera::cm5::server') }
 
     it { should_not contain_class('cloudera::java') }
     it { should_not contain_class('cloudera::java::jce') }
@@ -38,6 +39,7 @@ describe 'cloudera', :type => 'class' do
     it { should_not contain_class('cloudera::cm') }
     it { should_not contain_class('cloudera::cdh::repo') }
     it { should_not contain_class('cloudera::cdh') }
+    it { should_not contain_class('cloudera::cm::server') }
   end
 
   context 'on a supported operatingsystem, custom parameters, cm_version => 5' do
@@ -98,6 +100,11 @@ describe 'cloudera', :type => 'class' do
       it { should contain_class('cloudera::java5').with_ensure('present') }
       it { should contain_class('cloudera::java5::jce').with_ensure('present') }
     end
+
+    describe 'install_cmserver => true' do
+      let(:params) {{ :install_cmserver => true }}
+      it { should contain_class('cloudera::cm5::server').with_ensure('present') }
+    end
   end
 
   context 'on a supported operatingsystem, custom parameters, cm_version => 4' do
@@ -137,6 +144,11 @@ describe 'cloudera', :type => 'class' do
       let(:params) {{ :install_jce => true, :cm_version => '4' }}
       it { should contain_class('cloudera::java').with_ensure('present') }
       it { should contain_class('cloudera::java::jce').with_ensure('present') }
+    end
+
+    describe 'install_cmserver => true' do
+      let(:params) {{ :install_cmserver => true, :cm_version => '4' }}
+      it { should contain_class('cloudera::cm::server').with_ensure('present') }
     end
   end
 

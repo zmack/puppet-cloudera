@@ -125,12 +125,12 @@ class { 'cloudera':
 }
 ```
 
-The node that will be the CM server may use this declaration:
+The node that will be the CM server will use this declaration:
 ```puppet
 class { 'cloudera':
-  cm_server_host => 'smhost.example.com',
-} ->
-class { 'cloudera::cm::server': }
+  cm_server_host   => 'smhost.example.com',
+  install_cmserver => true,
+}
 ```
 
 ### Parcels
@@ -202,13 +202,11 @@ file { '/etc/pki/tls/certs/cloudera_manager.crt': }
 ```puppet
 # The node that will be the CM agent+server may use this declaration:
 class { 'cloudera':
-  server_host => 'smhost.example.com',
-  use_tls     => true,
-  install_jce => true,
-} ->
-class { 'cloudera::cm::server':
-  use_tls      => true,
-  server_keypw => 'myPassWord',
+  server_host      => 'smhost.example.com',
+  use_tls          => true,
+  install_jce      => true,
+  install_cmserver => true,
+  server_keypw     => 'myPassWord',
 }
 file { '/etc/pki/tls/certs/cloudera_manager.crt': }
 file { '/etc/pki/tls/certs/cloudera_manager-ca.crt': }
