@@ -209,6 +209,7 @@
 # === Actions:
 #
 # Installs YUM repository configuration files.
+# Tunes the kernel parameter vm.swappiness to be 0.
 #
 # === Requires:
 #
@@ -305,6 +306,15 @@ class cloudera (
 
   anchor { 'cloudera::begin': }
   anchor { 'cloudera::end': }
+
+  sysctl { 'vm.swappiness':
+    ensure  => $ensure,
+    value   => '0',
+    apply   => true,
+    comment => 'Clodera recommended setting.',
+    require => Anchor['cloudera::begin'],
+    before  => Anchor['cloudera::end'],
+  }
 
   if $cm_version =~ /^5/ {
     if $install_java {

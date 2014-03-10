@@ -25,6 +25,11 @@ describe 'cloudera', :type => 'class' do
     }
     end
     it { should compile.with_all_deps }
+    it { should contain_sysctl('vm.swappiness').with(
+      :ensure => 'present',
+      :value  => '0',
+      :apply  => 'true'
+    )}
     it { should contain_class('cloudera::java5').with_ensure('present') }
     it { should_not contain_class('cloudera::java5::jce') }
     it { should contain_class('cloudera::cm5::repo').with_ensure('present') }
@@ -51,6 +56,7 @@ describe 'cloudera', :type => 'class' do
 
     describe 'ensure => absent' do
       let(:params) {{ :ensure => 'absent' }}
+      it { should contain_sysctl('vm.swappiness').with_ensure('absent') }
       it { should contain_class('cloudera::java5').with_ensure('absent') }
       it { should_not contain_class('cloudera::java5::jce') }
       it { should contain_class('cloudera::cm5').with_ensure('absent') }
