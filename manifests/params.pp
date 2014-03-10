@@ -190,6 +190,16 @@ class cloudera::params {
     $safe_install_jce = $install_jce
   }
 
+  $install_cmserver = $::cloudera_install_cmserver ? {
+    undef => false,
+    default => $::cloudera_install_cmserver,
+  }
+  if is_string($install_cmserver) {
+    $safe_install_cmserver = str2bool($install_cmserver)
+  } else {
+    $safe_install_cmserver = $install_cmserver
+  }
+
   if $::operatingsystemmajrelease { # facter 1.7+
     $majdistrelease = $::operatingsystemmajrelease
   } elsif $::lsbmajdistrelease {    # requires LSB to already be installed
@@ -205,6 +215,15 @@ class cloudera::params {
   $ci_version  = '1'
   $cs_version  = '1'
   $cg_version  = '5'
+
+  $database_name = 'scm'
+  $username      = 'scm'
+  $password      = 'scm'
+  $db_host       = 'localhost'
+  $db_port       = '3306'
+  $db_user       = 'root'
+  $db_pass       = ''
+  $db_type       = 'embedded'
 
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OEL', 'OracleLinux': {
