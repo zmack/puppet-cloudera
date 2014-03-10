@@ -18,6 +18,7 @@ describe 'cloudera::gplextras::repo', :type => 'class' do
   end
 
   context 'on a supported operatingsystem, default parameters' do
+    let(:params) {{ :version => '4' }}
     describe 'RedHat 6' do
       let :facts do {
         :osfamily               => 'RedHat',
