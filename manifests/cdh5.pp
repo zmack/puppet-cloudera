@@ -139,4 +139,8 @@ class cloudera::cdh5 (
 #    ensure      => $ensure,
 #    autoupgrade => $autoupgrade,
   }
+  class { 'cloudera::cdh5::spark':
+#    ensure      => $ensure,
+#    autoupgrade => $autoupgrade,
+  }
 }
