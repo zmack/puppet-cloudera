@@ -9,8 +9,7 @@ class { 'cloudera::cm::server':
 
 include '::postgresql::server'
 #class { 'cloudera':
-#  cm_server_host => 'localhost',
-#} ->
-#class { 'cloudera::cm::server':
-#  db_type => 'postgresql',
+#  cm_server_host   => 'localhost',
+#  install_cmserver => true,
+#  db_type          => 'postgresql',
 #}
