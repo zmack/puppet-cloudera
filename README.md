@@ -151,26 +151,24 @@ class { 'cloudera':
   cm_server_host => 'smhost.example.com',
   use_parcels    => false,
 }
-class { 'cloudera::cdh::hue': }
-class { 'cloudera::cdh::mahout': }
-class { 'cloudera::cdh::sqoop': }
+class { 'cloudera::cdh5::hue': }
+class { 'cloudera::cdh5::mahout': }
+class { 'cloudera::cdh5::sqoop': }
 # Install Oozie WebUI support (optional):
-#class { 'cloudera::cdh::oozie::ext': }
+#class { 'cloudera::cdh5::oozie::ext': }
 # Install MySQL support (optional):
-#class { 'cloudera::cdh::hue::mysql': }
-#class { 'cloudera::cdh::oozie::mysql': }
+#class { 'cloudera::cdh5::hue::mysql': }
+#class { 'cloudera::cdh5::oozie::mysql': }
 ```
 
 The node that will be the CM server may use this declaration:
 (This will skip installation of the CDH software as it is not required.)
 ```puppet
-class { 'cloudera::cm::repo':
-  cm_version => '4.1',
-} ->
-class { 'cloudera::java': } ->
-class { 'cloudera::java::jce': } ->
-class { 'cloudera::cm': } ->
-class { 'cloudera::cm::server': }
+class { 'cloudera::cm5::repo': } ->
+class { 'cloudera::java5': } ->
+class { 'cloudera::java5::jce': } ->
+class { 'cloudera::cm5': } ->
+class { 'cloudera::cm5::server': }
 ```
 
 ### TLS
