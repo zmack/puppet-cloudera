@@ -75,13 +75,6 @@ class cloudera::java5 (
     before  => Anchor['cloudera::java5::end'],
   }
 
-  file { '/usr/java/default':
-    ensure  => symlink,
-    target  => '/usr/java/jdk1.7.0_25-cloudera',
-    require => [ Anchor['cloudera::java5::begin'], Package['jdk'], ],
-    before  => Anchor['cloudera::java5::end'],
-  }
-
   file { 'java-profile.d':
     ensure  => $file_ensure,
     path    => '/etc/profile.d/java.sh',
@@ -95,6 +88,13 @@ class cloudera::java5 (
 
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OEL', 'OracleLinux', 'SLES': {
+      file { '/usr/java/default':
+        ensure  => symlink,
+        target  => '/usr/java/jdk1.7.0_25-cloudera',
+        require => [ Anchor['cloudera::java5::begin'], Package['jdk'], ],
+        before  => Anchor['cloudera::java5::end'],
+      }
+
       Exec {
         require => Anchor['cloudera::java5::begin'],
         before  => Anchor['cloudera::java5::end'],
