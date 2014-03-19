@@ -17,13 +17,13 @@
 
 ##Overview
 
-This module manages the installation of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html).
+This module manages the installation of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html) on the Cloudera official [supported operating systems](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html?scroll=cmig_topic_4_1_unique_1).
 
 A one-maybe-two sentence summary of what the module does/what problem it solves. This is your 30 second elevator pitch for your module. Consider including OS/Puppet version it works with.
 
 ##Module Description
 
-This module manages the installation of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html).  It follows the standards written in the [Cloudera Manager Installation Guide](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/Cloudera-Manager-Installation-Guide.html) "[Installation Path B - Installation Using Your Own Method](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_B.html)".  By default, this module assumes that [parcels](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) will be used to deploy [Cloudera's Distribution of Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html) and related software.  If parcels are not desired, this module can also manage the installation of CDH including HDFS & MapReduce, Impala, Sentry, Search, Spark, HBase, and [LZO compression](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html).  The module can also confiure TLS Encryption Cloudera Manager communications.
+This module manages the installation of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html), a management application for Apache Hadoop.  It follows the standards written in the [Cloudera Manager Installation Guide](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/Cloudera-Manager-Installation-Guide.html) "[Installation Path B - Installation Using Your Own Method](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_B.html)".  By default, this module assumes that [parcels](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) will be used to deploy [Cloudera's Distribution of Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html) and related software.  If parcels are not desired, this module can also manage the installation of CDH including HDFS & MapReduce, Impala, Sentry, Search, Spark, HBase, and [LZO compression](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html).  The module can also configure TLS encryption of the Cloudera Manager communications channels.
 
 If applicable, this section should have a brief description of the technology the module integrates with and what that integration enables. This section should answer the questions: "What does this module *do*?" and "Why would I use it?"
     
@@ -40,10 +40,8 @@ If your module has a range of functionality (installation, configuration, manage
 * Configures the CM agent to talk to a CM server.
 * Starts the CM agent.
 * Sets the [kernel vm.swappiness](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH5/latest/CDH5-Installation-Guide/cdh5ig_topic_11_6.html) to 0.
-
 * Separately installs the CM server and database connectivity (by default to the embedded database server).
 * Separately starts the CM server.
-
 * Optionally installs the Cloudera software repository for CDH 5.
 * Optionally installs most components of CDH 5 including HBase, Impala, Search, and Spark.
 * Optionally installs GPL Extras (LZO) 5.
@@ -60,14 +58,14 @@ If your module requires anything extra before setting up (pluginsync enabled, et
 
 Most nodes in the cluster will use this declaration.
 ```puppet
-class { 'cloudera':
+class { '::cloudera':
   cm_server_host => 'smhost.localdomain',
 }
 ```
 
 The node that will be the CM server (ie smhost.localdomain) will use this declaration. This should only be included on one node of your environment.  By default it will install the embeded PostgreSQL database on the same node.  With the correct parameters, it can also connect to local or remote MySQL, PostgreSQL, and Oracle RDBMS databases.
 ```puppet
-class { 'cloudera':
+class { '::cloudera':
   cm_server_host   => 'smhost.localdomain',
   install_cmserver => true,
 }
@@ -81,12 +79,12 @@ If your most recent release breaks compatibility or requires particular steps fo
 
 ####Deprecation Warning
 
-The default for `use_parcels` will switch to `true` before the 1.0.0 release.
+- The default for `use_parcels` will switch to `true` before the 1.0.0 release.
 
 This:
 
 ```puppet
-class { 'cloudera':
+class { '::cloudera':
   cm_server_host => 'smhost.localdomain',
 }
 ```
@@ -94,20 +92,20 @@ class { 'cloudera':
 would become this:
 
 ```puppet
-class { 'cloudera':
+class { '::cloudera':
   cm_server_host => 'smhost.localdomain',
   use_parcels    => false,
 }
 ```
 
-The [puppetlabs/mysql](https://forge.puppetlabs.com/puppetlabs/mysql) dependency will update to version 2.  Make sure to review its changelog in the case of an upgrade.
+- The [puppetlabs/mysql](https://forge.puppetlabs.com/puppetlabs/mysql) dependency will update to version 2.  Make sure to review its changelog in the case of an upgrade.
 
-The class `cloudera::repo` will be renamed to `cloudera::cdh::repo` and the Impala repository will be split out into `cloudera::impala::repo`.
+- The class `::cloudera::repo` will be renamed to `::cloudera::cdh::repo` and the Impala repository will be split out into `::cloudera::impala::repo`.
 
 This:
 
 ```puppet
-class { 'cloudera::repo':
+class { '::cloudera::repo':
   cdh_version => '4.1',
   cm_version  => '4.1',
 }
@@ -116,59 +114,61 @@ class { 'cloudera::repo':
 would become this:
 
 ```puppet
-class { 'cloudera::cdh::repo':
+class { '::cloudera::cdh::repo':
   version => '4.1',
 }
-class { 'cloudera::impala::repo':
+class { '::cloudera::impala::repo':
   version => '4.1',
 }
 ```
 
 ##Usage
 
-All interaction with the cloudera module can do be done through the main cloudera class.  This means you can simply toggle the options in `::cloudera` to have full functionality of the module.
+All interaction with the cloudera module can be done through the main cloudera class.  This means you can simply toggle the options in `::cloudera` to have full functionality of the module.
 
 ### Parcels
 
-[Parcel](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) is an alternative binary distribution format supported by Cloudera Manager 4.5+ that simplifies distribution of CDH and other Cloudera products.  By default, this module assumes software deployment via parcel.  To allow Cloudera Manager to install RPMs (or DEBs) instead of parcels, just set `use_parcels => false`.
+[Parcel](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) is an alternative binary distribution format supported by Cloudera Manager 4.5+ that simplifies distribution of CDH and other Cloudera products.  By default, this module assumes software deployment of CDH via parcel.  To allow Cloudera Manager to install CDH via RPMs (or DEBs) instead of parcels, just set `use_parcels => false`.
 
 Nodes that will be cluster members will use this declaration:
 ```puppet
-class { 'cloudera':
+class { '::cloudera':
   cm_server_host => 'smhost.localdomain',
   use_parcels    => false,
 }
 ```
 
-Nodes that will be Gateways may use this declaration:
+Nodes that will be Gateways may use this declaration to install extra parts of CDH:
 ```puppet
-class { 'cloudera':
+class { '::cloudera':
   cm_server_host => 'smhost.localdomain',
   use_parcels    => false,
 }
-class { 'cloudera::cdh5::hue': }
-class { 'cloudera::cdh5::mahout': }
-class { 'cloudera::cdh5::sqoop': }
+class { '::cloudera::cdh5::hue': }
+class { '::cloudera::cdh5::mahout': }
+class { '::cloudera::cdh5::sqoop': }
 # Install Oozie WebUI support (optional):
-#class { 'cloudera::cdh5::oozie::ext': }
+#class { '::cloudera::cdh5::oozie::ext': }
 # Install MySQL support (optional):
-#class { 'cloudera::cdh5::hue::mysql': }
-#class { 'cloudera::cdh5::oozie::mysql': }
+#class { '::cloudera::cdh5::hue::mysql': }
+#class { '::cloudera::cdh5::oozie::mysql': }
 ```
 
-The node that will be the CM server may use this declaration:
+The node that will be just the CM server may use this declaration:
 (This will skip installation of the CDH software as it is not required.)
 ```puppet
-class { 'cloudera::cm5::repo': } ->
-class { 'cloudera::java5': } ->
-class { 'cloudera::java5::jce': } ->
-class { 'cloudera::cm5': } ->
-class { 'cloudera::cm5::server': }
+class { '::cloudera::cm5::repo': } ->
+class { '::cloudera::java5': } ->
+class { '::cloudera::java5::jce': } ->
+class { '::cloudera::cm5': } ->
+class { '::cloudera::cm5::server': }
 ```
 
 ### TLS
 Level 1: [Configuring TLS Encryption only for Cloudera Manager](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Administration-Guide/cm5ag_config_tls_encr.html)
+
 Level 2: [Configuring TLS Authentication of Server to Agents](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Administration-Guide/cm5ag_config_tls_auth.html)
+
 Level 3: [Configuring TLS Authentication of Agents to Server](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Administration-Guide/cm5ag_config_tls_agent_auth.html)
 
 This module's deployment of TLS provides both level 1 and level 2 configuration (encryption and authentication of the server to the agents).  Level 3 is presently much more difficult to implement.  You will need to provide a TLS certificate and the signing certificate authority for the CM server.  See the File resources in the below example for where the files need to be deployed.
@@ -178,13 +178,13 @@ There are some settings inside CM that can only be configured manually.  See the
     Setting                       Value
     Use TLS Encryption for Agents (check)
     Path to TLS Keystore File     /etc/cloudera-scm-server/keystore
-    Keystore Password             The value of server_keypw in Class['cloudera::cm5::server'].
+    Keystore Password             The value of server_keypw in Class['::cloudera::cm5::server'].
     Use TLS Encryption for        (check)
       Admin Console
 
 ```puppet
 # The node that will be the CM agent may use this declaration:
-class { 'cloudera':
+class { '::cloudera':
   server_host => 'smhost.localdomain',
   use_tls     => true,
   install_jce => true,
@@ -194,7 +194,7 @@ file { '/etc/pki/tls/certs/cloudera_manager.crt': }
 
 ```puppet
 # The node that will be the CM agent+server may use this declaration:
-class { 'cloudera':
+class { '::cloudera':
   server_host      => 'smhost.localdomain',
   use_tls          => true,
   install_jce      => true,
@@ -209,10 +209,10 @@ file { "/etc/pki/tls/private/${::fqdn}-cloudera_manager.key": }
 
 ### LZO Compression
 
-[LZO](http://www.oberhumer.com/opensource/lzo/) Compression libraries are available in the GPL Extras repository.  To deploy the software on a non-parcel system just add `use_gplextras => true` to the class declaration.  Additional configuration in Cloudera Manager will be required to [activate](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html) the functionality (ignore the mention of parcels in the link to the documentation).
+[LZO](http://www.oberhumer.com/opensource/lzo/) compression libraries are available in the GPL Extras repository.  To deploy the software on a non-parcel system just add `use_gplextras => true` to the class declaration.  Additional configuration in Cloudera Manager will be required to [activate](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html) the functionality (ignore the mention of parcels in the link to the documentation).
 
 ```puppet
-class { 'cloudera':
+class { '::cloudera':
   cm_server_host => 'smhost.localdomain',
   use_parcels    => false,
   use_gplextras  => true,
@@ -231,9 +231,8 @@ Put the classes, types, and resources for customizing, configuring, and doing th
 
 ####Private Classes
 
-* cloudera::install: Handles the packages.
 * cloudera::java5: Installs the Oracle Java Development Kit (JDK) from the Cloudera Manager repository.
-* cloudera::java5::jce: Installs the Oracle Java Cryptography Extension (JCE) unlimited strength jurisdiction policy files.  Set the parameter `install_jce => true` in `Class['cloudera']`.  Manual setup is requied in order to download the required software from Oracle.  See the files/README_JCE.md file for details.
+* cloudera::java5::jce: Installs the Oracle Java Cryptography Extension (JCE) unlimited strength jurisdiction policy files.
 * cloudera::cm5
 * cloudera::cm5::repo
 * cloudera::cm5::server
@@ -242,7 +241,7 @@ Put the classes, types, and resources for customizing, configuring, and doing th
 * cloudera::gplextras5
 * cloudera::gplextras5::repo
 * cloudera::java: Installs the Oracle Java Development Kit (JDK) from the Cloudera Manager repository.
-* cloudera::java::jce: Installs the Oracle Java Cryptography Extension (JCE) unlimited strength jurisdiction policy files.  Set the parameter `install_jce => true` in `Class['cloudera']`.  Manual setup is requied in order to download the required software from Oracle.  See the files/README_JCE.md file for details.
+* cloudera::java::jce: Installs the Oracle Java Cryptography Extension (JCE) unlimited strength jurisdiction policy files.
 * cloudera::cm
 * cloudera::cm::repo
 * cloudera::cm::server
@@ -498,7 +497,7 @@ Here, list the classes, types, providers, facts, etc contained in your module. T
 
 ##Limitations
 
-Software Support:
+###Software Support:
 
 * Cloudera Manager    - tested with 4.1.2, 4.8.0, and 5.0.0beta2
 * CDH                 - tested with 4.1.2 and 4.5.0, 5.0.0beta2
@@ -506,7 +505,7 @@ Software Support:
 * Cloudera Search     - tested with 1.1.0
 * Cloudera GPL Extras - tested with 4.3.0 and 5.0.0
 
-OS Support:
+###OS Support:
 
 Cloudera official [supported operating systems](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html?scroll=cmig_topic_4_1_unique_1).
 
@@ -514,7 +513,7 @@ Cloudera official [supported operating systems](http://www.cloudera.com/content/
 * SuSE family   - tested on SLES 11SP1
 * Debian family - tested on Debian 6.0.7, Debian 7.0, Ubuntu 10.04.4 LTS, and Ubuntu 12.04.2 LTS
 
-Notes:
+###Notes:
 
 * Supports Top Scope variables (i.e. via Dashboard) and Parameterized Classes.
 * Installing CDH3 will not be supported.
@@ -525,20 +524,18 @@ Notes:
 * Osfamily RedHat 5 requires the EPEL YUM repository when installing LZO support.
 * This module does not support upgrading from CDH4 to CDH5 packages, including Impala, Search, and GPL Extras.
 
-Issues:
+###Issues:
 
 * Need external module support for the Oracle Instant Client JDBC.
 * When using an external PostgreSQL server that is on the same host as the CM server, PostgreSQL must be configured to accept connections with md5 password authentication.
 
-TODO:
+###TODO:
 
 See TODO.md for more items.
 
-This is where you list OS compatibility, version compatibility, etc.
-
 ##Development
 
-Please see DEVELOP.md for contribution information.
+Please see DEVELOP.md for information on how to contribute.
 
 Copyright (C) 2013 Mike Arnold <mike@razorsedge.org>
 
