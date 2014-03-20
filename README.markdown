@@ -8,7 +8,6 @@
 2. [Module Description - What the module does and why it is useful](#module-description)
 3. [Setup - The basics of getting started with cloudera](#setup)
     * [What cloudera affects](#what-cloudera-affects)
-    * [Setup requirements](#setup-requirements)
     * [Beginning with cloudera](#beginning-with-cloudera)
 4. [Usage - Configuration options and additional functionality](#usage)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
@@ -19,15 +18,9 @@
 
 This module manages the installation of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html) on the Cloudera official [supported operating systems](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html?scroll=cmig_topic_4_1_unique_1).
 
-A one-maybe-two sentence summary of what the module does/what problem it solves. This is your 30 second elevator pitch for your module. Consider including OS/Puppet version it works with.
-
 ##Module Description
 
 This module manages the installation of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html), a management application for Apache Hadoop.  It follows the standards written in the [Cloudera Manager Installation Guide](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/Cloudera-Manager-Installation-Guide.html) "[Installation Path B - Installation Using Your Own Method](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_B.html)".  By default, this module assumes that [parcels](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) will be used to deploy [Cloudera's Distribution of Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html) and related software.  If parcels are not desired, this module can also manage the installation of CDH including HDFS & MapReduce, Impala, Sentry, Search, Spark, HBase, and [LZO compression](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html).  The module can also configure TLS encryption of the Cloudera Manager communications channels.
-
-If applicable, this section should have a brief description of the technology the module integrates with and what that integration enables. This section should answer the questions: "What does this module *do*?" and "Why would I use it?"
-    
-If your module has a range of functionality (installation, configuration, management, etc.) this is the time to mention it.
 
 ##Setup
 
@@ -42,38 +35,26 @@ If your module has a range of functionality (installation, configuration, manage
 * Sets the [kernel vm.swappiness](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH5/latest/CDH5-Installation-Guide/cdh5ig_topic_11_6.html) to 0.
 * Separately installs the CM server and database connectivity (by default to the embedded database server).
 * Separately starts the CM server.
-* Optionally installs the Cloudera software repository for CDH 5.
+* Optionally installs the Cloudera software repository for CDH.
 * Optionally installs most components of CDH 5 including HBase, Impala, Search, and Spark.
-* Optionally installs GPL Extras (LZO) 5.
+* Optionally installs GPL Extras (LZO).
 
-* A list of files, packages, services, or operations that the module will alter, impact, or execute on the system it's installed on.
-* This is a great place to stick any warnings.
-* Can be in list or paragraph form. 
-
-###Setup Requirements **OPTIONAL**
-
-If your module requires anything extra before setting up (pluginsync enabled, etc.), mention it here. 
-	
 ###Beginning with cloudera	
 
-Most nodes in the cluster will use this declaration.
+Most nodes  that will be a part of a Hadoop cluster will use this declaration.
 ```puppet
 class { '::cloudera':
   cm_server_host => 'smhost.localdomain',
 }
 ```
 
-The node that will be the CM server (ie smhost.localdomain) will use this declaration. This should only be included on one node of your environment.  By default it will install the embeded PostgreSQL database on the same node.  With the correct parameters, it can also connect to local or remote MySQL, PostgreSQL, and Oracle RDBMS databases.
+The node that will be the CM server (ie smhost.localdomain) will use this declaration. This should only be included on one node of your environment.  By default it will install the embeded PostgreSQL database on the same node.  With the correct parameters, it can instead connect to local or remote MySQL, PostgreSQL, or Oracle RDBMS databases.
 ```puppet
 class { '::cloudera':
   cm_server_host   => 'smhost.localdomain',
   install_cmserver => true,
 }
 ```
-
-The very basic steps needed for a user to get the module up and running. 
-
-If your most recent release breaks compatibility or requires particular steps for upgrading, you may wish to include an additional section here: Upgrading (For an example, see http://forge.puppetlabs.com/puppetlabs/firewall).
 
 ###Upgrading
 
@@ -98,9 +79,9 @@ class { '::cloudera':
 }
 ```
 
-- The [puppetlabs/mysql](https://forge.puppetlabs.com/puppetlabs/mysql) dependency will update to version 2.  Make sure to review its changelog in the case of an upgrade.
+- The [puppetlabs/mysql](https://forge.puppetlabs.com/puppetlabs/mysql) dependency will update to version 2 before the 1.0.0 release.  Make sure to review its changelog in the case of an upgrade.
 
-- The class `::cloudera::repo` will be renamed to `::cloudera::cdh::repo` and the Impala repository will be split out into `::cloudera::impala::repo`.
+- The class `::cloudera::repo` will be renamed to `::cloudera::cdh::repo` and the Impala repository will be split out into `::cloudera::impala::repo` before the 1.0.0 release.
 
 This:
 
@@ -171,7 +152,7 @@ Level 2: [Configuring TLS Authentication of Server to Agents](http://www.clouder
 
 Level 3: [Configuring TLS Authentication of Agents to Server](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Administration-Guide/cm5ag_config_tls_agent_auth.html)
 
-This module's deployment of TLS provides both level 1 and level 2 configuration (encryption and authentication of the server to the agents).  Level 3 is presently much more difficult to implement.  You will need to provide a TLS certificate and the signing certificate authority for the CM server.  See the File resources in the below example for where the files need to be deployed.
+This module's deployment of TLS provides both level 1 and level 2 configuration (encryption and authentication of the server to the agents).  Level 3 is not presently implemented.  You will need to provide a TLS certificate and the signing certificate authority for the CM server.  See the File resources in the below example for where the files need to be deployed.
 
 There are some settings inside CM that can only be configured manually.  See the [Level 1](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Administration-Guide/cm5ag_config_tls_encr.html) instructions for the details of what to change in the WebUI and use the below values:
 
@@ -218,8 +199,6 @@ class { '::cloudera':
   use_gplextras  => true,
 }
 ```
-
-Put the classes, types, and resources for customizing, configuring, and doing the fancy stuff with your module here. 
 
 ##Reference
 
@@ -489,12 +468,6 @@ Default: absent
 The password for the YUM proxy.
 Default: absent
 
-
-
-
-
-Here, list the classes, types, providers, facts, etc contained in your module. This section should include all of the under-the-hood workings of your module so people know what the module is touching on their system but don't need to mess with things. (We are working on automating this section!)
-
 ##Limitations
 
 ###Software Support:
@@ -510,13 +483,12 @@ Here, list the classes, types, providers, facts, etc contained in your module. T
 Cloudera official [supported operating systems](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html?scroll=cmig_topic_4_1_unique_1).
 
 * RedHat family - tested on CentOS 5.9, CentOS 6.4
-* SuSE family   - tested on SLES 11SP1
+* SuSE family   - tested on SLES 11SP3
 * Debian family - tested on Debian 6.0.7, Debian 7.0, Ubuntu 10.04.4 LTS, and Ubuntu 12.04.2 LTS
 
 ###Notes:
 
 * Supports Top Scope variables (i.e. via Dashboard) and Parameterized Classes.
-* Installing CDH3 will not be supported.
 * Based on the [Cloudera Manager 5.0.0 Beta 2 Installation Guide](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/PDF/Cloudera-Manager-Installation-Guide.pdf)
 * TLS certificates must be in PEM format and are not deployed by this module.
 * When using parcels, the CDH software is not deployed by Puppet.  Puppet will only install the Cloudera Manager server/agent.  You must then configure Cloudera Manager to deploy the parcels.
@@ -542,10 +514,4 @@ Copyright (C) 2013 Mike Arnold <mike@razorsedge.org>
 [razorsedge/puppet-cloudera on GitHub](https://github.com/razorsedge/puppet-cloudera)
 
 [razorsedge/cloudera on Puppet Forge](http://forge.puppetlabs.com/razorsedge/cloudera)
-
-Since your module is awesome, other users will want to play with it. Let them know what the ground rules for contributing are.
-
-##Release Notes/Contributors/Etc **Optional**
-
-If you aren't using changelog, put your release notes here (though you should consider using changelog). You may also add any additional sections you feel are necessary or important to include here. Please use the `## ` header. 
 
