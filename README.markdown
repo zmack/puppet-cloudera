@@ -22,6 +22,8 @@ This module manages the installation of [Cloudera Manager](http://www.cloudera.c
 
 This module manages the installation of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html), a management application for Apache Hadoop.  It follows the standards written in the [Cloudera Manager Installation Guide](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/Cloudera-Manager-Installation-Guide.html) "[Installation Path B - Installation Using Your Own Method](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_B.html)".  By default, this module assumes that [parcels](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) will be used to deploy [Cloudera's Distribution of Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html) and related software.  If parcels are not desired, this module can also manage the installation of CDH including HDFS & MapReduce, Impala, Sentry, Search, Spark, HBase, and [LZO compression](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html).  The module can also configure TLS encryption of the Cloudera Manager communications channels.
 
+[![Cloudera Certified](http://www.cloudera.com/content/cloudera/en/partners/certified-technology/_jcr_content/mainLeftContent/assetwithtext.img.jpg/1390942947804.jpg)](http://www.cloudera.com/content/cloudera/en/partners/certified-technology.html) This module is certified on Cloudera 5.
+
 ##Setup
 
 ###What cloudera affects
