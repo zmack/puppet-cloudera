@@ -33,7 +33,7 @@
 #
 # [*cdh_version*]
 #   The version of Cloudera's Distribution, including Apache Hadoop to install.
-#   Default: 4
+#   Default: 5
 #
 # [*cm_yumserver*]
 #   URI of the YUM server.
@@ -95,7 +95,7 @@
 #
 # [*cg_version*]
 #   The version of Cloudera Search to install.
-#   Default: 4
+#   Default: 5
 #
 # [*cm_server_host*]
 #   Hostname of the Cloudera Manager server.
