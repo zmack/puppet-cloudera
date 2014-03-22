@@ -10,17 +10,21 @@
     * [What cloudera affects](#what-cloudera-affects)
     * [Beginning with cloudera](#beginning-with-cloudera)
 4. [Usage - Configuration options and additional functionality](#usage)
+    * [Parcels](#parcels)
+    * [TLS Security](#tls-security)
+    * [LZO Compression](#lzo-compression)
+    * [External Database](#external-database)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Development - Guide for contributing to the module](#development)
 
 ##Overview
 
-This module manages the installation of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html) on the Cloudera official [supported operating systems](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html?scroll=cmig_topic_4_1_unique_1).
+This Puppet module manages the installation and configuration of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html), a management application for Apache Hadoop, on the Cloudera official [supported operating systems](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html?scroll=cmig_topic_4_1_unique_1).
 
 ##Module Description
 
-This module manages the installation of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html), a management application for Apache Hadoop.  It follows the standards written in the [Cloudera Manager Installation Guide](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/Cloudera-Manager-Installation-Guide.html) "[Installation Path B - Installation Using Your Own Method](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_B.html)".  By default, this module assumes that [parcels](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) will be used to deploy [Cloudera's Distribution of Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html) and related software.  If parcels are not desired, this module can also manage the installation of CDH including HDFS & MapReduce, Impala, Sentry, Search, Spark, HBase, and [LZO compression](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html).  The module can also configure TLS encryption of the Cloudera Manager communications channels.
+This module manages the installation of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html), a management application for Apache Hadoop.  It follows the standards written in the [Cloudera Manager Installation Guide](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/Cloudera-Manager-Installation-Guide.html) "[Installation Path B - Installation Using Your Own Method](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_B.html)".  By default, this module assumes that [parcels](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) will be used to deploy [Cloudera's Distribution of Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html) and related software.  If parcels are not desired, this module can also manage the installation of CDH including HDFS & MapReduce, Impala, Sentry, Search, Spark, HBase, and [LZO compression](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html).  The module can also configure [TLS security](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Administration-Guide/cm5ag_config_tls_security.html) of the Cloudera Manager communications channels, and set up Cloudera Manager to use an alternative to the [embedded database](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_B.html?scroll=cmig_topic_6_6_5_unique_1).
 
 [![Cloudera Certified](http://www.cloudera.com/content/cloudera/en/partners/certified-technology/_jcr_content/mainLeftContent/assetwithtext.img.jpg/1390942947804.jpg)](http://www.cloudera.com/content/cloudera/en/partners/certified-technology.html) This module is certified on Cloudera 5.
 
@@ -109,7 +113,7 @@ class { '::cloudera::impala::repo':
 
 All interaction with the cloudera module can be done through the main cloudera class.  This means you can simply toggle the options in `::cloudera` to have full functionality of the module.
 
-### Parcels
+###Parcels
 
 [Parcel](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) is an alternative binary distribution format supported by Cloudera Manager 4.5+ that simplifies distribution of CDH and other Cloudera products.  By default, this module assumes software deployment of CDH via parcel.  To allow Cloudera Manager to install CDH via RPMs (or DEBs) instead of parcels, just set `use_parcels => false`.
 
@@ -147,7 +151,7 @@ class { '::cloudera::cm5': } ->
 class { '::cloudera::cm5::server': }
 ```
 
-### TLS
+###TLS Security
 Level 1: [Configuring TLS Encryption only for Cloudera Manager](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Administration-Guide/cm5ag_config_tls_encr.html)
 
 Level 2: [Configuring TLS Authentication of Server to Agents](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Administration-Guide/cm5ag_config_tls_auth.html)
@@ -165,8 +169,8 @@ There are some settings inside CM that can only be configured manually.  See the
     Use TLS Encryption for        (check)
       Admin Console
 
+The node that will be the CM agent may use this declaration:
 ```puppet
-# The node that will be the CM agent may use this declaration:
 class { '::cloudera':
   server_host => 'smhost.localdomain',
   use_tls     => true,
@@ -175,13 +179,13 @@ class { '::cloudera':
 file { '/etc/pki/tls/certs/cloudera_manager.crt': }
 ```
 
+The node that will be the CM agent+server may use this declaration:
 ```puppet
-# The node that will be the CM agent+server may use this declaration:
 class { '::cloudera':
   server_host      => 'smhost.localdomain',
+  install_cmserver => true,
   use_tls          => true,
   install_jce      => true,
-  install_cmserver => true,
   server_keypw     => 'myPassWord',
 }
 file { '/etc/pki/tls/certs/cloudera_manager.crt': }
@@ -190,7 +194,7 @@ file { "/etc/pki/tls/certs/${::fqdn}-cloudera_manager.crt": }
 file { "/etc/pki/tls/private/${::fqdn}-cloudera_manager.key": }
 ```
 
-### LZO Compression
+###LZO Compression
 
 [LZO](http://www.oberhumer.com/opensource/lzo/) compression libraries are available in the GPL Extras repository.  To deploy the software on a non-parcel system just add `use_gplextras => true` to the class declaration.  Additional configuration in Cloudera Manager will be required to [activate](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html) the functionality (ignore the mention of parcels in the link to the documentation).
 
@@ -199,6 +203,22 @@ class { '::cloudera':
   cm_server_host => 'smhost.localdomain',
   use_parcels    => false,
   use_gplextras  => true,
+}
+```
+
+###External Database
+
+If you decide not to use the embedded database, the Cloudera Manager server database configuration can be completed by configuring this module to call the [`scm_prepare_database.sh`](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_B.html#cmig_topic_6_6_5_unique_1__section_y3j_pyp_bm_unique_1) script.  The external database must be configured and ready for connection with the supplied credentials via some method outside of this module.
+
+```puppet
+class { '::cloudera':
+  cm_server_host   => 'smhost.localdomain',
+  install_cmserver => true,
+  db_type          => 'postgresql',
+  db_host          => 'dbhost.localdomain',
+  db_port          => '5432',
+  db_user          => 'root',
+  db_pass          => 'SeCrEt',
 }
 ```
 
@@ -505,11 +525,11 @@ Cloudera official [supported operating systems](http://www.cloudera.com/content/
 
 ###TODO:
 
-See TODO.md for more items.
+See [TODO.md](TODO.md) for more items.
 
 ##Development
 
-Please see DEVELOP.md for information on how to contribute.
+Please see [DEVELOP.md](DEVELOP.md) for information on how to contribute.
 
 Copyright (C) 2013 Mike Arnold <mike@razorsedge.org>
 
