@@ -1,4 +1,4 @@
-#cloudera
+#Cloudera Manager
 
 [![Build Status](https://secure.travis-ci.org/razorsedge/puppet-cloudera.png?branch=master)](http://travis-ci.org/razorsedge/puppet-cloudera)
 
@@ -6,17 +6,21 @@
 
 1. [Overview](#overview)
 2. [Module Description - What the module does and why it is useful](#module-description)
-3. [Setup - The basics of getting started with cloudera](#setup)
-    * [What cloudera affects](#what-cloudera-affects)
-    * [Beginning with cloudera](#beginning-with-cloudera)
+3. [Setup - The basics of getting started with this module](#setup)
+    * [What this module affects](#what-this-module-affects)
+    * [Beginning with this module](#beginning-with-this-module)
 4. [Usage - Configuration options and additional functionality](#usage)
     * [Parcels](#parcels)
     * [TLS Security](#tls-security)
     * [LZO Compression](#lzo-compression)
     * [External Database](#external-database)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
-5. [Limitations - OS compatibility, etc.](#limitations)
-6. [Development - Guide for contributing to the module](#development)
+6. [Limitations - OS compatibility, etc.](#limitations)
+    * [OS Support](#os-support)
+    * [Software Support](#software-support)
+    * [Notes](#notes)
+    * [Issues](#issues)
+7. [Development - Guide for contributing to the module](#development)
 
 ##Overview
 
@@ -30,7 +34,7 @@ This module manages the installation of [Cloudera Manager](http://www.cloudera.c
 
 ##Setup
 
-###What cloudera affects
+###What this module affects
 
 * Installs the Cloudera software repository for CM.
 * Installs Oracle Java Development Kit (JDK) 7.
@@ -45,7 +49,7 @@ This module manages the installation of [Cloudera Manager](http://www.cloudera.c
 * Optionally installs most components of CDH 5 including HBase, Impala, Search, and Spark.
 * Optionally installs GPL Extras (LZO).
 
-###Beginning with cloudera	
+###Beginning with this module
 
 Most nodes  that will be a part of a Hadoop cluster will use this declaration.
 ```puppet
@@ -279,14 +283,14 @@ Default: running
 Start service at boot.
 Default: true
 
-####`cdh_yumserver`
+####`cdh_reposerver`
 
 URI of the YUM server.
 Default: http://archive.cloudera.com
 
-####`cdh_yumpath`
+####`cdh_repopath`
 
-The path to add to the $cdh_yumserver URI.
+The path to add to the $cdh_reposerver URI.
 Only set this if your platform is not supported or you know what you are doing.
 Default: auto-set, platform specific
 
@@ -295,14 +299,14 @@ Default: auto-set, platform specific
 The version of Cloudera's Distribution, including Apache Hadoop to install.
 Default: 5
 
-####`cm_yumserver`
+####`cm_reposerver`
 
 URI of the YUM server.
 Default: http://archive.cloudera.com
 
-####`cm_yumpath`
+####`cm_repopath`
 
-The path to add to the $cm_yumserver URI.
+The path to add to the $cm_reposerver URI.
 Only set this if your platform is not supported or you know what you are doing.
 Default: auto-set, platform specific
 
@@ -311,20 +315,20 @@ Default: auto-set, platform specific
 The version of Cloudera Manager to install.
 Default: 5
 
-####`cm5_yumpath`
+####`cm5_repopath`
 
-The path to add to the $cm_yumserver URI.
+The path to add to the $cm_reposerver URI.
 Only set this if your platform is not supported or you know what you are doing.
 Default: auto-set, platform specific
 
-####`ci_yumserver`
+####`ci_reposerver`
 
 URI of the YUM server.
 Default: http://archive.cloudera.com
 
-####`ci_yumpath`
+####`ci_repopath`
 
-The path to add to the $ci_yumserver URI.
+The path to add to the $ci_reposerver URI.
 Only set this if your platform is not supported or you know what you are doing.
 Default: auto-set, platform specific
 
@@ -333,14 +337,14 @@ Default: auto-set, platform specific
 The version of Cloudera Impala to install.
 Default: 1
 
-####`cs_yumserver`
+####`cs_reposerver`
 
 URI of the YUM server.
 Default: http://archive.cloudera.com
 
-####`cs_yumpath`
+####`cs_repopath`
 
-The path to add to the $cs_yumserver URI.
+The path to add to the $cs_reposerver URI.
 Only set this if your platform is not supported or you know what you are doing.
 Default: auto-set, platform specific
 
@@ -349,14 +353,14 @@ Default: auto-set, platform specific
 The version of Cloudera Search to install.
 Default: 1
 
-####`cg_yumserver`
+####`cg_reposerver`
 
 URI of the YUM server.
 Default: http://archive.cloudera.com
 
-####`cg_yumpath`
+####`cg_repopath`
 
-The path to add to the $cg_yumserver URI.
+The path to add to the $cg_reposerver URI.
 Only set this if your platform is not supported or you know what you are doing.
 Default: auto-set, platform specific
 
@@ -492,14 +496,6 @@ Default: absent
 
 ##Limitations
 
-###Software Support:
-
-* Cloudera Manager    - tested with 4.1.2, 4.8.0, and 5.0.0beta2
-* CDH                 - tested with 4.1.2 and 4.5.0, 5.0.0beta2
-* Cloudera Impala     - tested with 1.0 and 1.2.3
-* Cloudera Search     - tested with 1.1.0
-* Cloudera GPL Extras - tested with 4.3.0 and 5.0.0
-
 ###OS Support:
 
 Cloudera official [supported operating systems](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html?scroll=cmig_topic_4_1_unique_1).
@@ -507,6 +503,14 @@ Cloudera official [supported operating systems](http://www.cloudera.com/content/
 * RedHat family - tested on CentOS 5.9, CentOS 6.4
 * SuSE family   - tested on SLES 11SP3
 * Debian family - tested on Debian 6.0.7, Debian 7.0, Ubuntu 10.04.4 LTS, and Ubuntu 12.04.2 LTS
+
+###Software Support:
+
+* Cloudera Manager    - tested with 4.1.2, 4.8.0, and 5.0.0beta2
+* CDH                 - tested with 4.1.2 and 4.5.0, 5.0.0beta2
+* Cloudera Impala     - tested with 1.0 and 1.2.3
+* Cloudera Search     - tested with 1.1.0
+* Cloudera GPL Extras - tested with 4.3.0 and 5.0.0
 
 ###Notes:
 
@@ -532,6 +536,8 @@ See [TODO.md](TODO.md) for more items.
 Please see [DEVELOP.md](DEVELOP.md) for information on how to contribute.
 
 Copyright (C) 2013 Mike Arnold <mike@razorsedge.org>
+
+Licensed under the Apache License, Version 2.0.
 
 [razorsedge/puppet-cloudera on GitHub](https://github.com/razorsedge/puppet-cloudera)
 
