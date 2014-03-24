@@ -8,12 +8,12 @@
 #   Ensure if present or absent.
 #   Default: present
 #
-# [*yumserver*]
+# [*reposerver*]
 #   URI of the YUM server.
 #   Default: http://archive.cloudera.com
 #
-# [*yumpath*]
-#   The path to add to the $yumserver URI.
+# [*repopath*]
+#   The path to add to the $reposerver URI.
 #   Only set this if your platform is not supported or you know what you are
 #   doing.
 #   Default: auto-set, platform specific
@@ -58,8 +58,8 @@
 #
 class cloudera::search::repo (
   $ensure         = $cloudera::params::ensure,
-  $yumserver      = $cloudera::params::cs_yumserver,
-  $yumpath        = $cloudera::params::cs_yumpath,
+  $reposerver     = $cloudera::params::cs_reposerver,
+  $repopath       = $cloudera::params::cs_repopath,
   $version        = $cloudera::params::cs_version,
   $aptkey         = $cloudera::params::cs_aptkey,
   $proxy          = $cloudera::params::proxy,
@@ -84,8 +84,8 @@ class cloudera::search::repo (
         descr          => 'Search',
         enabled        => $enabled,
         gpgcheck       => 1,
-        gpgkey         => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
-        baseurl        => "${yumserver}${yumpath}${version}/",
+        gpgkey         => "${reposerver}${repopath}RPM-GPG-KEY-cloudera",
+        baseurl        => "${reposerver}${repopath}${version}/",
         priority       => $cloudera::params::yum_priority,
         protect        => $cloudera::params::yum_protect,
         proxy          => $proxy,
@@ -108,8 +108,8 @@ class cloudera::search::repo (
         descr       => 'Search',
         enabled     => $enabled,
         gpgcheck    => 1,
-        gpgkey      => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
-        baseurl     => "${yumserver}${yumpath}${version}/",
+        gpgkey      => "${reposerver}${repopath}RPM-GPG-KEY-cloudera",
+        baseurl     => "${reposerver}${repopath}${version}/",
         autorefresh => 1,
         priority    => $cloudera::params::yum_priority,
       }
@@ -128,11 +128,11 @@ class cloudera::search::repo (
       include '::apt'
 
       apt::source { 'cloudera-search':
-        location     => "${yumserver}${yumpath}",
+        location     => "${reposerver}${repopath}",
         release      => "${::lsbdistcodename}-search${version}",
         repos        => 'contrib',
         key          => $aptkey,
-        key_source   => "${yumserver}${yumpath}archive.key",
+        key_source   => "${reposerver}${repopath}archive.key",
         architecture => $cloudera::params::architecture,
       }
 

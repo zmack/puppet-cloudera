@@ -21,12 +21,12 @@
 #   Start service at boot.
 #   Default: true
 #
-# [*cdh_yumserver*]
+# [*cdh_reposerver*]
 #   URI of the YUM server.
 #   Default: http://archive.cloudera.com
 #
-# [*cdh_yumpath*]
-#   The path to add to the $cdh_yumserver URI.
+# [*cdh_repopath*]
+#   The path to add to the $cdh_reposerver URI.
 #   Only set this if your platform is not supported or you know what you are
 #   doing.
 #   Default: auto-set, platform specific
@@ -35,12 +35,12 @@
 #   The version of Cloudera's Distribution, including Apache Hadoop to install.
 #   Default: 5
 #
-# [*cm_yumserver*]
+# [*cm_reposerver*]
 #   URI of the YUM server.
 #   Default: http://archive.cloudera.com
 #
-# [*cm_yumpath*]
-#   The path to add to the $cm_yumserver URI.
+# [*cm_repopath*]
+#   The path to add to the $cm_reposerver URI.
 #   Only set this if your platform is not supported or you know what you are
 #   doing.
 #   Default: auto-set, platform specific
@@ -49,18 +49,18 @@
 #   The version of Cloudera Manager to install.
 #   Default: 5
 #
-# [*cm5_yumpath*]
-#   The path to add to the $cm_yumserver URI.
+# [*cm5_repopath*]
+#   The path to add to the $cm_reposerver URI.
 #   Only set this if your platform is not supported or you know what you are
 #   doing.
 #   Default: auto-set, platform specific
 #
-# [*ci_yumserver*]
+# [*ci_reposerver*]
 #   URI of the YUM server.
 #   Default: http://archive.cloudera.com
 #
-# [*ci_yumpath*]
-#   The path to add to the $ci_yumserver URI.
+# [*ci_repopath*]
+#   The path to add to the $ci_reposerver URI.
 #   Only set this if your platform is not supported or you know what you are
 #   doing.
 #   Default: auto-set, platform specific
@@ -69,12 +69,12 @@
 #   The version of Cloudera Impala to install.
 #   Default: 1
 #
-# [*cs_yumserver*]
+# [*cs_reposerver*]
 #   URI of the YUM server.
 #   Default: http://archive.cloudera.com
 #
-# [*cs_yumpath*]
-#   The path to add to the $cs_yumserver URI.
+# [*cs_repopath*]
+#   The path to add to the $cs_reposerver URI.
 #   Only set this if your platform is not supported or you know what you are
 #   doing.
 #   Default: auto-set, platform specific
@@ -83,12 +83,12 @@
 #   The version of Cloudera Search to install.
 #   Default: 1
 #
-# [*cg_yumserver*]
+# [*cg_reposerver*]
 #   URI of the YUM server.
 #   Default: http://archive.cloudera.com
 #
-# [*cg_yumpath*]
-#   The path to add to the $cg_yumserver URI.
+# [*cg_repopath*]
+#   The path to add to the $cg_reposerver URI.
 #   Only set this if your platform is not supported or you know what you are
 #   doing.
 #   Default: auto-set, platform specific
@@ -250,24 +250,24 @@ class cloudera (
   $autoupgrade      = $cloudera::params::safe_autoupgrade,
   $service_ensure   = $cloudera::params::service_ensure,
   $service_enable   = $cloudera::params::safe_service_enable,
-  $cdh_yumserver    = $cloudera::params::cdh_yumserver,
-  $cdh_yumpath      = $cloudera::params::cdh_yumpath,
+  $cdh_reposerver   = $cloudera::params::cdh_reposerver,
+  $cdh_repopath     = $cloudera::params::cdh_repopath,
   $cdh_version      = $cloudera::params::cdh_version,
-  $cdh5_yumpath     = $cloudera::params::cdh5_yumpath,
-  $cm_yumserver     = $cloudera::params::cm_yumserver,
-  $cm_yumpath       = $cloudera::params::cm_yumpath,
+  $cdh5_repopath    = $cloudera::params::cdh5_repopath,
+  $cm_reposerver    = $cloudera::params::cm_reposerver,
+  $cm_repopath      = $cloudera::params::cm_repopath,
   $cm_version       = $cloudera::params::cm_version,
-  $cm5_yumpath      = $cloudera::params::cm5_yumpath,
-  $ci_yumserver     = $cloudera::params::ci_yumserver,
-  $ci_yumpath       = $cloudera::params::ci_yumpath,
+  $cm5_repopath     = $cloudera::params::cm5_repopath,
+  $ci_reposerver    = $cloudera::params::ci_reposerver,
+  $ci_repopath      = $cloudera::params::ci_repopath,
   $ci_version       = $cloudera::params::ci_version,
-  $cs_yumserver     = $cloudera::params::cs_yumserver,
-  $cs_yumpath       = $cloudera::params::cs_yumpath,
+  $cs_reposerver    = $cloudera::params::cs_reposerver,
+  $cs_repopath      = $cloudera::params::cs_repopath,
   $cs_version       = $cloudera::params::cs_version,
-  $cg_yumserver     = $cloudera::params::cg_yumserver,
-  $cg_yumpath       = $cloudera::params::cg_yumpath,
+  $cg_reposerver    = $cloudera::params::cg_reposerver,
+  $cg_repopath      = $cloudera::params::cg_repopath,
   $cg_version       = $cloudera::params::cg_version,
-  $cg5_yumpath      = $cloudera::params::cg5_yumpath,
+  $cg5_repopath     = $cloudera::params::cg5_repopath,
   $cm_server_host   = $cloudera::params::cm_server_host,
   $cm_server_port   = $cloudera::params::cm_server_port,
   $use_tls          = $cloudera::params::safe_cm_use_tls,
@@ -356,8 +356,8 @@ class cloudera (
     }
     class { 'cloudera::cm5::repo':
       ensure         => $ensure,
-      yumserver      => $cm_yumserver,
-      yumpath        => $cm5_yumpath,
+      reposerver     => $cm_reposerver,
+      repopath       => $cm5_repopath,
       version        => $cm_version,
       proxy          => $proxy,
       proxy_username => $proxy_username,
@@ -393,8 +393,8 @@ class cloudera (
       if $cdh_version =~ /^5/ {
         class { 'cloudera::cdh5::repo':
           ensure         => $ensure,
-          yumserver      => $cdh_yumserver,
-          yumpath        => $cdh5_yumpath,
+          reposerver     => $cdh_reposerver,
+          repopath       => $cdh5_repopath,
           version        => $cdh_version,
           proxy          => $proxy,
           proxy_username => $proxy_username,
@@ -413,8 +413,8 @@ class cloudera (
         if $use_gplextras {
           class { 'cloudera::gplextras5::repo':
             ensure         => $ensure,
-            yumserver      => $cg_yumserver,
-            yumpath        => $cg5_yumpath,
+            reposerver     => $cg_reposerver,
+            repopath       => $cg5_repopath,
             version        => $cg_version,
             proxy          => $proxy,
             proxy_username => $proxy_username,
@@ -432,8 +432,8 @@ class cloudera (
       } elsif $cdh_version =~ /^4/ {
         class { 'cloudera::cdh::repo':
           ensure         => $ensure,
-          yumserver      => $cdh_yumserver,
-          yumpath        => $cdh_yumpath,
+          reposerver     => $cdh_reposerver,
+          repopath       => $cdh_repopath,
           version        => $cdh_version,
           proxy          => $proxy,
           proxy_username => $proxy_username,
@@ -443,8 +443,8 @@ class cloudera (
         }
         class { 'cloudera::impala::repo':
           ensure         => $ensure,
-          yumserver      => $ci_yumserver,
-          yumpath        => $ci_yumpath,
+          reposerver     => $ci_reposerver,
+          repopath       => $ci_repopath,
           version        => $ci_version,
           proxy          => $proxy,
           proxy_username => $proxy_username,
@@ -454,8 +454,8 @@ class cloudera (
         }
         class { 'cloudera::search::repo':
           ensure         => $ensure,
-          yumserver      => $cs_yumserver,
-          yumpath        => $cs_yumpath,
+          reposerver     => $cs_reposerver,
+          repopath       => $cs_repopath,
           version        => $cs_version,
           proxy          => $proxy,
           proxy_username => $proxy_username,
@@ -490,8 +490,8 @@ class cloudera (
         if $use_gplextras {
           class { 'cloudera::gplextras::repo':
             ensure         => $ensure,
-            yumserver      => $cg_yumserver,
-            yumpath        => $cg_yumpath,
+            reposerver     => $cg_reposerver,
+            repopath       => $cg_repopath,
             version        => $cg_version,
             proxy          => $proxy,
             proxy_username => $proxy_username,
@@ -550,8 +550,8 @@ class cloudera (
     }
     class { 'cloudera::cm::repo':
       ensure         => $ensure,
-      yumserver      => $cm_yumserver,
-      yumpath        => $cm_yumpath,
+      reposerver     => $cm_reposerver,
+      repopath       => $cm_repopath,
       version        => $cm_version,
       proxy          => $proxy,
       proxy_username => $proxy_username,
@@ -586,8 +586,8 @@ class cloudera (
     if ! $use_parcels {
       class { 'cloudera::cdh::repo':
         ensure         => $ensure,
-        yumserver      => $cdh_yumserver,
-        yumpath        => $cdh_yumpath,
+        reposerver     => $cdh_reposerver,
+        repopath       => $cdh_repopath,
         version        => $cdh_version,
         proxy          => $proxy,
         proxy_username => $proxy_username,
@@ -597,8 +597,8 @@ class cloudera (
       }
       class { 'cloudera::impala::repo':
         ensure         => $ensure,
-        yumserver      => $ci_yumserver,
-        yumpath        => $ci_yumpath,
+        reposerver     => $ci_reposerver,
+        repopath       => $ci_repopath,
         version        => $ci_version,
         proxy          => $proxy,
         proxy_username => $proxy_username,
@@ -608,8 +608,8 @@ class cloudera (
       }
       class { 'cloudera::search::repo':
         ensure         => $ensure,
-        yumserver      => $cs_yumserver,
-        yumpath        => $cs_yumpath,
+        reposerver     => $cs_reposerver,
+        repopath       => $cs_repopath,
         version        => $cs_version,
         proxy          => $proxy,
         proxy_username => $proxy_username,
@@ -644,8 +644,8 @@ class cloudera (
       if $use_gplextras {
         class { 'cloudera::gplextras::repo':
           ensure         => $ensure,
-          yumserver      => $cg_yumserver,
-          yumpath        => $cg_yumpath,
+          reposerver     => $cg_reposerver,
+          repopath       => $cg_repopath,
           version        => $cg_version,
           proxy          => $proxy,
           proxy_username => $proxy_username,

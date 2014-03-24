@@ -8,12 +8,12 @@
 #   Ensure if present or absent.
 #   Default: present
 #
-# [*yumserver*]
+# [*reposerver*]
 #   URI of the YUM server.
 #   Default: http://archive.cloudera.com
 #
-# [*yumpath*]
-#   The path to add to the $yumserver URI.
+# [*repopath*]
+#   The path to add to the $reposerver URI.
 #   Only set this if your platform is not supported or you know what you are
 #   doing.
 #   Default: auto-set, platform specific
@@ -58,8 +58,8 @@
 #
 class cloudera::cm5::repo (
   $ensure         = $cloudera::params::ensure,
-  $yumserver      = $cloudera::params::cm_yumserver,
-  $yumpath        = $cloudera::params::cm5_yumpath,
+  $reposerver     = $cloudera::params::cm_reposerver,
+  $repopath       = $cloudera::params::cm5_repopath,
   $version        = $cloudera::params::cm_version,
   $aptkey         = $cloudera::params::cm_aptkey,
   $proxy          = $cloudera::params::proxy,
@@ -84,8 +84,8 @@ class cloudera::cm5::repo (
         descr          => 'Cloudera Manager',
         enabled        => $enabled,
         gpgcheck       => 1,
-        gpgkey         => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
-        baseurl        => "${yumserver}${yumpath}${version}/",
+        gpgkey         => "${reposerver}${repopath}RPM-GPG-KEY-cloudera",
+        baseurl        => "${reposerver}${repopath}${version}/",
         priority       => $cloudera::params::yum_priority,
         protect        => $cloudera::params::yum_protect,
         proxy          => $proxy,
@@ -107,8 +107,8 @@ class cloudera::cm5::repo (
         descr       => 'Cloudera Manager',
         enabled     => $enabled,
         gpgcheck    => 1,
-        gpgkey      => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
-        baseurl     => "${yumserver}${yumpath}${version}/",
+        gpgkey      => "${reposerver}${repopath}RPM-GPG-KEY-cloudera",
+        baseurl     => "${reposerver}${repopath}${version}/",
         priority    => $cloudera::params::yum_priority,
         autorefresh => 1,
         notify      => Exec['cloudera-import-gpgkey'],
@@ -123,7 +123,7 @@ class cloudera::cm5::repo (
 
       exec { 'cloudera-import-gpgkey':
         path        => '/bin:/usr/bin:/sbin:/usr/sbin',
-        command     => "rpm --import ${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
+        command     => "rpm --import ${reposerver}${repopath}RPM-GPG-KEY-cloudera",
         refreshonly => true,
       }
 
@@ -133,11 +133,11 @@ class cloudera::cm5::repo (
       include '::apt'
 
       apt::source { 'cloudera-manager':
-        location     => "${yumserver}${yumpath}",
+        location     => "${reposerver}${repopath}",
         release      => "${::lsbdistcodename}-cm${version}",
         repos        => 'contrib',
         key          => $aptkey,
-        key_source   => "${yumserver}${yumpath}archive.key",
+        key_source   => "${reposerver}${repopath}archive.key",
         architecture => $cloudera::params::architecture,
       }
 

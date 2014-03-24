@@ -21,29 +21,29 @@ class cloudera::params {
 
   # If we have a top scope variable defined, use it, otherwise fall back to a
   # hardcoded value.
-  $cdh_yumserver = $::cloudera_cdh_yumserver ? {
+  $cdh_reposerver = $::cloudera_cdh_reposerver ? {
     undef   => 'http://archive.cloudera.com',
-    default => $::cloudera_cdh_yumserver,
+    default => $::cloudera_cdh_reposerver,
   }
 
-  $cm_yumserver = $::cloudera_cm_yumserver ? {
+  $cm_reposerver = $::cloudera_cm_reposerver ? {
     undef   => 'http://archive.cloudera.com',
-    default => $::cloudera_cm_yumserver,
+    default => $::cloudera_cm_reposerver,
   }
 
-  $ci_yumserver = $::cloudera_ci_yumserver ? {
+  $ci_reposerver = $::cloudera_ci_reposerver ? {
     undef   => 'http://archive.cloudera.com',
-    default => $::cloudera_ci_yumserver,
+    default => $::cloudera_ci_reposerver,
   }
 
-  $cs_yumserver = $::cloudera_cs_yumserver ? {
+  $cs_reposerver = $::cloudera_cs_reposerver ? {
     undef   => 'http://archive.cloudera.com',
-    default => $::cloudera_cs_yumserver,
+    default => $::cloudera_cs_reposerver,
   }
 
-  $cg_yumserver = $::cloudera_cg_yumserver ? {
+  $cg_reposerver = $::cloudera_cg_reposerver ? {
     undef   => 'http://archive.cloudera.com',
-    default => $::cloudera_cg_yumserver,
+    default => $::cloudera_cg_reposerver,
   }
 
   $cm_server_host = $::cloudera_cm_server_host ? {
@@ -228,40 +228,40 @@ class cloudera::params {
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OEL', 'OracleLinux': {
       $java_package_name = 'jdk'
-      $cdh_yumpath = "/cdh4/redhat/${majdistrelease}/${::architecture}/cdh/"
-      $cm_yumpath = "/cm4/redhat/${majdistrelease}/${::architecture}/cm/"
-      $ci_yumpath = "/impala/redhat/${majdistrelease}/${::architecture}/impala/"
-      $cs_yumpath = "/search/redhat/${majdistrelease}/${::architecture}/search/"
-      $cg_yumpath = "/gplextras/redhat/${majdistrelease}/${::architecture}/gplextras/"
+      $cdh_repopath = "/cdh4/redhat/${majdistrelease}/${::architecture}/cdh/"
+      $cm_repopath = "/cm4/redhat/${majdistrelease}/${::architecture}/cm/"
+      $ci_repopath = "/impala/redhat/${majdistrelease}/${::architecture}/impala/"
+      $cs_repopath = "/search/redhat/${majdistrelease}/${::architecture}/search/"
+      $cg_repopath = "/gplextras/redhat/${majdistrelease}/${::architecture}/gplextras/"
       $java5_package_name = 'oracle-j2sdk1.7'
-      $cm5_yumpath = "/cm5/redhat/${majdistrelease}/${::architecture}/cm/"
-      $cdh5_yumpath = "/cdh5/redhat/${majdistrelease}/${::architecture}/cdh/"
-      $cg5_yumpath = "/gplextras5/redhat/${majdistrelease}/${::architecture}/gplextras/"
+      $cm5_repopath = "/cm5/redhat/${majdistrelease}/${::architecture}/cm/"
+      $cdh5_repopath = "/cdh5/redhat/${majdistrelease}/${::architecture}/cdh/"
+      $cg5_repopath = "/gplextras5/redhat/${majdistrelease}/${::architecture}/gplextras/"
     }
     'SLES': {
       $java_package_name = 'jdk'
       #$package_provider = 'zypper'
-      $cdh_yumpath = "/cdh4/sles/${majdistrelease}/${::architecture}/cdh/"
-      $cm_yumpath = "/cm4/sles/${majdistrelease}/${::architecture}/cm/"
-      $ci_yumpath = "/impala/sles/${majdistrelease}/${::architecture}/impala/"
-      $cs_yumpath = "/search/sles/${majdistrelease}/${::architecture}/search/"
-      $cg_yumpath = "/gplextras/sles/${majdistrelease}/${::architecture}/gplextras/"
+      $cdh_repopath = "/cdh4/sles/${majdistrelease}/${::architecture}/cdh/"
+      $cm_repopath = "/cm4/sles/${majdistrelease}/${::architecture}/cm/"
+      $ci_repopath = "/impala/sles/${majdistrelease}/${::architecture}/impala/"
+      $cs_repopath = "/search/sles/${majdistrelease}/${::architecture}/search/"
+      $cg_repopath = "/gplextras/sles/${majdistrelease}/${::architecture}/gplextras/"
       $java5_package_name = 'oracle-j2sdk1.7'
-      $cm5_yumpath = "/cm5/sles/${majdistrelease}/${::architecture}/cm/"
-      $cdh5_yumpath = "/cdh5/sles/${majdistrelease}/${::architecture}/cdh/"
-      $cg5_yumpath = "/gplextras5/sles/${majdistrelease}/${::architecture}/gplextras/"
+      $cm5_repopath = "/cm5/sles/${majdistrelease}/${::architecture}/cm/"
+      $cdh5_repopath = "/cdh5/sles/${majdistrelease}/${::architecture}/cdh/"
+      $cg5_repopath = "/gplextras5/sles/${majdistrelease}/${::architecture}/gplextras/"
     }
     'Debian': {
       $java_package_name = 'oracle-j2sdk1.6'
-      $cdh_yumpath = "/cdh4/debian/${::lsbdistcodename}/${::architecture}/cdh/"
-      $cm_yumpath = "/cm4/debian/${::lsbdistcodename}/${::architecture}/cm/"
-      $ci_yumpath = "/impala/debian/${::lsbdistcodename}/${::architecture}/impala/"
-      $cs_yumpath = "/search/debian/${::lsbdistcodename}/${::architecture}/search/"
-      $cg_yumpath = "/gplextras/debian/${::lsbdistcodename}/${::architecture}/gplextras/"
+      $cdh_repopath = "/cdh4/debian/${::lsbdistcodename}/${::architecture}/cdh/"
+      $cm_repopath = "/cm4/debian/${::lsbdistcodename}/${::architecture}/cm/"
+      $ci_repopath = "/impala/debian/${::lsbdistcodename}/${::architecture}/impala/"
+      $cs_repopath = "/search/debian/${::lsbdistcodename}/${::architecture}/search/"
+      $cg_repopath = "/gplextras/debian/${::lsbdistcodename}/${::architecture}/gplextras/"
       $java5_package_name = 'oracle-j2sdk1.7'
-      $cm5_yumpath = "/cm5/debian/${::lsbdistcodename}/${::architecture}/cm/"
-      $cdh5_yumpath = "/cdh5/debian/${::lsbdistcodename}/${::architecture}/cdh/"
-      $cg5_yumpath = "/gplextras5/debian/${::lsbdistcodename}/${::architecture}/gplextras/"
+      $cm5_repopath = "/cm5/debian/${::lsbdistcodename}/${::architecture}/cm/"
+      $cdh5_repopath = "/cdh5/debian/${::lsbdistcodename}/${::architecture}/cdh/"
+      $cg5_repopath = "/gplextras5/debian/${::lsbdistcodename}/${::architecture}/gplextras/"
       $cdh_aptkey = false
       $cm_aptkey = '327574EE02A818DD'
       $ci_aptkey = false
@@ -271,15 +271,15 @@ class cloudera::params {
     }
     'Ubuntu': {
       $java_package_name = 'oracle-j2sdk1.6'
-      $cdh_yumpath = "/cdh4/ubuntu/${::lsbdistcodename}/${::architecture}/cdh/"
-      $cm_yumpath = "/cm4/ubuntu/${::lsbdistcodename}/${::architecture}/cm/"
-      $ci_yumpath = "/impala/ubuntu/${::lsbdistcodename}/${::architecture}/impala/"
-      $cs_yumpath = "/search/ubuntu/${::lsbdistcodename}/${::architecture}/search/"
-      $cg_yumpath = "/gplextras/ubuntu/${::lsbdistcodename}/${::architecture}/gplextras/"
+      $cdh_repopath = "/cdh4/ubuntu/${::lsbdistcodename}/${::architecture}/cdh/"
+      $cm_repopath = "/cm4/ubuntu/${::lsbdistcodename}/${::architecture}/cm/"
+      $ci_repopath = "/impala/ubuntu/${::lsbdistcodename}/${::architecture}/impala/"
+      $cs_repopath = "/search/ubuntu/${::lsbdistcodename}/${::architecture}/search/"
+      $cg_repopath = "/gplextras/ubuntu/${::lsbdistcodename}/${::architecture}/gplextras/"
       $java5_package_name = 'oracle-j2sdk1.7'
-      $cm5_yumpath = "/cm5/ubuntu/${::lsbdistcodename}/${::architecture}/cm/"
-      $cdh5_yumpath = "/cdh5/ubuntu/${::lsbdistcodename}/${::architecture}/cdh/"
-      $cg5_yumpath = "/gplextras5/ubuntu/${::lsbdistcodename}/${::architecture}/gplextras/"
+      $cm5_repopath = "/cm5/ubuntu/${::lsbdistcodename}/${::architecture}/cm/"
+      $cdh5_repopath = "/cdh5/ubuntu/${::lsbdistcodename}/${::architecture}/cdh/"
+      $cg5_repopath = "/gplextras5/ubuntu/${::lsbdistcodename}/${::architecture}/gplextras/"
       $cdh_aptkey = false
       $cm_aptkey = '327574EE02A818DD'
       $ci_aptkey = false

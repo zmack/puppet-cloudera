@@ -113,8 +113,8 @@ describe 'cloudera::gplextras5::repo', :type => 'class' do
 
     describe 'all other parameters' do
       let :params do {
-        :yumserver      => 'http://localhost',
-        :yumpath        => '/somepath/2/',
+        :reposerver     => 'http://localhost',
+        :repopath       => '/somepath/2/',
         :version        => '777',
         :proxy          => 'http://proxy:3128/',
         :proxy_username => 'myUser',
