@@ -73,15 +73,12 @@ class { '::cloudera':
 - The default for `use_parcels` will switch to `true` before the 1.0.0 release.
 
 This:
-
 ```puppet
 class { '::cloudera':
   cm_server_host => 'smhost.localdomain',
 }
 ```
-
 would become this:
-
 ```puppet
 class { '::cloudera':
   cm_server_host => 'smhost.localdomain',
@@ -94,22 +91,36 @@ class { '::cloudera':
 - The class `::cloudera::repo` will be renamed to `::cloudera::cdh::repo` and the Impala repository will be split out into `::cloudera::impala::repo` before the 1.0.0 release.
 
 This:
-
 ```puppet
 class { '::cloudera::repo':
   cdh_version => '4.1',
   cm_version  => '4.1',
 }
 ```
-
 would become this:
-
 ```puppet
 class { '::cloudera::cdh::repo':
   version => '4.1',
 }
 class { '::cloudera::impala::repo':
   version => '4.1',
+}
+```
+
+- The class parameters and variables `yumserver` and `yumpath` have been renamed to `reposerver` and `repopath` respectively.  This makes the name more generic as it applies to APT and Zypprepo as well as YUM package repositories.
+
+This:
+```puppet
+class { 'cloudera':
+  cm_yumserver => 'http://packageserver.localdomain',
+  cm_yumpath   => '/gplextras/',
+}
+```
+would become this:
+```puppet
+class { 'cloudera':
+  cm_reposerver => 'http://packageserver.localdomain',
+  cm_repopath   => '/gplextras/',
 }
 ```
 
