@@ -8,12 +8,12 @@
 #   Ensure if present or absent.
 #   Default: present
 #
-# [*yumserver*]
+# [*reposerver*]
 #   URI of the YUM server.
 #   Default: http://archive.cloudera.com
 #
-# [*yumpath*]
-#   The path to add to the $yumserver URI.
+# [*repopath*]
+#   The path to add to the $reposerver URI.
 #   Only set this if your platform is not supported or you know what you are
 #   doing.
 #   Default: auto-set, platform specific
@@ -58,8 +58,8 @@
 #
 class cloudera::gplextras5::repo (
   $ensure         = $cloudera::params::ensure,
-  $yumserver      = $cloudera::params::cg_yumserver,
-  $yumpath        = $cloudera::params::cg5_yumpath,
+  $reposerver     = $cloudera::params::cg_reposerver,
+  $repopath       = $cloudera::params::cg5_repopath,
   $version        = $cloudera::params::cg_version,
   $aptkey         = $cloudera::params::cg_aptkey,
   $proxy          = $cloudera::params::proxy,
@@ -84,8 +84,8 @@ class cloudera::gplextras5::repo (
         descr          => 'Cloudera GPL Extras',
         enabled        => $enabled,
         gpgcheck       => 1,
-        gpgkey         => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
-        baseurl        => "${yumserver}${yumpath}${version}/",
+        gpgkey         => "${reposerver}${repopath}RPM-GPG-KEY-cloudera",
+        baseurl        => "${reposerver}${repopath}${version}/",
         priority       => $cloudera::params::yum_priority,
         protect        => $cloudera::params::yum_protect,
         proxy          => $proxy,
@@ -107,8 +107,8 @@ class cloudera::gplextras5::repo (
         descr       => 'Cloudera GPL Extras',
         enabled     => $enabled,
         gpgcheck    => 1,
-        gpgkey      => "${yumserver}${yumpath}RPM-GPG-KEY-cloudera",
-        baseurl     => "${yumserver}${yumpath}${version}/",
+        gpgkey      => "${reposerver}${repopath}RPM-GPG-KEY-cloudera",
+        baseurl     => "${reposerver}${repopath}${version}/",
         autorefresh => 1,
         priority    => $cloudera::params::yum_priority,
       }
@@ -126,11 +126,11 @@ class cloudera::gplextras5::repo (
       include '::apt'
 
       apt::source { 'cloudera-gplextras5':
-        location     => "${yumserver}${yumpath}",
+        location     => "${reposerver}${repopath}",
         release      => "${::lsbdistcodename}-gplextras${version}",
         repos        => 'contrib',
         key          => $aptkey,
-        key_source   => "${yumserver}${yumpath}archive.key",
+        key_source   => "${reposerver}${repopath}archive.key",
         architecture => $cloudera::params::architecture,
       }
 

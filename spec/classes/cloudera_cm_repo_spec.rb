@@ -150,8 +150,8 @@ describe 'cloudera::cm::repo', :type => 'class' do
 
     describe 'all other parameters' do
       let :params do {
-        :yumserver      => 'http://localhost',
-        :yumpath        => '/somepath/3/',
+        :reposerver     => 'http://localhost',
+        :repopath       => '/somepath/3/',
         :version        => '888',
         :proxy          => 'http://proxy:3128/',
         :proxy_username => 'myUser',
