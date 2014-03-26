@@ -123,8 +123,7 @@ describe 'cloudera::cm5', :type => 'class' do
     describe 'server_host => some.other.host' do
       let :params do {
         :server_host => 'some.other.host',
-        :server_port => '9000',
-        :use_tls     => true
+        :server_port => '9000'
       }
       end
       it { should contain_file('scm-config.ini').with_ensure('present') }
@@ -133,11 +132,61 @@ describe 'cloudera::cm5', :type => 'class' do
           'server_host=some.other.host',
           'server_port=9000',
           'listening_hostname=myhost',
-          'use_tls=1',
-          'verify_cert_file=/etc/pki/tls/certs/cloudera_manager.crt',
+          'use_tls=0',
         ])
       end
     end
-  end
 
+    describe 'use_tls => true' do
+      let :params do {
+        :use_tls => true
+      }
+      end
+
+      describe 'RedHat' do
+        let :facts do {
+          :osfamily        => 'RedHat',
+          :operatingsystem => 'CentOS'
+        }
+        end
+        it { should contain_file('scm-config.ini').with_ensure('present') }
+        it 'should contain File[scm-config.ini] with correct contents' do
+          verify_contents(subject, 'scm-config.ini', [
+            'use_tls=1',
+            'verify_cert_file=/etc/pki/tls/certs/cloudera_manager.crt',
+          ])
+        end
+      end
+
+      describe 'SLES' do
+        let :facts do {
+          :osfamily        => 'Suse',
+          :operatingsystem => 'SLES'
+        }
+        end
+        it { should contain_file('scm-config.ini').with_ensure('present') }
+        it 'should contain File[scm-config.ini] with correct contents' do
+          verify_contents(subject, 'scm-config.ini', [
+            'use_tls=1',
+            'verify_cert_file=/etc/ssl/certs/cloudera_manager.crt',
+          ])
+        end
+      end
+
+      describe 'Ubuntu' do
+        let :facts do {
+          :osfamily        => 'Debian',
+          :operatingsystem => 'Ubuntu'
+        }
+        end
+        it { should contain_file('scm-config.ini').with_ensure('present') }
+        it 'should contain File[scm-config.ini] with correct contents' do
+          verify_contents(subject, 'scm-config.ini', [
+            'use_tls=1',
+            'verify_cert_file=/etc/ssl/certs/cloudera_manager.crt',
+          ])
+        end
+      end
+    end
+  end
 end
