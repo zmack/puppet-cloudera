@@ -188,8 +188,10 @@ There are some settings inside CM that can only be configured manually.  See the
     Use TLS Encryption for        (check)
       Admin Console
 
+(The following assume osfamily = RedHat. For Debian or Suse, use `/etc/ssl` instead of `/etc/pki/tls`.)
+
+The node that will be the CM agent may use this declaration:
 ```puppet
-# The node that will be the CM agent may use this declaration:
 class { 'cloudera':
   server_host => 'smhost.example.com',
   use_tls     => true,
@@ -198,8 +200,8 @@ class { 'cloudera':
 file { '/etc/pki/tls/certs/cloudera_manager.crt': }
 ```
 
+The node that will be the CM agent+server may use this declaration:
 ```puppet
-# The node that will be the CM agent+server may use this declaration:
 class { 'cloudera':
   server_host      => 'smhost.example.com',
   use_tls          => true,

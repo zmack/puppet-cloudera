@@ -32,7 +32,8 @@
 # [*verify_cert_file*]
 #   The file holding the public key of the Cloudera Manager server as well as
 #   the chain of signing certificate authorities. PEM format.
-#   Default: /etc/pki/tls/certs/cloudera_manager.crt
+#   Default: /etc/pki/tls/certs/cloudera_manager.crt or
+#            /etc/ssl/certs/cloudera_manager.crt
 #
 # === Actions:
 #

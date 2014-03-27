@@ -56,26 +56,6 @@ class cloudera::params {
     default => $::cloudera_cm_server_port,
   }
 
-  $verify_cert_file = $::cloudera_verify_cert_file ? {
-    undef   => '/etc/pki/tls/certs/cloudera_manager.crt',
-    default => $::cloudera_verify_cert_file,
-  }
-
-  $server_ca_file = $::cloudera_server_ca_file ? {
-    undef   => '/etc/pki/tls/certs/cloudera_manager-ca.crt',
-    default => $::cloudera_server_ca_file,
-  }
-
-  $server_cert_file = $::cloudera_server_cert_file ? {
-    undef   => "/etc/pki/tls/certs/${::fqdn}-cloudera_manager.crt",
-    default => $::cloudera_server_cert_file,
-  }
-
-  $server_key_file = $::cloudera_server_key_file ? {
-    undef   => "/etc/pki/tls/private/${::fqdn}-cloudera_manager.key",
-    default => $::cloudera_server_key_file,
-  }
-
   $server_chain_file = $::cloudera_server_chain_file ? {
     undef   => undef,
     default => $::cloudera_server_chain_file,
@@ -237,6 +217,7 @@ class cloudera::params {
       $cm5_repopath = "/cm5/redhat/${majdistrelease}/${::architecture}/cm/"
       $cdh5_repopath = "/cdh5/redhat/${majdistrelease}/${::architecture}/cdh/"
       $cg5_repopath = "/gplextras5/redhat/${majdistrelease}/${::architecture}/gplextras/"
+      $tls_dir = '/etc/pki/tls'
     }
     'SLES': {
       $java_package_name = 'jdk'
@@ -250,6 +231,7 @@ class cloudera::params {
       $cm5_repopath = "/cm5/sles/${majdistrelease}/${::architecture}/cm/"
       $cdh5_repopath = "/cdh5/sles/${majdistrelease}/${::architecture}/cdh/"
       $cg5_repopath = "/gplextras5/sles/${majdistrelease}/${::architecture}/gplextras/"
+      $tls_dir = '/etc/ssl'
     }
     'Debian': {
       $java_package_name = 'oracle-j2sdk1.6'
@@ -268,6 +250,7 @@ class cloudera::params {
       $cs_aptkey = false
       $cg_aptkey = false
       $architecture = undef
+      $tls_dir = '/etc/ssl'
     }
     'Ubuntu': {
       $java_package_name = 'oracle-j2sdk1.6'
@@ -289,9 +272,30 @@ class cloudera::params {
         'lucid': { $architecture = undef }
         default: { $architecture = $::architecture }
       }
+      $tls_dir = '/etc/ssl'
     }
     default: {
       fail("Module ${module_name} is not supported on ${::operatingsystem}")
     }
+  }
+
+  $verify_cert_file = $::cloudera_verify_cert_file ? {
+    undef   => "${tls_dir}/certs/cloudera_manager.crt",
+    default => $::cloudera_verify_cert_file,
+  }
+
+  $server_ca_file = $::cloudera_server_ca_file ? {
+    undef   => "${tls_dir}/certs/cloudera_manager-ca.crt",
+    default => $::cloudera_server_ca_file,
+  }
+
+  $server_cert_file = $::cloudera_server_cert_file ? {
+    undef   => "${tls_dir}/certs/${::fqdn}-cloudera_manager.crt",
+    default => $::cloudera_server_cert_file,
+  }
+
+  $server_key_file = $::cloudera_server_key_file ? {
+    undef   => "${tls_dir}/private/${::fqdn}-cloudera_manager.key",
+    default => $::cloudera_server_key_file,
   }
 }
