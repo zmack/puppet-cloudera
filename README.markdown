@@ -10,10 +10,10 @@
     * [What this module affects](#what-this-module-affects)
     * [Beginning with this module](#beginning-with-this-module)
 4. [Usage - Configuration options and additional functionality](#usage)
-    * [Parcels](#parcels)
     * [TLS Security](#tls-security)
-    * [LZO Compression](#lzo-compression)
     * [External Database](#external-database)
+    * [Parcels](#parcels)
+    * [LZO Compression](#lzo-compression)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 6. [Limitations - OS compatibility, etc.](#limitations)
     * [OS Support](#os-support)
@@ -58,7 +58,7 @@ class { '::cloudera':
 }
 ```
 
-The node that will be the CM server (ie smhost.localdomain) will use this declaration. This should only be included on one node of your environment.  By default it will install the embeded PostgreSQL database on the same node.  With the correct parameters, it can instead connect to local or remote MySQL, PostgreSQL, or Oracle RDBMS databases.
+The node that will be the CM server (ie smhost.localdomain) will use this declaration. This should only be included on one node of your environment.  By default it will install the embeded PostgreSQL database on the same node.  With the [correct parameters](#external-database), it can instead connect to local or remote MySQL, PostgreSQL, or Oracle RDBMS databases.
 ```puppet
 class { '::cloudera':
   cm_server_host   => 'smhost.localdomain',
@@ -128,44 +128,6 @@ class { 'cloudera':
 
 All interaction with the cloudera module can be done through the main cloudera class.  This means you can simply toggle the options in `::cloudera` to have full functionality of the module.
 
-###Parcels
-
-[Parcel](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) is an alternative binary distribution format supported by Cloudera Manager 4.5+ that simplifies distribution of CDH and other Cloudera products.  By default, this module assumes software deployment of CDH via parcel.  To allow Cloudera Manager to install CDH via RPMs (or DEBs) instead of parcels, just set `use_parcels => false`.
-
-Nodes that will be cluster members will use this declaration:
-```puppet
-class { '::cloudera':
-  cm_server_host => 'smhost.localdomain',
-  use_parcels    => false,
-}
-```
-
-Nodes that will be Gateways may use this declaration to install extra parts of CDH:
-```puppet
-class { '::cloudera':
-  cm_server_host => 'smhost.localdomain',
-  use_parcels    => false,
-}
-class { '::cloudera::cdh5::hue': }
-class { '::cloudera::cdh5::mahout': }
-class { '::cloudera::cdh5::sqoop': }
-# Install Oozie WebUI support (optional):
-#class { '::cloudera::cdh5::oozie::ext': }
-# Install MySQL support (optional):
-#class { '::cloudera::cdh5::hue::mysql': }
-#class { '::cloudera::cdh5::oozie::mysql': }
-```
-
-The node that will be just the CM server may use this declaration:
-(This will skip installation of the CDH software as it is not required.)
-```puppet
-class { '::cloudera::cm5::repo': } ->
-class { '::cloudera::java5': } ->
-class { '::cloudera::java5::jce': } ->
-class { '::cloudera::cm5': } ->
-class { '::cloudera::cm5::server': }
-```
-
 ###TLS Security
 Level 1: [Configuring TLS Encryption only for Cloudera Manager](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Administration-Guide/cm5ag_config_tls_encr.html)
 
@@ -209,18 +171,6 @@ file { "/etc/pki/tls/certs/${::fqdn}-cloudera_manager.crt": }
 file { "/etc/pki/tls/private/${::fqdn}-cloudera_manager.key": }
 ```
 
-###LZO Compression
-
-[LZO](http://www.oberhumer.com/opensource/lzo/) compression libraries are available in the GPL Extras repository.  To deploy the software on a non-parcel system just add `use_gplextras => true` to the class declaration.  Additional configuration in Cloudera Manager will be required to [activate](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html) the functionality (ignore the mention of parcels in the link to the documentation).
-
-```puppet
-class { '::cloudera':
-  cm_server_host => 'smhost.localdomain',
-  use_parcels    => false,
-  use_gplextras  => true,
-}
-```
-
 ###External Database
 
 If you decide not to use the embedded database, the Cloudera Manager server database configuration can be completed by configuring this module to call the [`scm_prepare_database.sh`](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_B.html#cmig_topic_6_6_5_unique_1__section_y3j_pyp_bm_unique_1) script.  The external database must be configured and ready for connection with the supplied credentials via some method outside of this module.
@@ -234,6 +184,56 @@ class { '::cloudera':
   db_port          => '5432',
   db_user          => 'root',
   db_pass          => 'SeCrEt',
+}
+```
+
+###Parcels
+
+[Parcel](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) is an alternative binary distribution format supported by Cloudera Manager 4.5+ that simplifies distribution of CDH and other Cloudera products.  By default, this module assumes software deployment of CDH via parcel.  To allow Cloudera Manager to install CDH via RPMs (or DEBs) instead of parcels, just set `use_parcels => false`.
+
+Nodes that will be cluster members will use this declaration:
+```puppet
+class { '::cloudera':
+  cm_server_host => 'smhost.localdomain',
+  use_parcels    => false,
+}
+```
+
+Nodes that will be Gateways may use this declaration to install extra parts of CDH:
+```puppet
+class { '::cloudera':
+  cm_server_host => 'smhost.localdomain',
+  use_parcels    => false,
+}
+class { '::cloudera::cdh5::hue': }
+class { '::cloudera::cdh5::mahout': }
+class { '::cloudera::cdh5::sqoop': }
+# Install Oozie WebUI support (optional):
+#class { '::cloudera::cdh5::oozie::ext': }
+# Install MySQL support (optional):
+#class { '::cloudera::cdh5::hue::mysql': }
+#class { '::cloudera::cdh5::oozie::mysql': }
+```
+
+The node that will be just the CM server may use this declaration:
+(This will skip installation of the CDH software as it is not required.)
+```puppet
+class { '::cloudera::cm5::repo': } ->
+class { '::cloudera::java5': } ->
+class { '::cloudera::java5::jce': } ->
+class { '::cloudera::cm5': } ->
+class { '::cloudera::cm5::server': }
+```
+
+###LZO Compression
+
+[LZO](http://www.oberhumer.com/opensource/lzo/) compression libraries are available in the GPL Extras repository.  To deploy the software on a non-parcel system just add `use_gplextras => true` to the class declaration.  Additional configuration in Cloudera Manager will be required to [activate](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html) the functionality (ignore the mention of parcels in the link to the documentation).
+
+```puppet
+class { '::cloudera':
+  cm_server_host => 'smhost.localdomain',
+  use_parcels    => false,
+  use_gplextras  => true,
 }
 ```
 
