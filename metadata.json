@@ -1,46 +1,4 @@
 {
-  "name": "razorsedge-cloudera",
-  "summary": "Deploy Cloudera Manager and Cloudera's Distribution, including Apache Hadoop (CDH).",
-  "description": "This module manages the installation of Cloudera's Distribution,\nincluding Apache Hadoop (CDH) and Cloudera Manager. It follows the standards\nwritten in the Cloudera Manager Installation Guide Installation Path B -\nInstallation Using Your Own Method.",
-  "version": "1.0.1",
-  "license": "Apache License, Version 2.0",
-  "source": "https://github.com/razorsedge/puppet-cloudera.git",
-  "author": "razorsedge",
-  "project_page": "https://github.com/razorsedge/puppet-cloudera",
-  "dependencies": [
-    {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">=2.3.0"
-    },
-    {
-      "name": "puppetlabs/mysql",
-      "version_requirement": ">=2.0.0 <3.0.0"
-    },
-    {
-      "name": "puppetlabs/postgresql",
-      "version_requirement": ">=2.1.0 <3.0.0"
-    },
-    {
-      "name": "nanliu/staging",
-      "version_requirement": ">=0.2.1"
-    },
-    {
-      "name": "stahnma/epel",
-      "version_requirement": ">=0.0.3"
-    },
-    {
-      "name": "puppetlabs/java_ks",
-      "version_requirement": ">=1.0.0 <2.0.0"
-    },
-    {
-      "name": "darin/zypprepo",
-      "version_requirement": ">=1.0.0 <2.0.0"
-    },
-    {
-      "name": "puppetlabs/apt",
-      "version_requirement": ">=1.4.2 <2.0.0"
-    }
-  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
