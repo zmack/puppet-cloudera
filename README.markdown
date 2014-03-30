@@ -199,23 +199,22 @@ class { '::cloudera':
 }
 ```
 
-Nodes that will be Gateways may use this declaration to install extra parts of CDH:
+For more advanced use cases, nodes that will be gateways may use this declaration to install extra parts of CDH:
 ```puppet
 class { '::cloudera':
   cm_server_host => 'smhost.localdomain',
   use_parcels    => false,
 }
-class { '::cloudera::cdh5::hue': }
 class { '::cloudera::cdh5::mahout': }
-class { '::cloudera::cdh5::sqoop': }
+class { '::cloudera::cdh5::kite': }
 # Install Oozie WebUI support (optional):
-#class { '::cloudera::cdh5::oozie::ext': }
+class { '::cloudera::cdh5::oozie::ext': }
 # Install MySQL support (optional):
-#class { '::cloudera::cdh5::hue::mysql': }
-#class { '::cloudera::cdh5::oozie::mysql': }
+class { '::cloudera::cdh5::hue::mysql': }
+class { '::cloudera::cdh5::oozie::mysql': }
 ```
 
-The node that will be just the CM server may use this declaration:
+For more advanced use cases, the node that will be just the CM server may use this declaration:
 (This will skip installation of the CDH software as it is not required.)
 ```puppet
 class { '::cloudera::cm5::repo': } ->
