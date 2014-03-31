@@ -226,13 +226,23 @@ class { '::cloudera::cm5::server': }
 
 ###LZO Compression
 
-[LZO](http://www.oberhumer.com/opensource/lzo/) compression libraries are available in the GPL Extras repository.  To deploy the software on a non-parcel system just add `use_gplextras => true` to the class declaration.  Additional configuration in Cloudera Manager will be required to [activate](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html) the functionality (ignore the mention of parcels in the link to the documentation).
+Hadoop-specific [LZO](http://www.oberhumer.com/opensource/lzo/) compression libraries are available in the Cloudera GPL Extras repository.  To deploy the Hadoop-specific and also the native libraries on a non-parcel system just add `install_lzo => true` to the class declaration.  Additional configuration in Cloudera Manager will be required to [activate](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html) the functionality (ignore the mention of parcels in the link to the documentation).
 
 ```puppet
 class { '::cloudera':
   cm_server_host => 'smhost.localdomain',
   use_parcels    => false,
-  use_gplextras  => true,
+  install_lzo    => true,
+}
+```
+
+To deploy the native LZO compression libraries on a parcel system just add `install_lzo => true` to the class declaration.  Additional configuration in Cloudera Manager will be required to [activate](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html) the functionality.
+
+```puppet
+class { '::cloudera':
+  cm_server_host => 'smhost.localdomain',
+  use_parcels    => true,
+  install_lzo    => true,
 }
 ```
 
@@ -268,6 +278,7 @@ class { '::cloudera':
 * cloudera::impala::repo
 * cloudera::search
 * cloudera::search::repo
+* cloudera::lzo
 
 ###Parameters
 
@@ -401,12 +412,12 @@ Default: /etc/pki/tls/certs/cloudera_manager.crt or /etc/ssl/certs/cloudera_mana
 
 ####`use_parcels`
 
-Whether to use parcel format software install and not RPM.
+Whether to install CDH software via parcels or packages.
 Default: true
 
-####`use_gplextras`
+####`install_lzo`
 
-Whether to install the GPL LZO compression libraries.
+Whether to install the native LZO compression library packages.  If *use_parcels* is false, then also install the Hadoop-specific LZO compression library packages.  You must configure and deploy the GPLextras parcel repository if *use_parcels* is true.
 Default: false
 
 ####`install_java`
