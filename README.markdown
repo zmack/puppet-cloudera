@@ -9,6 +9,7 @@
 3. [Setup - The basics of getting started with this module](#setup)
     * [What this module affects](#what-this-module-affects)
     * [Beginning with this module](#beginning-with-this-module)
+    * [Upgrading](#upgrading)
 4. [Usage - Configuration options and additional functionality](#usage)
     * [TLS Security](#tls-security)
     * [External Database](#external-database)
