@@ -116,11 +116,14 @@
 #            /etc/ssl/certs/cloudera_manager.crt
 #
 # [*use_parcels*]
-#   Whether to use parcel format software install and not RPM.
+#   Whether to install CDH software via parcels or packages.
 #   Default: true
 #
 # [*install_lzo*]
-#   Whether to install the GPL LZO compression libraries.
+#   Whether to install the native LZO compression library packages.  If
+#   *use_parcels* is false, then also install the Hadoop-specific LZO
+#   compression library packages.  You must configure and deploy the GPLextras
+#   parcel repository if *use_parcels* is true.
 #   Default: false
 #
 # [*install_java*]
@@ -318,6 +321,13 @@ class cloudera (
     comment => 'Clodera recommended setting.',
     require => Anchor['cloudera::begin'],
     before  => Anchor['cloudera::end'],
+  }
+
+  if $install_lzo {
+    class { 'cloudera::lzo':
+      require => Anchor['cloudera::begin'],
+      before  => Anchor['cloudera::end'],
+    }
   }
 
   if $cm_version =~ /^5/ {
