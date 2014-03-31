@@ -119,7 +119,7 @@
 #   Whether to use parcel format software install and not RPM.
 #   Default: true
 #
-# [*use_gplextras*]
+# [*install_lzo*]
 #   Whether to install the GPL LZO compression libraries.
 #   Default: false
 #
@@ -277,7 +277,7 @@ class cloudera (
   $use_tls          = $cloudera::params::safe_cm_use_tls,
   $verify_cert_file = $cloudera::params::verify_cert_file,
   $use_parcels      = $cloudera::params::safe_use_parcels,
-  $use_gplextras    = $cloudera::params::safe_use_gplextras,
+  $install_lzo      = $cloudera::params::safe_install_lzo,
   $install_java     = $cloudera::params::safe_install_java,
   $install_jce      = $cloudera::params::safe_install_jce,
   $install_cmserver  = $cloudera::params::safe_install_cmserver,
@@ -303,7 +303,7 @@ class cloudera (
   validate_bool($service_enable)
   validate_bool($use_tls)
   validate_bool($use_parcels)
-  validate_bool($use_gplextras)
+  validate_bool($install_lzo)
   validate_bool($install_java)
   validate_bool($install_jce)
   validate_bool($install_cmserver)
@@ -414,7 +414,7 @@ class cloudera (
           require        => Anchor['cloudera::begin'],
           before         => Anchor['cloudera::end'],
         }
-        if $use_gplextras {
+        if $install_lzo {
           class { 'cloudera::gplextras5::repo':
             ensure         => $ensure,
             reposerver     => $cg_reposerver,
@@ -491,7 +491,7 @@ class cloudera (
           require        => Anchor['cloudera::begin'],
           before         => Anchor['cloudera::end'],
         }
-        if $use_gplextras {
+        if $install_lzo {
           class { 'cloudera::gplextras::repo':
             ensure         => $ensure,
             reposerver     => $cg_reposerver,
@@ -645,7 +645,7 @@ class cloudera (
         require        => Anchor['cloudera::begin'],
         before         => Anchor['cloudera::end'],
       }
-      if $use_gplextras {
+      if $install_lzo {
         class { 'cloudera::gplextras::repo':
           ensure         => $ensure,
           reposerver     => $cg_reposerver,

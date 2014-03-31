@@ -140,14 +140,14 @@ class cloudera::params {
     $safe_use_parcels = $use_parcels
   }
 
-  $use_gplextras = $::cloudera_use_gplextras ? {
+  $install_lzo = $::cloudera_install_lzo ? {
     undef => false,
-    default => $::cloudera_use_gplextras,
+    default => $::cloudera_install_lzo,
   }
-  if is_string($use_gplextras) {
-    $safe_use_gplextras = str2bool($use_gplextras)
+  if is_string($install_lzo) {
+    $safe_install_lzo = str2bool($install_lzo)
   } else {
-    $safe_use_gplextras = $use_gplextras
+    $safe_install_lzo = $install_lzo
   }
 
   $install_java = $::cloudera_install_java ? {
