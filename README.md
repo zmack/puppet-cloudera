@@ -314,6 +314,23 @@ class { 'cloudera':
 }
 ```
 
+`use_gplextras` has been renamed to `install_lzo` for the 2.0.0 release.
+
+This:
+```puppet
+class { 'cloudera':
+  cm_server_host => 'smhost.example.com',
+  use_gplextras  => true,
+}
+```
+would become this:
+```puppet
+class { 'cloudera':
+  cm_server_host => 'smhost.example.com',
+  install_lzo    => true,
+}
+```
+
 Contributing
 ------------
 
