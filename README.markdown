@@ -107,7 +107,7 @@ class { '::cloudera::impala::repo':
 }
 ```
 
-- The class parameters and variables `yumserver` and `yumpath` have been renamed to `reposerver` and `repopath` respectively.  This makes the name more generic as it applies to APT and Zypprepo as well as YUM package repositories.
+- The class parameters and variables `yumserver` and `yumpath` have been renamed to `reposerver` and `repopath` respectively for the 2.0.0 release.  This makes the name more generic as it applies to APT and Zypprepo as well as YUM package repositories.
 
 This:
 ```puppet
@@ -121,6 +121,23 @@ would become this:
 class { 'cloudera':
   cm_reposerver => 'http://packageserver.localdomain',
   cm_repopath   => '/gplextras/',
+}
+```
+
+- The `use_gplextras` parameter has been renamed to `install_lzo` for the 2.0.0 release.
+
+This:
+```puppet
+class { 'cloudera':
+  cm_server_host => 'smhost.example.com',
+  use_gplextras  => true,
+}
+```
+would become this:
+```puppet
+class { 'cloudera':
+  cm_server_host => 'smhost.example.com',
+  install_lzo    => true,
 }
 ```
 
