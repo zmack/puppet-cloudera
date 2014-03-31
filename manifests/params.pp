@@ -140,14 +140,14 @@ class cloudera::params {
     $safe_use_parcels = $use_parcels
   }
 
-  $use_gplextras = $::cloudera_use_gplextras ? {
+  $install_lzo = $::cloudera_install_lzo ? {
     undef => false,
-    default => $::cloudera_use_gplextras,
+    default => $::cloudera_install_lzo,
   }
-  if is_string($use_gplextras) {
-    $safe_use_gplextras = str2bool($use_gplextras)
+  if is_string($install_lzo) {
+    $safe_install_lzo = str2bool($install_lzo)
   } else {
-    $safe_use_gplextras = $use_gplextras
+    $safe_install_lzo = $install_lzo
   }
 
   $install_java = $::cloudera_install_java ? {
@@ -218,6 +218,7 @@ class cloudera::params {
       $cdh5_repopath = "/cdh5/redhat/${majdistrelease}/${::architecture}/cdh/"
       $cg5_repopath = "/gplextras5/redhat/${majdistrelease}/${::architecture}/gplextras/"
       $tls_dir = '/etc/pki/tls'
+      $lzo_package_name = 'lzo'
     }
     'SLES': {
       $java_package_name = 'jdk'
@@ -232,6 +233,7 @@ class cloudera::params {
       $cdh5_repopath = "/cdh5/sles/${majdistrelease}/${::architecture}/cdh/"
       $cg5_repopath = "/gplextras5/sles/${majdistrelease}/${::architecture}/gplextras/"
       $tls_dir = '/etc/ssl'
+      $lzo_package_name = 'liblzo2-2'
     }
     'Debian': {
       $java_package_name = 'oracle-j2sdk1.6'
@@ -251,6 +253,7 @@ class cloudera::params {
       $cg_aptkey = false
       $architecture = undef
       $tls_dir = '/etc/ssl'
+      $lzo_package_name = 'liblzo2-2'
     }
     'Ubuntu': {
       $java_package_name = 'oracle-j2sdk1.6'
@@ -273,6 +276,7 @@ class cloudera::params {
         default: { $architecture = $::architecture }
       }
       $tls_dir = '/etc/ssl'
+      $lzo_package_name = 'liblzo2-2'
     }
     default: {
       fail("Module ${module_name} is not supported on ${::operatingsystem}")

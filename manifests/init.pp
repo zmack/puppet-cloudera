@@ -116,11 +116,14 @@
 #            /etc/ssl/certs/cloudera_manager.crt
 #
 # [*use_parcels*]
-#   Whether to use parcel format software install and not RPM.
+#   Whether to install CDH software via parcels or packages.
 #   Default: true
 #
-# [*use_gplextras*]
-#   Whether to install the GPL LZO compression libraries.
+# [*install_lzo*]
+#   Whether to install the native LZO compression library packages.  If
+#   *use_parcels* is false, then also install the Hadoop-specific LZO
+#   compression library packages.  You must configure and deploy the GPLextras
+#   parcel repository if *use_parcels* is true.
 #   Default: false
 #
 # [*install_java*]
@@ -277,7 +280,7 @@ class cloudera (
   $use_tls          = $cloudera::params::safe_cm_use_tls,
   $verify_cert_file = $cloudera::params::verify_cert_file,
   $use_parcels      = $cloudera::params::safe_use_parcels,
-  $use_gplextras    = $cloudera::params::safe_use_gplextras,
+  $install_lzo      = $cloudera::params::safe_install_lzo,
   $install_java     = $cloudera::params::safe_install_java,
   $install_jce      = $cloudera::params::safe_install_jce,
   $install_cmserver  = $cloudera::params::safe_install_cmserver,
@@ -303,7 +306,7 @@ class cloudera (
   validate_bool($service_enable)
   validate_bool($use_tls)
   validate_bool($use_parcels)
-  validate_bool($use_gplextras)
+  validate_bool($install_lzo)
   validate_bool($install_java)
   validate_bool($install_jce)
   validate_bool($install_cmserver)
@@ -318,6 +321,13 @@ class cloudera (
     comment => 'Clodera recommended setting.',
     require => Anchor['cloudera::begin'],
     before  => Anchor['cloudera::end'],
+  }
+
+  if $install_lzo {
+    class { 'cloudera::lzo':
+      require => Anchor['cloudera::begin'],
+      before  => Anchor['cloudera::end'],
+    }
   }
 
   if $cm_version =~ /^5/ {
@@ -414,7 +424,7 @@ class cloudera (
           require        => Anchor['cloudera::begin'],
           before         => Anchor['cloudera::end'],
         }
-        if $use_gplextras {
+        if $install_lzo {
           class { 'cloudera::gplextras5::repo':
             ensure         => $ensure,
             reposerver     => $cg_reposerver,
@@ -491,7 +501,7 @@ class cloudera (
           require        => Anchor['cloudera::begin'],
           before         => Anchor['cloudera::end'],
         }
-        if $use_gplextras {
+        if $install_lzo {
           class { 'cloudera::gplextras::repo':
             ensure         => $ensure,
             reposerver     => $cg_reposerver,
@@ -645,7 +655,7 @@ class cloudera (
         require        => Anchor['cloudera::begin'],
         before         => Anchor['cloudera::end'],
       }
-      if $use_gplextras {
+      if $install_lzo {
         class { 'cloudera::gplextras::repo':
           ensure         => $ensure,
           reposerver     => $cg_reposerver,

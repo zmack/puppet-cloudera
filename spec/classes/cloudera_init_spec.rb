@@ -37,6 +37,7 @@ describe 'cloudera', :type => 'class' do
     it { should_not contain_class('cloudera::cdh5::repo') }
     it { should_not contain_class('cloudera::cdh5') }
     it { should_not contain_class('cloudera::cm5::server') }
+    it { should_not contain_class('cloudera::lzo') }
 
     it { should_not contain_class('cloudera::java') }
     it { should_not contain_class('cloudera::java::jce') }
@@ -45,6 +46,8 @@ describe 'cloudera', :type => 'class' do
     it { should_not contain_class('cloudera::cdh::repo') }
     it { should_not contain_class('cloudera::cdh') }
     it { should_not contain_class('cloudera::cm::server') }
+    it { should_not contain_class('cloudera::gplextras5::repo') }
+    it { should_not contain_class('cloudera::gplextras5') }
   end
 
   context 'on a supported operatingsystem, custom parameters, cm_version => 5' do
@@ -77,6 +80,11 @@ describe 'cloudera', :type => 'class' do
       it { should_not contain_class('cloudera::impala') }
       it { should_not contain_class('cloudera::search::repo') }
       it { should_not contain_class('cloudera::search') }
+      it { should_not contain_class('cloudera::gplextras::repo') }
+      it { should_not contain_class('cloudera::gplextras') }
+      it { should_not contain_class('cloudera::gplextras5::repo') }
+      it { should_not contain_class('cloudera::gplextras5') }
+      it { should_not contain_class('cloudera::lzo') }
     end
 
     describe 'use_parcels => false, cdh_version => 4' do
@@ -93,6 +101,25 @@ describe 'cloudera', :type => 'class' do
       it { should contain_class('cloudera::search').with_ensure('present') }
       it { should_not contain_class('cloudera::cdh5::repo') }
       it { should_not contain_class('cloudera::cdh5') }
+      it { should_not contain_class('cloudera::gplextras::repo') }
+      it { should_not contain_class('cloudera::gplextras') }
+      it { should_not contain_class('cloudera::gplextras5::repo') }
+      it { should_not contain_class('cloudera::gplextras5') }
+      it { should_not contain_class('cloudera::lzo') }
+    end
+
+    describe 'use_parcels => false, install_lzo => true' do
+      let(:params) {{ :use_parcels => false, :install_lzo => true }}
+      it { should contain_class('cloudera::gplextras5::repo') }
+      it { should contain_class('cloudera::gplextras5') }
+      it { should contain_class('cloudera::lzo') }
+    end
+
+    describe 'install_lzo => true' do
+      let(:params) {{ :install_lzo => true }}
+      it { should contain_class('cloudera::lzo') }
+      it { should_not contain_class('cloudera::gplextras5::repo') }
+      it { should_not contain_class('cloudera::gplextras5') }
     end
 
     describe 'install_java => false' do
@@ -138,6 +165,25 @@ describe 'cloudera', :type => 'class' do
       it { should contain_class('cloudera::impala').with_ensure('present') }
       it { should contain_class('cloudera::search::repo').with_ensure('present') }
       it { should contain_class('cloudera::search').with_ensure('present') }
+      it { should_not contain_class('cloudera::gplextras::repo') }
+      it { should_not contain_class('cloudera::gplextras') }
+      it { should_not contain_class('cloudera::gplextras5::repo') }
+      it { should_not contain_class('cloudera::gplextras5') }
+      it { should_not contain_class('cloudera::lzo') }
+    end
+
+    describe 'use_parcels => false, install_lzo => true' do
+      let(:params) {{ :use_parcels => false, :install_lzo => true, :cm_version => '4' }}
+      it { should contain_class('cloudera::gplextras::repo') }
+      it { should contain_class('cloudera::gplextras') }
+      it { should contain_class('cloudera::lzo') }
+    end
+
+    describe 'install_lzo => true' do
+      let(:params) {{ :install_lzo => true, :cm_version => '4' }}
+      it { should contain_class('cloudera::lzo') }
+      it { should_not contain_class('cloudera::gplextras::repo') }
+      it { should_not contain_class('cloudera::gplextras') }
     end
 
     describe 'install_java => false' do
