@@ -18,6 +18,7 @@ describe 'cloudera::cdh::repo', :type => 'class' do
   end
 
   context 'on a supported operatingsystem, default parameters' do
+    let(:params) {{ :version => '4' }}
     describe 'RedHat 6' do
       let :facts do {
         :osfamily               => 'RedHat',
@@ -119,8 +120,8 @@ describe 'cloudera::cdh::repo', :type => 'class' do
 
     describe 'all other parameters' do
       let :params do {
-        :yumserver      => 'http://localhost',
-        :yumpath        => '/somepath/',
+        :reposerver     => 'http://localhost',
+        :repopath       => '/somepath/',
         :version        => '999',
         :proxy          => 'http://proxy:3128/',
         :proxy_username => 'myUser',

@@ -359,6 +359,126 @@ describe 'cloudera::cm::server', :type => 'class' do
   end
 
   context 'on a supported operatingsystem, custom parameters, use_tls => true' do
+    describe 'RedHat' do
+      let :facts do {
+        :osfamily        => 'RedHat',
+        :operatingsystem => 'OracleLinux',
+        :fqdn            => 'localhost.localdomain'
+      }
+      end
+
+      describe 'use_tls => true' do
+        let :params do {
+          :use_tls => true
+        }
+        end
+        it { should contain_java_ks('cmca:/etc/cloudera-scm-server/keystore').with(
+          :ensure       => 'latest',
+          :certificate  => '/etc/pki/tls/certs/cloudera_manager-ca.crt',
+          :password     => nil,
+          :trustcacerts => true,
+          :require      => 'Package[cloudera-manager-server]',
+          :notify       => 'Service[cloudera-scm-server]'
+        )}
+        it { should contain_java_ks('jetty:/etc/cloudera-scm-server/keystore').with(
+          :ensure       => 'latest',
+          :certificate  => '/etc/pki/tls/certs/localhost.localdomain-cloudera_manager.crt',
+          :private_key  => '/etc/pki/tls/private/localhost.localdomain-cloudera_manager.key',
+          :chain        => nil,
+          :password     => nil,
+          :require      => 'Package[cloudera-manager-server]',
+          :notify       => 'Service[cloudera-scm-server]'
+        )}
+        it { should contain_file('/etc/cloudera-scm-server/keystore').with(
+          :ensure  => 'present',
+          :owner   => 'cloudera-scm',
+          :group   => 'cloudera-scm',
+          :mode    => '0640',
+          :require => 'Java_ks[cmca:/etc/cloudera-scm-server/keystore]'
+        )}
+      end
+    end
+
+    describe 'SLES' do
+      let :facts do {
+        :osfamily        => 'Suse',
+        :operatingsystem => 'SLES',
+        :fqdn            => 'localhost.localdomain'
+      }
+      end
+
+      describe 'use_tls => true' do
+        let :params do {
+          :use_tls => true
+        }
+        end
+        it { should contain_java_ks('cmca:/etc/cloudera-scm-server/keystore').with(
+          :ensure       => 'latest',
+          :certificate  => '/etc/ssl/certs/cloudera_manager-ca.crt',
+          :password     => nil,
+          :trustcacerts => true,
+          :require      => 'Package[cloudera-manager-server]',
+          :notify       => 'Service[cloudera-scm-server]'
+        )}
+        it { should contain_java_ks('jetty:/etc/cloudera-scm-server/keystore').with(
+          :ensure       => 'latest',
+          :certificate  => '/etc/ssl/certs/localhost.localdomain-cloudera_manager.crt',
+          :private_key  => '/etc/ssl/private/localhost.localdomain-cloudera_manager.key',
+          :chain        => nil,
+          :password     => nil,
+          :require      => 'Package[cloudera-manager-server]',
+          :notify       => 'Service[cloudera-scm-server]'
+        )}
+        it { should contain_file('/etc/cloudera-scm-server/keystore').with(
+          :ensure  => 'present',
+          :owner   => 'cloudera-scm',
+          :group   => 'cloudera-scm',
+          :mode    => '0640',
+          :require => 'Java_ks[cmca:/etc/cloudera-scm-server/keystore]'
+        )}
+      end
+    end
+
+    describe 'Debian' do
+      let :facts do {
+        :osfamily        => 'Debian',
+        :operatingsystem => 'Debian',
+        :fqdn            => 'localhost.localdomain'
+      }
+      end
+
+      describe 'use_tls => true' do
+        let :params do {
+          :use_tls => true
+        }
+        end
+        it { should contain_java_ks('cmca:/etc/cloudera-scm-server/keystore').with(
+          :ensure       => 'latest',
+          :certificate  => '/etc/ssl/certs/cloudera_manager-ca.crt',
+          :password     => nil,
+          :trustcacerts => true,
+          :require      => 'Package[cloudera-manager-server]',
+          :notify       => 'Service[cloudera-scm-server]'
+        )}
+        it { should contain_java_ks('jetty:/etc/cloudera-scm-server/keystore').with(
+          :ensure       => 'latest',
+          :certificate  => '/etc/ssl/certs/localhost.localdomain-cloudera_manager.crt',
+          :private_key  => '/etc/ssl/private/localhost.localdomain-cloudera_manager.key',
+          :chain        => nil,
+          :password     => nil,
+          :require      => 'Package[cloudera-manager-server]',
+          :notify       => 'Service[cloudera-scm-server]'
+        )}
+        it { should contain_file('/etc/cloudera-scm-server/keystore').with(
+          :ensure  => 'present',
+          :owner   => 'cloudera-scm',
+          :group   => 'cloudera-scm',
+          :mode    => '0640',
+          :require => 'Java_ks[cmca:/etc/cloudera-scm-server/keystore]'
+        )}
+      end
+    end
+
     let :facts do {
       :osfamily        => 'RedHat',
       :operatingsystem => 'OracleLinux',
@@ -376,37 +496,6 @@ describe 'cloudera::cm::server', :type => 'class' do
           should raise_error(Puppet::Error, /"badvalue" is not a boolean./)
         }
       end
-    end
-
-    describe 'use_tls => true' do
-      let :params do {
-        :use_tls => true
-      }
-      end
-      it { should contain_java_ks('cmca:/etc/cloudera-scm-server/keystore').with(
-        :ensure       => 'latest',
-        :certificate  => '/etc/pki/tls/certs/cloudera_manager-ca.crt',
-        :password     => nil,
-        :trustcacerts => true,
-        :require      => 'Package[cloudera-manager-server]',
-        :notify       => 'Service[cloudera-scm-server]'
-      )}
-      it { should contain_java_ks('jetty:/etc/cloudera-scm-server/keystore').with(
-        :ensure       => 'latest',
-        :certificate  => '/etc/pki/tls/certs/localhost.localdomain-cloudera_manager.crt',
-        :private_key  => '/etc/pki/tls/private/localhost.localdomain-cloudera_manager.key',
-        :chain        => nil,
-        :password     => nil,
-        :require      => 'Package[cloudera-manager-server]',
-        :notify       => 'Service[cloudera-scm-server]'
-      )}
-      it { should contain_file('/etc/cloudera-scm-server/keystore').with(
-        :ensure  => 'present',
-        :owner   => 'cloudera-scm',
-        :group   => 'cloudera-scm',
-        :mode    => '0640',
-        :require => 'Java_ks[cmca:/etc/cloudera-scm-server/keystore]'
-      )}
     end
 
     describe 'server_keypw => somePass; server_chain_file => /etc/pki/tls/certs/intermediateCA.pem' do

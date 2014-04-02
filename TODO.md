@@ -11,21 +11,23 @@
 ## For 2.0.0 release:
 
 * support CM5 / CDH5 / Oracle JDK 7
-* refactor ::repo to autoinclude in cdh/impala/search
-* remove CDH (RPM) support?
+* integrate cloudera::cm::server into init.pp
+* Set [kernel vm.swappiness](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH5/latest/CDH5-Installation-Guide/cdh5ig_topic_11_6.html) to 0.
+* Do parcels still require LZO OS libraries?
 
 ## Other:
 
+* refactor ::repo to autoinclude in cdh/impala/search
 * Support TLS level 3.
 * PostgreSQL must be configured to accept connections with md5 password authentication.  To do so, edit /var/lib/pgsql/data/pg_hba.conf (or similar) to include `host all all 127.0.0.1/32 md5` *above* a similar line that allows `ident` authentication.
 * cm_api support.
-* Do parcels still require LZO OS libraries?
 * Add HDFS FUSE mounting support.
 * Support pig-udf installation.
 * Document hive-server installation.
 * Document hive-metastore installation.
 * Document sqoop-metastore installation.
 * Document whirr installation.
+* Sqoop: [Installing the JDBC Drivers](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH5/latest/CDH5-Installation-Guide/cdh5ig_topic_13_7.html)
 
 ## Links
 

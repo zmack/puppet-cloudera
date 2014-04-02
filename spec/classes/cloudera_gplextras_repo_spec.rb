@@ -18,6 +18,7 @@ describe 'cloudera::gplextras::repo', :type => 'class' do
   end
 
   context 'on a supported operatingsystem, default parameters' do
+    let(:params) {{ :version => '4' }}
     describe 'RedHat 6' do
       let :facts do {
         :osfamily               => 'RedHat',
@@ -113,8 +114,8 @@ describe 'cloudera::gplextras::repo', :type => 'class' do
 
     describe 'all other parameters' do
       let :params do {
-        :yumserver      => 'http://localhost',
-        :yumpath        => '/somepath/2/',
+        :reposerver     => 'http://localhost',
+        :repopath       => '/somepath/2/',
         :version        => '777',
         :proxy          => 'http://proxy:3128/',
         :proxy_username => 'myUser',
