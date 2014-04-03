@@ -31,7 +31,7 @@ This Puppet module manages the installation and configuration of [Cloudera Manag
 
 This module manages the installation of [Cloudera Manager](http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html), a management application for Apache Hadoop.  It follows the standards written in the [Cloudera Manager Installation Guide](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/Cloudera-Manager-Installation-Guide.html) "[Installation Path B - Installation Using Your Own Method](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_B.html)".  By default, this module assumes that [parcels](http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/) will be used to deploy [Cloudera's Distribution of Apache Hadoop (CDH)](http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html) and related software.  If parcels are not desired, this module can also manage the installation of CDH including HDFS & MapReduce, Impala, Sentry, Search, Spark, HBase, and [LZO compression](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_lzo_compression.html).  The module can also configure [TLS security](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Administration-Guide/cm5ag_config_tls_security.html) of the Cloudera Manager communications channels, and set up Cloudera Manager to use an alternative to the [embedded database](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_B.html?scroll=cmig_topic_6_6_5_unique_1).
 
-[![Cloudera Certified](https://github.com/razorsedge/puppet-cloudera/logo_Cloudera_Certified.jpg)](http://www.cloudera.com/content/cloudera/en/partners/certified-technology.html) This module is certified on Cloudera 5.
+[![Cloudera Certified](https://raw.githubusercontent.com/razorsedge/puppet-cloudera/master/logo_Cloudera_Certified.jpg)](http://www.cloudera.com/content/cloudera/en/partners/certified-technology.html) This module is certified on Cloudera 5.
 
 ##Setup
 
@@ -59,7 +59,7 @@ class { '::cloudera':
 }
 ```
 
-The node that will be the CM server (ie smhost.localdomain) will use this declaration. This should only be included on one node of your environment.  By default it will install the embeded PostgreSQL database on the same node.  With the [correct parameters](#external-database), it can instead connect to local or remote MySQL, PostgreSQL, or Oracle RDBMS databases.
+The node that will be the CM server (ie smhost.localdomain) will use this declaration. This should only be included on one node of your environment.  By default it will install the embedded PostgreSQL database on the same node.  With the [correct parameters](#external-database), it can instead connect to local or remote MySQL, PostgreSQL, or Oracle RDBMS databases.
 ```puppet
 class { '::cloudera':
   cm_server_host   => 'smhost.localdomain',
@@ -557,7 +557,7 @@ Cloudera official [supported operating systems](http://www.cloudera.com/content/
 * Based on the [Cloudera Manager 5.0.0 Beta 2 Installation Guide](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/PDF/Cloudera-Manager-Installation-Guide.pdf)
 * TLS certificates must be in PEM format and are not deployed by this module.
 * When using parcels, the CDH software is not deployed by Puppet.  Puppet will only install the Cloudera Manager server/agent.  You must then configure Cloudera Manager to deploy the parcels.
-* When installing packages and not parcels on SLES, SP2 is required as the hadoop-2.0.0+1518-1.cdh4.5.0.p0.24.sles11.x86_64 package requires netcat-openbsd which is not avalable on SLES 11SP1.
+* When installing packages and not parcels on SLES, SP2 is required as the hadoop-2.0.0+1518-1.cdh4.5.0.p0.24.sles11.x86_64 package requires netcat-openbsd which is not available on SLES 11SP1.
 * Osfamily RedHat 5 requires the EPEL YUM repository when installing LZO support.
 * This module does not support upgrading from CDH4 to CDH5 packages, including Impala, Search, and GPL Extras.
 
