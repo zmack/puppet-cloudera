@@ -28,6 +28,7 @@
 * Document sqoop-metastore installation.
 * Document whirr installation.
 * Sqoop: [Installing the JDBC Drivers](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH5/latest/CDH5-Installation-Guide/cdh5ig_topic_13_7.html)
+* Hue: [EL5 requires python26 from EPEL](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_A.html)
 
 ## Links
 

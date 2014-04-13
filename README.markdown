@@ -8,6 +8,7 @@
 2. [Module Description - What the module does and why it is useful](#module-description)
 3. [Setup - The basics of getting started with this module](#setup)
     * [What this module affects](#what-this-module-affects)
+    * [What this module requires](#requirements)
     * [Beginning with this module](#beginning-with-this-module)
     * [Upgrading](#upgrading)
 4. [Usage - Configuration options and additional functionality](#usage)
@@ -49,6 +50,10 @@ This module manages the installation of [Cloudera Manager](http://www.cloudera.c
 * Optionally installs the Cloudera software repository for CDH.
 * Optionally installs most components of CDH 5 including HBase, Impala, Search, and Spark.
 * Optionally installs GPL Extras (LZO).
+
+###Requirements
+
+Please read through the [Cloudera Manager Requirements](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html) document in order to discover all of the entities (ie operating systems, databases, and browsers) supported by Cloudera Manager.  Pay close attention to the [Resource Requirements](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html#cmig_topic_4_3_2_unique_1) and [Networking and Security Requirements](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html#cmig_topic_4_3_3_unique_1) sections.  There are a number of requirements that this module cannot easily configure for your environment (ie No blocking by Security-Enhanced Linux (SELinux)) and which you must ensure are correct on your platform.
 
 ###Beginning with this module
 
@@ -565,6 +570,7 @@ Cloudera official [supported operating systems](http://www.cloudera.com/content/
 
 * Need external module support for the Oracle Instant Client JDBC.
 * When using an external PostgreSQL server that is on the same host as the CM server, PostgreSQL must be configured to accept connections with md5 password authentication.
+* Osfamily RedHat 5 requires Python 2.6 from the EPEL YUM repository when installing the Hue service.
 
 ###TODO:
 
