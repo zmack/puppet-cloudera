@@ -53,7 +53,7 @@ This module manages the installation of [Cloudera Manager](http://www.cloudera.c
 
 ###Requirements
 
-Please read through the [Cloudera Manager Requirements](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html) document in order to discover all of the entities (ie operating systems, databases, and browsers) supported by Cloudera Manager.  Pay close attention to the [Resource Requirements](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html#cmig_topic_4_3_2_unique_1) and [Networking and Security Requirements](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html#cmig_topic_4_3_3_unique_1) sections.  There are a number of requirements that this module cannot easily configure for your environment (ie No blocking by Security-Enhanced Linux (SELinux)) and which you must ensure are correct on your platform.
+Please read through the [Cloudera Manager Requirements](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html) document in order to discover all of the entities (ie operating systems, databases, and browsers) supported by Cloudera Manager.  Pay close attention to the [Resource Requirements](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html?scroll=cmig_topic_4_3_2_unique_1) and [Networking and Security Requirements](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html?scroll=cmig_topic_4_3_3_unique_1) sections.  There are a number of requirements that this module cannot easily configure for your environment (ie No blocking by Security-Enhanced Linux (SELinux)) and which you must ensure are correct on your platform.
 
 ###Beginning with this module
 
@@ -196,7 +196,7 @@ file { "/etc/pki/tls/private/${::fqdn}-cloudera_manager.key": }
 
 ###External Database
 
-If you decide not to use the embedded database, the Cloudera Manager server database configuration can be completed by configuring this module to call the [`scm_prepare_database.sh`](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_B.html#cmig_topic_6_6_5_unique_1__section_y3j_pyp_bm_unique_1) script.  The external database must be configured and ready for connection with the supplied credentials via some method outside of this module.
+If you decide not to use the embedded database, the Cloudera Manager server database configuration can be completed by configuring this module to call the [`scm_prepare_database.sh`](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_path_B.html?scroll=cmig_topic_6_6_5_unique_1__section_y3j_pyp_bm_unique_1) script.  The external database must be configured and ready for connection with the supplied credentials via some method outside of this module.
 
 ```puppet
 class { '::cloudera':
