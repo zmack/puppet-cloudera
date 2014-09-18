@@ -13,6 +13,6 @@ fixtures:
     java_ks: "https://github.com/puppetlabs/puppetlabs-java_ks.git"
     zypprepo: "https://github.com/deadpoint/puppet-zypprepo.git"
     apt: "https://github.com/puppetlabs/puppetlabs-apt.git"
-    augeasproviders: "https://github.com/hercules-team/augeasproviders.git"
+    augeasproviders: "https://github.com/domcleal/augeasproviders.git"
   symlinks:
     cloudera: "#{source_dir}"
