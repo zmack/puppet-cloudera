@@ -425,6 +425,9 @@ class cloudera (
           before         => Anchor['cloudera::end'],
         }
         if $install_lzo {
+          if $cg_version !~ /^5/ {
+            fail('Parameter $cg_version must be 5 if $cdh_version is 5.')
+          }
           class { 'cloudera::gplextras5::repo':
             ensure         => $ensure,
             reposerver     => $cg_reposerver,
@@ -502,6 +505,9 @@ class cloudera (
           before         => Anchor['cloudera::end'],
         }
         if $install_lzo {
+          if $cg_version !~ /^4/ {
+            fail('Parameter $cg_version must be 4 if $cdh_version is 4.')
+          }
           class { 'cloudera::gplextras::repo':
             ensure         => $ensure,
             reposerver     => $cg_reposerver,
@@ -656,6 +662,9 @@ class cloudera (
         before         => Anchor['cloudera::end'],
       }
       if $install_lzo {
+        if $cg_version !~ /^4/ {
+          fail('Parameter $cg_version must be 4 if $cdh_version is 4.')
+        }
         class { 'cloudera::gplextras::repo':
           ensure         => $ensure,
           reposerver     => $cg_reposerver,
