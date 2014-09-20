@@ -1,18 +1,18 @@
 fixtures:
   repositories:
-    stdlib: "git://github.com/puppetlabs/puppetlabs-stdlib.git"
+    stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
     mysql:
-      repo: "git://github.com/puppetlabs/puppetlabs-mysql.git"
+      repo: "https://github.com/puppetlabs/puppetlabs-mysql.git"
       ref: "2.1.0"
     postgresql:
-      repo: "git://github.com/puppetlabs/puppet-postgresql.git"
+      repo: "https://github.com/puppetlabs/puppet-postgresql.git"
       ref: "2.5.0"
-    concat: "git://github.com/ripienaar/puppet-concat.git"
-    staging: "git://github.com/nanliu/puppet-staging.git"
-    epel: "git://github.com/stahnma/puppet-module-epel.git"
-    java_ks: "git://github.com/puppetlabs/puppetlabs-java_ks.git"
+    concat: "https://github.com/ripienaar/puppet-concat.git"
+    staging: "https://github.com/nanliu/puppet-staging.git"
+    epel: "https://github.com/stahnma/puppet-module-epel.git"
+    java_ks: "https://github.com/puppetlabs/puppetlabs-java_ks.git"
     zypprepo: "https://github.com/deadpoint/puppet-zypprepo.git"
     apt: "https://github.com/puppetlabs/puppetlabs-apt.git"
-    augeasproviders: "https://github.com/hercules-team/augeasproviders.git"
+    augeasproviders: "https://github.com/domcleal/augeasproviders.git"
   symlinks:
     cloudera: "#{source_dir}"

@@ -122,6 +122,22 @@ describe 'cloudera', :type => 'class' do
       it { should_not contain_class('cloudera::gplextras5') }
     end
 
+    describe 'use_parcels => false, install_lzo => true, cdh_version => 5, cg_version => 4' do
+      let :params do {
+        :use_parcels => false,
+        :install_lzo => true,
+        :cm_version  => '5',
+        :cdh_version => '5',
+        :cg_version  => '4'
+      }
+      end
+      it do
+        expect {
+          should compile
+        }.to raise_error(Puppet::Error, /Parameter \$cg_version must be 5 if \$cdh_version is 5./)
+      end
+    end
+
     describe 'install_java => false' do
       let(:params) {{ :install_java => false }}
       it { should_not contain_class('cloudera::java5') }
@@ -173,7 +189,13 @@ describe 'cloudera', :type => 'class' do
     end
 
     describe 'use_parcels => false, install_lzo => true' do
-      let(:params) {{ :use_parcels => false, :install_lzo => true, :cm_version => '4' }}
+      let :params do {
+        :use_parcels => false,
+        :install_lzo => true,
+        :cm_version  => '4',
+        :cg_version  => '4'
+      }
+      end
       it { should contain_class('cloudera::gplextras::repo') }
       it { should contain_class('cloudera::gplextras') }
       it { should contain_class('cloudera::lzo') }
@@ -184,6 +206,22 @@ describe 'cloudera', :type => 'class' do
       it { should contain_class('cloudera::lzo') }
       it { should_not contain_class('cloudera::gplextras::repo') }
       it { should_not contain_class('cloudera::gplextras') }
+    end
+
+    describe 'use_parcels => false, install_lzo => true, cdh_version => 4, cg_version => 5' do
+      let :params do {
+        :use_parcels => false,
+        :install_lzo => true,
+        :cm_version  => '4',
+        :cdh_version => '4',
+        :cg_version  => '5'
+      }
+      end
+      it do
+        expect {
+          should compile
+        }.to raise_error(Puppet::Error, /Parameter \$cg_version must be 4 if \$cdh_version is 4./)
+      end
     end
 
     describe 'install_java => false' do
