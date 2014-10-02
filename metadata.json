@@ -6,8 +6,8 @@
   "license": "Apache License, Version 2.0",
   "project_page": "https://github.com/razorsedge/puppet-cloudera",
   "issues_url": "https://github.com/razorsedge/puppet-cloudera/issues",
-  "tags": [ "Ubuntu", "Debian", "SLES", "cloudera", "cdh", "flume", "hadoop", "hbase", "hive", "hue", "impala", "mahout", "oozie", "pig", "sqoop", "whirr", "zookeeper", "RHEL", "rhel", "CentOS", "OEL" ],
   "source": "https://github.com/razorsedge/puppet-cloudera.git",
+  "tags": [ "Ubuntu", "Debian", "SLES", "cloudera", "cdh", "flume", "hadoop", "hbase", "hive", "hue", "impala", "mahout", "oozie", "pig", "sqoop", "whirr", "zookeeper", "RHEL", "rhel", "CentOS", "OEL" ],
   "dependencies": [
     {
       "version_requirement": ">=2.3.0",
