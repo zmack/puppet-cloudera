@@ -33,6 +33,20 @@ describe 'cloudera::java5', :type => 'class' do
         :owner  => 'root',
         :group  => 'root'
       )}
+      it { should contain_file('/usr/java/_mklinks.sh').with(
+        :ensure => 'present',
+        :path   => '/usr/java/_mklinks.sh',
+        :mode   => '0744',
+        :owner  => 'root',
+        :group  => 'root'
+      )}
+      it { should contain_exec('/usr/java/_mklinks.sh').with(
+        :command     => '/usr/java/_mklinks.sh',
+        :refreshonly => 'true',
+        :path        => '/bin:/usr/bin:/sbin:/usr/sbin',
+        :require     => [ 'Anchor[cloudera::java5::begin]', 'File[/usr/java/_mklinks.sh]', ],
+        :subscribe   => 'Package[jdk]'
+      )}
       it { should contain_exec('java-alternatives').with(
         :command => 'update-alternatives --install /usr/bin/java java /usr/java/default/bin/java 1601 \
 --slave /usr/bin/keytool keytool /usr/java/default/bin/keytool \

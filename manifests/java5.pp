@@ -88,11 +88,22 @@ class cloudera::java5 (
 
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OEL', 'OracleLinux', 'SLES': {
-      file { '/usr/java/default':
-        ensure  => symlink,
-        target  => '/usr/java/jdk1.7.0_45-cloudera',
+      file { '/usr/java/_mklinks.sh':
+        ensure  => $file_ensure,
+        source  => "puppet:///modules/${module_name}/_mklinks.sh",
+        mode    => '0744',
+        owner   => 'root',
+        group   => 'root',
         require => [ Anchor['cloudera::java5::begin'], Package['jdk'], ],
         before  => Anchor['cloudera::java5::end'],
+      }
+
+      exec { '/usr/java/_mklinks.sh':
+        command     => '/usr/java/_mklinks.sh',
+        refreshonly => true,
+        path        => '/bin:/usr/bin:/sbin:/usr/sbin',
+        require     => [ Anchor['cloudera::java5::begin'], File['/usr/java/_mklinks.sh'], ],
+        subscribe   => Package['jdk'],
       }
 
       Exec {
