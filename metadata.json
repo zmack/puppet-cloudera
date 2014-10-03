@@ -1,13 +1,13 @@
 {
   "name": "razorsedge-cloudera",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "author": "razorsedge",
   "summary": "Deploy Cloudera Manager and Cloudera's Distribution, including Apache Hadoop (CDH).",
   "license": "Apache License, Version 2.0",
   "project_page": "https://github.com/razorsedge/puppet-cloudera",
   "issues_url": "https://github.com/razorsedge/puppet-cloudera/issues",
-  "tags": [ "Ubuntu", "Debian", "SLES", "cloudera", "cdh", "flume", "hadoop", "hbase", "hive", "hue", "impala", "mahout", "oozie", "pig", "sqoop", "whirr", "zookeeper", "RHEL", "rhel", "CentOS", "OEL" ],
   "source": "https://github.com/razorsedge/puppet-cloudera.git",
+  "tags": [ "Ubuntu", "Debian", "SLES", "cloudera", "cdh", "flume", "hadoop", "hbase", "hive", "hue", "impala", "mahout", "oozie", "pig", "sqoop", "whirr", "zookeeper", "RHEL", "rhel", "CentOS", "OEL" ],
   "dependencies": [
     {
       "version_requirement": ">=2.3.0",

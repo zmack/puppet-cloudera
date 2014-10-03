@@ -50,26 +50,26 @@ class cloudera::java5::jce (
   }
 
   file { '/usr/java/default/jre/lib/security/README.txt':
-    ensure  => $file_ensure,
-    source  => "puppet:///modules/${module_name}/UnlimitedJCEPolicy/README.txt",
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
+    ensure => $file_ensure,
+    source => "puppet:///modules/${module_name}/UnlimitedJCEPolicy/README.txt",
+    mode   => '0644',
+    owner  => 'root',
+    group  => 'root',
   }
 
   file { '/usr/java/default/jre/lib/security/local_policy.jar':
-    ensure  => $file_ensure,
-    source  => "puppet:///modules/${module_name}/UnlimitedJCEPolicy/local_policy.jar",
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
+    ensure => $file_ensure,
+    source => "puppet:///modules/${module_name}/UnlimitedJCEPolicy/local_policy.jar",
+    mode   => '0644',
+    owner  => 'root',
+    group  => 'root',
   }
 
   file { '/usr/java/default/jre/lib/security/US_export_policy.jar':
-    ensure  => $file_ensure,
-    source  => "puppet:///modules/${module_name}/UnlimitedJCEPolicy/US_export_policy.jar",
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
+    ensure => $file_ensure,
+    source => "puppet:///modules/${module_name}/UnlimitedJCEPolicy/US_export_policy.jar",
+    mode   => '0644',
+    owner  => 'root',
+    group  => 'root',
   }
 }
