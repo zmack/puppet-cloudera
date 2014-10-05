@@ -323,6 +323,14 @@ class cloudera (
     before  => Anchor['cloudera::end'],
   }
 
+  if $::cloudera::params::transparent_hugepages {
+    exec { 'disable_transparent_hugepage_defrag':
+      command => 'if [ -f /sys/kernel/mm/redhat_transparent_hugepage/defrag ]; then echo never > /sys/kernel/mm/redhat_transparent_hugepage/defrag; fi',
+      unless  => 'grep -q "\[never\]" /sys/kernel/mm/redhat_transparent_hugepage/defrag',
+      path    => '/usr/bin:/usr/sbin:/bin:/sbin',
+    }
+  }
+
   if $install_lzo {
     class { 'cloudera::lzo':
       require => Anchor['cloudera::begin'],

@@ -50,6 +50,61 @@ describe 'cloudera', :type => 'class' do
     it { should_not contain_class('cloudera::gplextras5') }
   end
 
+  context 'on a supported operatingsystem, default parameters, transparent_hugepages' do
+    let(:params) {{}}
+
+    describe 'RedHat 6' do
+      let :facts do {
+        :osfamily        => 'RedHat',
+        :operatingsystem => 'RedHat',
+        :operatingsystemmajrelease => '6',
+      }
+      end
+      it { should contain_exec('disable_transparent_hugepage_defrag') }
+    end
+
+    describe 'RedHat 5' do
+      let :facts do {
+        :osfamily        => 'RedHat',
+        :operatingsystem => 'RedHat',
+        :operatingsystemmajrelease => '5',
+      }
+      end
+      it { should_not contain_exec('disable_transparent_hugepage_defrag') }
+    end
+
+    describe 'Debian' do
+      let :facts do {
+        :osfamily        => 'Debian',
+        :operatingsystem => 'Debian',
+        :lsbdistid       => 'Debian',
+        :lsbdistcodename => 'squeeze'
+      }
+      end
+      it { should_not contain_exec('disable_transparent_hugepage_defrag') }
+    end
+
+    describe 'Ubuntu' do
+      let :facts do {
+        :osfamily        => 'Debian',
+        :operatingsystem => 'Ubuntu',
+        :lsbdistid       => 'Ubuntu',
+        :lsbdistcodename => 'precise'
+      }
+      end
+      it { should_not contain_exec('disable_transparent_hugepage_defrag') }
+    end
+
+    describe 'SLES' do
+      let :facts do {
+        :osfamily        => 'SuSE',
+        :operatingsystem => 'SLES'
+      }
+      end
+      it { should_not contain_exec('disable_transparent_hugepage_defrag') }
+    end
+  end
+
   context 'on a supported operatingsystem, custom parameters, cm_version => 5' do
     let :facts do {
       :osfamily        => 'RedHat',
