@@ -326,7 +326,7 @@ class cloudera (
   if $::cloudera::params::transparent_hugepages {
     exec { 'disable_transparent_hugepage_defrag':
       command => 'if [ -f /sys/kernel/mm/redhat_transparent_hugepage/defrag ]; then echo never > /sys/kernel/mm/redhat_transparent_hugepage/defrag; fi',
-      unless  => 'grep -q "\[never\]" /sys/kernel/mm/redhat_transparent_hugepage/defrag',
+      unless  => 'if [ -f /sys/kernel/mm/redhat_transparent_hugepage/defrag ]; then grep -q "\[never\]" /sys/kernel/mm/redhat_transparent_hugepage/defrag; fi',
       path    => '/usr/bin:/usr/sbin:/bin:/sbin',
     }
   }
