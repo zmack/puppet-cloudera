@@ -219,10 +219,6 @@ class cloudera::params {
       $cg5_repopath = "/gplextras5/redhat/${majdistrelease}/${::architecture}/gplextras/"
       $tls_dir = '/etc/pki/tls'
       $lzo_package_name = 'lzo'
-      case $::operatingsystemmajrelease {
-        '6':     { $transparent_hugepages = true }
-        default: { $transparent_hugepages = false }
-      }
     }
     'SLES': {
       $java_package_name = 'jdk'
@@ -238,7 +234,6 @@ class cloudera::params {
       $cg5_repopath = "/gplextras5/sles/${majdistrelease}/${::architecture}/gplextras/"
       $tls_dir = '/etc/ssl'
       $lzo_package_name = 'liblzo2-2'
-      $transparent_hugepages = false
     }
     'Debian': {
       $java_package_name = 'oracle-j2sdk1.6'
@@ -259,7 +254,6 @@ class cloudera::params {
       $architecture = undef
       $tls_dir = '/etc/ssl'
       $lzo_package_name = 'liblzo2-2'
-      $transparent_hugepages = false
     }
     'Ubuntu': {
       $java_package_name = 'oracle-j2sdk1.6'
@@ -283,7 +277,6 @@ class cloudera::params {
       }
       $tls_dir = '/etc/ssl'
       $lzo_package_name = 'liblzo2-2'
-      $transparent_hugepages = false
     }
     default: {
       fail("Module ${module_name} is not supported on ${::operatingsystem}")
