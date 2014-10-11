@@ -44,7 +44,8 @@ This module manages the installation of [Cloudera Manager](http://www.cloudera.c
 * Installs the CM agent.
 * Configures the CM agent to talk to a CM server.
 * Starts the CM agent.
-* Sets the [kernel vm.swappiness](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH5/latest/CDH5-Installation-Guide/cdh5ig_topic_11_6.html) to 0.
+* Sets the [kernel vm.swappiness](http://www.cloudera.com/content/cloudera/en/documentation/cdh5/v5-0-0/CDH5-Installation-Guide/cdh5ig_tips_guidelines.html) to 0.
+* Disables the [kernel transparent hugepage compaction](http://www.cloudera.com/content/cloudera/en/documentation/cdh5/v5-0-0/CDH5-Installation-Guide/cdh5ig_tips_guidelines.html).
 * Separately installs the CM server and database connectivity (by default to the embedded database server).
 * Separately starts the CM server.
 * Optionally installs the Cloudera software repository for CDH.
