@@ -302,4 +302,10 @@ class cloudera::params {
     undef   => "${tls_dir}/private/${::fqdn}-cloudera_manager.key",
     default => $::cloudera_server_key_file,
   }
+
+  $parcel_dir = $::parcel_dir ? {
+    undef => '/opt/cloudera/parcels',
+    default => $::parcel_dir,
+  }
+
 }

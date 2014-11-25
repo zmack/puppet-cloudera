@@ -539,6 +539,11 @@ Default: absent
 The password for the YUM proxy.
 Default: absent
 
+###`parcel_dir`
+
+The directory where parcels are downloaded and distributed.
+Default: /opt/cloudera/parcels
+
 ##Limitations
 
 ###OS Support:
