@@ -66,7 +66,8 @@ class cloudera::cm5 (
   $server_host      = $cloudera::params::cm_server_host,
   $server_port      = $cloudera::params::cm_server_port,
   $use_tls          = $cloudera::params::safe_cm_use_tls,
-  $verify_cert_file = $cloudera::params::verify_cert_file
+  $verify_cert_file = $cloudera::params::verify_cert_file,
+  $parcel_dir       = $cloudera::params::parcel_dir
 ) inherits cloudera::params {
   # Validate our booleans
   validate_bool($autoupgrade)

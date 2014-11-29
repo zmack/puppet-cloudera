@@ -384,6 +384,7 @@ class cloudera (
       use_tls          => $use_tls,
       verify_cert_file => $verify_cert_file,
       require          => $cloudera_cm_require,
+      parcel_dir       => $parcel_dir,
       before           => Anchor['cloudera::end'],
     }
     class { 'cloudera::cm5::repo':
@@ -584,6 +585,7 @@ class cloudera (
       use_tls          => $use_tls,
       verify_cert_file => $verify_cert_file,
       require          => $cloudera_cm_require,
+      parcel_dir       => $parcel_dir,
       before           => Anchor['cloudera::end'],
     }
     class { 'cloudera::cm::repo':
