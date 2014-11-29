@@ -216,7 +216,7 @@
 # [*parcel_dir*]
 #   The directory where parcels are downloaded and distributed.
 #   Default: /opt/cloudera/parcels
-
+#
 # === Actions:
 #
 # Installs YUM repository configuration files.
