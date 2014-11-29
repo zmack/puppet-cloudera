@@ -35,6 +35,10 @@
 #   Default: /etc/pki/tls/certs/cloudera_manager.crt or
 #            /etc/ssl/certs/cloudera_manager.crt
 #
+# [*parcel_dir*]
+#   The directory where parcels are downloaded and distributed.
+#   Default: /opt/cloudera/parcels
+#
 # === Actions:
 #
 # Installs the packages.
