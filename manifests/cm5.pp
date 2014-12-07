@@ -35,6 +35,10 @@
 #   Default: /etc/pki/tls/certs/cloudera_manager.crt or
 #            /etc/ssl/certs/cloudera_manager.crt
 #
+# [*parcel_dir*]
+#   The directory where parcels are downloaded and distributed.
+#   Default: /opt/cloudera/parcels
+#
 # === Actions:
 #
 # Installs the packages.
@@ -66,7 +70,8 @@ class cloudera::cm5 (
   $server_host      = $cloudera::params::cm_server_host,
   $server_port      = $cloudera::params::cm_server_port,
   $use_tls          = $cloudera::params::safe_cm_use_tls,
-  $verify_cert_file = $cloudera::params::verify_cert_file
+  $verify_cert_file = $cloudera::params::verify_cert_file,
+  $parcel_dir       = $cloudera::params::parcel_dir
 ) inherits cloudera::params {
   # Validate our booleans
   validate_bool($autoupgrade)

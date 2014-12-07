@@ -213,6 +213,10 @@
 #   The password for the YUM proxy.
 #   Default: absent
 #
+# [*parcel_dir*]
+#   The directory where parcels are downloaded and distributed.
+#   Default: /opt/cloudera/parcels
+#
 # === Actions:
 #
 # Installs YUM repository configuration files.
@@ -299,7 +303,8 @@ class cloudera (
   $server_keypw      = $cloudera::params::server_keypw,
   $proxy            = $cloudera::params::proxy,
   $proxy_username   = $cloudera::params::proxy_username,
-  $proxy_password   = $cloudera::params::proxy_password
+  $proxy_password   = $cloudera::params::proxy_password,
+  $parcel_dir       = $cloudera::params::parcel_dir
 ) inherits cloudera::params {
   # Validate our booleans
   validate_bool($autoupgrade)
@@ -379,6 +384,7 @@ class cloudera (
       use_tls          => $use_tls,
       verify_cert_file => $verify_cert_file,
       require          => $cloudera_cm_require,
+      parcel_dir       => $parcel_dir,
       before           => Anchor['cloudera::end'],
     }
     class { 'cloudera::cm5::repo':
@@ -579,6 +585,7 @@ class cloudera (
       use_tls          => $use_tls,
       verify_cert_file => $verify_cert_file,
       require          => $cloudera_cm_require,
+      parcel_dir       => $parcel_dir,
       before           => Anchor['cloudera::end'],
     }
     class { 'cloudera::cm::repo':
