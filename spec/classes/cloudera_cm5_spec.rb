@@ -36,6 +36,7 @@ describe 'cloudera::cm5', :type => 'class' do
         'server_host=localhost',
         'server_port=7182',
         'listening_hostname=myhost',
+        'parcel_dir=/opt/cloudera/parcels',
         'use_tls=0',
         '# verify_cert_file=',
       ])
