@@ -28,7 +28,7 @@ listening_hostname=<%= scope.lookupvar('::fqdn') %>
 # Parcel directory
 # Unpacked parcels will be stored in this directory
 # Downloaded parcels will be stored in <parcel_dir>/../parcel-cache
-# parcel_dir=/opt/cloudera/parcels
+parcel_dir=<%= @parcel_dir %>
 
 # Heartbeat optimizations.
 # enable_eager_heartbeats=true
