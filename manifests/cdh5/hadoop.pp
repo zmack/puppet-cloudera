@@ -20,8 +20,8 @@ class cloudera::cdh5::hadoop {
   class { 'cloudera::cdh5::hadoop::client':
 #    ensure      => $ensure,
 #    autoupgrade => $autoupgrade,
-    require     => Anchor['cloudera::cdh5::hadoop::begin'],
-    before      => Anchor['cloudera::cdh5::hadoop::end'],
+    require => Anchor['cloudera::cdh5::hadoop::begin'],
+    before  => Anchor['cloudera::cdh5::hadoop::end'],
   }
 
   package { 'hadoop':
