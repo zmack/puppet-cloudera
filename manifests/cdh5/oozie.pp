@@ -20,8 +20,8 @@ class cloudera::cdh5::oozie {
   class { 'cloudera::cdh5::oozie::client':
 #    ensure      => $ensure,
 #    autoupgrade => $autoupgrade,
-    require     => Anchor['cloudera::cdh5::oozie::begin'],
-    before      => Anchor['cloudera::cdh5::oozie::end'],
+    require => Anchor['cloudera::cdh5::oozie::begin'],
+    before  => Anchor['cloudera::cdh5::oozie::end'],
   }
 
   package { 'oozie':
