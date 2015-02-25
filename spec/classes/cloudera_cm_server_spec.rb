@@ -12,8 +12,8 @@ describe 'cloudera::cm::server', :type => 'class' do
     end
     it do
       expect {
-        should compile
-      }.to raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
+        should raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
+      }
     end
   end
 
@@ -149,7 +149,7 @@ describe 'cloudera::cm::server', :type => 'class' do
 #      end
 #      it { should contain_file('/etc/cloudera-scm-server/db.properties').with_ensure('present') }
 #      it 'should contain File[/etc/cloudera-scm-server/db.properties] with correct contents' do
-#        verify_contents(subject, '/etc/cloudera-scm-server/db.properties', [
+#        verify_contents(catalogue, '/etc/cloudera-scm-server/db.properties', [
 #          '9000',
 #        ])
 #      end
@@ -172,7 +172,7 @@ describe 'cloudera::cm::server', :type => 'class' do
       end
       it { should contain_file('/etc/cloudera-scm-server/db.properties').with_ensure('present') }
       it 'should contain File[/etc/cloudera-scm-server/db.properties] with correct contents' do
-        verify_contents(subject, '/etc/cloudera-scm-server/db.properties', [
+        verify_contents(catalogue, '/etc/cloudera-scm-server/db.properties', [
           'com.cloudera.cmf.db.type=mysql',
           'com.cloudera.cmf.db.host=localhost:3306',
           'com.cloudera.cmf.db.name=scm',
@@ -205,7 +205,7 @@ describe 'cloudera::cm::server', :type => 'class' do
       end
       it { should contain_file('/etc/cloudera-scm-server/db.properties').with_ensure('present') }
       it 'should contain File[/etc/cloudera-scm-server/db.properties] with correct contents' do
-        verify_contents(subject, '/etc/cloudera-scm-server/db.properties', [
+        verify_contents(catalogue, '/etc/cloudera-scm-server/db.properties', [
           'com.cloudera.cmf.db.type=mysql',
           'com.cloudera.cmf.db.host=dbhost.example.com:9000',
           'com.cloudera.cmf.db.name=clouderaDB',
@@ -240,7 +240,7 @@ describe 'cloudera::cm::server', :type => 'class' do
       end
       it { should contain_file('/etc/cloudera-scm-server/db.properties').with_ensure('present') }
       it 'should contain File[/etc/cloudera-scm-server/db.properties] with correct contents' do
-        verify_contents(subject, '/etc/cloudera-scm-server/db.properties', [
+        verify_contents(catalogue, '/etc/cloudera-scm-server/db.properties', [
           'com.cloudera.cmf.db.type=oracle',
           'com.cloudera.cmf.db.host=localhost:3306',
           'com.cloudera.cmf.db.name=scm',
@@ -272,7 +272,7 @@ describe 'cloudera::cm::server', :type => 'class' do
       end
       it { should contain_file('/etc/cloudera-scm-server/db.properties').with_ensure('present') }
       it 'should contain File[/etc/cloudera-scm-server/db.properties] with correct contents' do
-        verify_contents(subject, '/etc/cloudera-scm-server/db.properties', [
+        verify_contents(catalogue, '/etc/cloudera-scm-server/db.properties', [
           'com.cloudera.cmf.db.type=oracle',
           'com.cloudera.cmf.db.host=dbhost.example.com:9000',
           'com.cloudera.cmf.db.name=clouderaDB',
@@ -309,7 +309,7 @@ describe 'cloudera::cm::server', :type => 'class' do
       end
       it { should contain_file('/etc/cloudera-scm-server/db.properties').with_ensure('present') }
       it 'should contain File[/etc/cloudera-scm-server/db.properties] with correct contents' do
-        verify_contents(subject, '/etc/cloudera-scm-server/db.properties', [
+        verify_contents(catalogue, '/etc/cloudera-scm-server/db.properties', [
           'com.cloudera.cmf.db.type=postgresql',
           'com.cloudera.cmf.db.host=localhost:3306',
           'com.cloudera.cmf.db.name=scm',
@@ -340,7 +340,7 @@ describe 'cloudera::cm::server', :type => 'class' do
       end
       it { should contain_file('/etc/cloudera-scm-server/db.properties').with_ensure('present') }
       it 'should contain File[/etc/cloudera-scm-server/db.properties] with correct contents' do
-        verify_contents(subject, '/etc/cloudera-scm-server/db.properties', [
+        verify_contents(catalogue, '/etc/cloudera-scm-server/db.properties', [
           'com.cloudera.cmf.db.type=postgresql',
           'com.cloudera.cmf.db.host=dbhost.example.com:9000',
           'com.cloudera.cmf.db.name=clouderaDB',

@@ -12,8 +12,8 @@ describe 'cloudera', :type => 'class' do
     end
     it do
       expect {
-        should compile
-      }.to raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
+        should raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
+      }
     end
   end
 
@@ -135,8 +135,8 @@ describe 'cloudera', :type => 'class' do
       end
       it do
         expect {
-          should compile
-        }.to raise_error(Puppet::Error, /Parameter \$cg_version must be 5 if \$cdh_version is 5./)
+          should raise_error(Puppet::Error, /Parameter \$cg_version must be 5 if \$cdh_version is 5./)
+        }
       end
     end
 
@@ -221,8 +221,8 @@ describe 'cloudera', :type => 'class' do
       end
       it do
         expect {
-          should compile
-        }.to raise_error(Puppet::Error, /Parameter \$cg_version must be 4 if \$cdh_version is 4./)
+          should raise_error(Puppet::Error, /Parameter \$cg_version must be 4 if \$cdh_version is 4./)
+        }
       end
     end
 
@@ -253,8 +253,8 @@ describe 'cloudera', :type => 'class' do
     end
     it do
       expect {
-        should compile
-      }.to raise_error(Puppet::Error, /Parameter \$cm_version must start with either 4 or 5./)
+        should raise_error(Puppet::Error, /Parameter \$cm_version must start with either 4 or 5./)
+      }
     end
   end
 

@@ -12,8 +12,8 @@ describe 'cloudera::java::jce', :type => 'class' do
     end
     it do
       expect {
-        should compile
-      }.to raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
+        should raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
+      }
     end
   end
 
