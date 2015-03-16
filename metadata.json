@@ -7,34 +7,34 @@
   "project_page": "https://github.com/razorsedge/puppet-cloudera",
   "issues_url": "https://github.com/razorsedge/puppet-cloudera/issues",
   "source": "https://github.com/razorsedge/puppet-cloudera.git",
-  "tags": [ "Ubuntu", "Debian", "SLES", "cloudera", "cdh", "flume", "hadoop", "hbase", "hive", "hue", "impala", "mahout", "oozie", "pig", "sqoop", "whirr", "zookeeper", "RHEL", "rhel", "CentOS", "OEL" ],
+  "tags": [ "cloudera", "cdh", "flume", "hadoop", "hbase", "hive", "hue", "impala", "mahout", "manager", "oozie", "pig", "sqoop", "whirr", "zookeeper" ],
   "dependencies": [
     {
       "version_requirement": ">=2.3.0 <5.0.0",
       "name": "puppetlabs/stdlib"
     },
     {
-      "version_requirement": ">=2.0.0 <3.0.0",
+      "version_requirement": ">=2.0.0 <4.0.0",
       "name": "puppetlabs/mysql"
     },
     {
-      "version_requirement": ">=2.1.0 <3.0.0",
+      "version_requirement": ">=3.0.0 <5.0.0",
       "name": "puppetlabs/postgresql"
     },
     {
-      "version_requirement": ">=0.2.1",
+      "version_requirement": "1.x",
       "name": "nanliu/staging"
     },
     {
-      "version_requirement": ">=0.0.3",
+      "version_requirement": "1.x",
       "name": "stahnma/epel"
     },
     {
-      "version_requirement": ">=1.0.0 <2.0.0",
+      "version_requirement": "1.x",
       "name": "puppetlabs/java_ks"
     },
     {
-      "version_requirement": ">=1.0.0 <2.0.0",
+      "version_requirement": "1.x",
       "name": "darin/zypprepo"
     },
     {
@@ -42,8 +42,8 @@
       "name": "puppetlabs/apt"
     },
     {
-      "version_requirement": ">=1.0.2 <2.0.0",
-      "name": "domcleal/augeasproviders"
+      "version_requirement": "2.x",
+      "name": "herculesteam/augeasproviders_sysctl"
     }
   ],
   "operatingsystem_support": [
@@ -75,7 +75,7 @@
   "requirements": [
     {
       "name": "pe",
-      "version_requirement": ">=3.0.0 <3.3.0"
+      "version_requirement": ">=3.3.0 <4.0.0"
     },
     {
       "name": "puppet",
