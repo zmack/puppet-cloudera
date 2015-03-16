@@ -12,8 +12,8 @@ describe 'cloudera::cm5', :type => 'class' do
     end
     it do
       expect {
-        should compile
-      }.to raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
+        should raise_error(Puppet::Error, /Module cloudera is not supported on bar/)
+      }
     end
   end
 
@@ -32,7 +32,7 @@ describe 'cloudera::cm5', :type => 'class' do
       :path   => '/etc/cloudera-scm-agent/config.ini'
     )}
     it 'should contain File[scm-config.ini] with correct contents' do
-      verify_contents(subject, 'scm-config.ini', [
+      verify_contents(catalogue, 'scm-config.ini', [
         'server_host=localhost',
         'server_port=7182',
         'listening_hostname=myhost',
@@ -129,7 +129,7 @@ describe 'cloudera::cm5', :type => 'class' do
       end
       it { should contain_file('scm-config.ini').with_ensure('present') }
       it 'should contain File[scm-config.ini] with correct contents' do
-        verify_contents(subject, 'scm-config.ini', [
+        verify_contents(catalogue, 'scm-config.ini', [
           'server_host=some.other.host',
           'server_port=9000',
           'listening_hostname=myhost',
@@ -152,7 +152,7 @@ describe 'cloudera::cm5', :type => 'class' do
         end
         it { should contain_file('scm-config.ini').with_ensure('present') }
         it 'should contain File[scm-config.ini] with correct contents' do
-          verify_contents(subject, 'scm-config.ini', [
+          verify_contents(catalogue, 'scm-config.ini', [
             'use_tls=1',
             'verify_cert_file=/etc/pki/tls/certs/cloudera_manager.crt',
           ])
@@ -167,7 +167,7 @@ describe 'cloudera::cm5', :type => 'class' do
         end
         it { should contain_file('scm-config.ini').with_ensure('present') }
         it 'should contain File[scm-config.ini] with correct contents' do
-          verify_contents(subject, 'scm-config.ini', [
+          verify_contents(catalogue, 'scm-config.ini', [
             'use_tls=1',
             'verify_cert_file=/etc/ssl/certs/cloudera_manager.crt',
           ])
@@ -182,7 +182,7 @@ describe 'cloudera::cm5', :type => 'class' do
         end
         it { should contain_file('scm-config.ini').with_ensure('present') }
         it 'should contain File[scm-config.ini] with correct contents' do
-          verify_contents(subject, 'scm-config.ini', [
+          verify_contents(catalogue, 'scm-config.ini', [
             'use_tls=1',
             'verify_cert_file=/etc/ssl/certs/cloudera_manager.crt',
           ])

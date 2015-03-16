@@ -148,6 +148,11 @@ class { 'cloudera':
 }
 ```
 
+- The [puppetlabs/postgresql](https://forge.puppetlabs.com/puppetlabs/postgresql) dependency will update to version 3 or newer for the 3.0.0 release.  Make sure to review its changelog in the case of an upgrade.
+
+- The [herculesteam/augeasproviders](https://forge.puppetlabs.com/herculesteam/augeasproviders) modules will replace [domcleal/augeasproviders](https://forge.puppetlabs.com/domcleal/augeasproviders) for the 3.0.0 release.
+
+
 ##Usage
 
 All interaction with the cloudera module can be done through the main cloudera class.  This means you can simply toggle the options in `::cloudera` to have full functionality of the module.
@@ -548,7 +553,7 @@ Default: /opt/cloudera/parcels
 
 ###OS Support:
 
-Cloudera official [supported operating systems](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html?scroll=cmig_topic_4_1_unique_1).
+Cloudera official [supported operating systems for CM4](http://www.cloudera.com/content/cloudera/en/documentation/cloudera-manager/v4-latest/Cloudera-Manager-Installation-Guide/cmig_cm_requirements.html#cmig_topic_4_1_unique_1) and [supported operating systems for CM5](http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_cm_requirements.html?scroll=cmig_topic_4_1_unique_1).
 
 * RedHat family - tested on CentOS 5.9, CentOS 6.4
 * SuSE family   - tested on SLES 11SP3
