@@ -202,7 +202,7 @@ class cloudera::params {
   $db_host       = 'localhost'
   $db_port       = '3306'
   $db_user       = 'root'
-  $db_pass       = ''
+  $db_pass       = undef
   $db_type       = 'embedded'
 
   case $::operatingsystem {
