@@ -8,7 +8,9 @@ fixtures:
     epel: "https://github.com/stahnma/puppet-module-epel.git"
     java_ks: "https://github.com/puppetlabs/puppetlabs-java_ks.git"
     zypprepo: "https://github.com/deadpoint/puppet-zypprepo.git"
-    apt: "https://github.com/puppetlabs/puppetlabs-apt.git"
+    apt:
+      repo: "https://github.com/puppetlabs/puppetlabs-apt.git"
+      ref: "1.8.0"
     augeasproviders_core: "https://github.com/hercules-team/augeasproviders_core.git"
     augeasproviders_sysctl: "https://github.com/hercules-team/augeasproviders_sysctl.git"
   symlinks:
