@@ -19,8 +19,9 @@ describe 'cloudera::cm5::server', :type => 'class' do
 
   context 'on a supported operatingsystem, default parameters' do
     let :facts do {
-      :osfamily        => 'RedHat',
-      :operatingsystem => 'CentOS'
+      :osfamily               => 'RedHat',
+      :operatingsystem        => 'CentOS',
+      :operatingsystemrelease => '6.0'
     }
     end
     it { should compile.with_all_deps }
@@ -56,8 +57,9 @@ describe 'cloudera::cm5::server', :type => 'class' do
 
   context 'on a supported operatingsystem, custom parameters' do
     let :facts do {
-      :osfamily        => 'RedHat',
-      :operatingsystem => 'OracleLinux'
+      :osfamily               => 'RedHat',
+      :operatingsystem        => 'OracleLinux',
+      :operatingsystemrelease => '6.0'
     }
     end
 
@@ -162,9 +164,10 @@ describe 'cloudera::cm5::server', :type => 'class' do
 
   context 'on a supported operatingsystem, custom parameters, db_type => mysql' do
     let :facts do {
-      :fqdn            => 'myhost.example.com',
-      :osfamily        => 'RedHat',
-      :operatingsystem => 'OracleLinux'
+      :fqdn                   => 'myhost.example.com',
+      :osfamily               => 'RedHat',
+      :operatingsystem        => 'OracleLinux',
+      :operatingsystemrelease => '6.0'
     }
     end
 
@@ -230,9 +233,10 @@ describe 'cloudera::cm5::server', :type => 'class' do
 
   context 'on a supported operatingsystem, custom parameters, db_type => oracle' do
     let :facts do {
-      :fqdn            => 'myhost.example.com',
-      :osfamily        => 'RedHat',
-      :operatingsystem => 'OracleLinux'
+      :fqdn                   => 'myhost.example.com',
+      :osfamily               => 'RedHat',
+      :operatingsystem        => 'OracleLinux',
+      :operatingsystemrelease => '6.0'
     }
     end
 
@@ -364,9 +368,10 @@ describe 'cloudera::cm5::server', :type => 'class' do
   context 'on a supported operatingsystem, custom parameters, use_tls => true' do
     describe 'RedHat' do
       let :facts do {
-        :osfamily        => 'RedHat',
-        :operatingsystem => 'OracleLinux',
-        :fqdn            => 'localhost.localdomain'
+        :fqdn                   => 'localhost.localdomain',
+        :osfamily               => 'RedHat',
+        :operatingsystem        => 'OracleLinux',
+        :operatingsystemrelease => '6.0'
       }
       end
 
