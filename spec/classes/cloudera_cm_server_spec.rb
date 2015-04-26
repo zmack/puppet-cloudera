@@ -405,9 +405,10 @@ describe 'cloudera::cm::server', :type => 'class' do
 
     describe 'SLES' do
       let :facts do {
-        :osfamily        => 'Suse',
-        :operatingsystem => 'SLES',
-        :fqdn            => 'localhost.localdomain'
+        :fqdn                   => 'localhost.localdomain',
+        :osfamily               => 'Suse',
+        :operatingsystem        => 'SLES',
+        :operatingsystemrelease => '11.0'
       }
       end
 
@@ -445,9 +446,10 @@ describe 'cloudera::cm::server', :type => 'class' do
 
     describe 'Debian' do
       let :facts do {
-        :osfamily        => 'Debian',
-        :operatingsystem => 'Debian',
-        :fqdn            => 'localhost.localdomain'
+        :fqdn                   => 'localhost.localdomain',
+        :osfamily               => 'Debian',
+        :operatingsystem        => 'Debian',
+        :operatingsystemrelease => '7'
       }
       end
 
@@ -484,9 +486,10 @@ describe 'cloudera::cm::server', :type => 'class' do
     end
 
     let :facts do {
-      :osfamily        => 'RedHat',
-      :operatingsystem => 'OracleLinux',
-      :fqdn            => 'localhost.localdomain'
+      :fqdn                   => 'localhost.localdomain',
+      :osfamily               => 'RedHat',
+      :operatingsystem        => 'OracleLinux',
+      :operatingsystemrelease => '6.0'
     }
     end
 
